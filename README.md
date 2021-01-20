@@ -1,6 +1,5 @@
 
-rhdx
-====
+# ridl
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
@@ -8,276 +7,205 @@ rhdx
 there has not yet been a stable, usable release suitable for the
 public.](http://www.repostatus.org/badges/latest/wip.svg)](http://www.repostatus.org/#wip)
 [![GitLab CI Build
-Status](https://gitlab.com/dickoa/rhdx/badges/master/pipeline.svg)](https://gitlab.com/dickoa/rhdx/pipelines)
+Status](https://gitlab.com/dickoa/ridl/badges/master/pipeline.svg)](https://gitlab.com/dickoa/ridl/pipelines)
 [![Travis build
-status](https://api.travis-ci.org/dickoa/rhdx.svg?branch=master)](https://travis-ci.org/dickoa/rhdx)
+status](https://api.travis-ci.org/dickoa/ridl.svg?branch=master)](https://travis-ci.org/dickoa/ridl)
 [![AppVeyor build
-status](https://ci.appveyor.com/api/projects/status/gitlab/dickoa/rhdx?branch=master&svg=true)](https://ci.appveyor.com/project/dickoa/rhdx)
+status](https://ci.appveyor.com/api/projects/status/gitlab/dickoa/ridl?branch=master&svg=true)](https://ci.appveyor.com/project/dickoa/ridl)
 [![Codecov Code
-Coverage](https://codecov.io/gh/dickoa/rhdx/branch/master/graph/badge.svg)](https://codecov.io/gh/dickoa/rhdx)
+Coverage](https://codecov.io/gh/dickoa/ridl/branch/master/graph/badge.svg)](https://codecov.io/gh/dickoa/ridl)
 [![CRAN
-status](https://www.r-pkg.org/badges/version/rhdx)](https://cran.r-project.org/package=rhdx)
+status](https://www.r-pkg.org/badges/version/ridl)](https://cran.r-project.org/package=ridl)
 [![License:
 MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-`rhdx` is an R client for the Humanitarian Exchange Data platform.
+`ridl` is an R client for the [UNHCR RIDL
+platform](https://ridl.unhcr.org).
 
-Introduction
-------------
+## Introduction
 
-The [Humanitarian Data Exchange platform](https://data.humdata.org/) is
-the open platform to easily find and analyze humanitarian data.
+The [UNHCR RIDL platform](https://ridl.unhcr.org) is UNHCR internal
+platform to easily store, find and analyze raw data.
 
-Installation
-------------
+## Installation
 
 This package is not on yet on CRAN and to install it, you will need the
 [`remotes`](https://github.com/r-lib/remotes) package. You can get
-`rhdx` from Gitlab or Github (mirror)
+`ridl` from Gitlab or Github (mirror)
 
-    ## install.packages("remotes")
-    remotes::install_gitlab("dickoa/rhdx")
-    remotes::install_github("dickoa/rhdx")
+``` r
+## install.packages("remotes")
+remotes::install_gitlab("dickoa/ridl")
+```
 
-rhdx: A quick tutorial
-----------------------
+## ridl: A quick tutorial
 
-    library("rhdx")
+``` r
+library("ridl")
+```
 
-The first step is usually to connect to HDX using the `set_rhdx_config`
-function and check the config using `get_rhdx_config`
+The `ridl` package requires you to add your API key and store it for
+further use. The easiest way to do that is to store your API key in your
+`.Renviron` file which is automatically read by R on startup.
 
-    set_rhdx_config(hdx_site = "prod")
-    get_rhdx_config()
-    ## <HDX Configuration>
-    ##   HDX site: prod
-    ##   HDX site url: https://data.humdata.org/
-    ##   HDX API key:
+You can retrieve your `API key` in your [user
+page](https://ridl.unhcr.org/user/).
 
-Now that we are connected to HDX, we can search for dataset using
-`search_datasets`, access resources withini the dataset page with the
-`get_resources` function and finally read the data directly into the `R`
-session using `read_resource`. `magrittr` pipes operator are also
-supported
+![api\_key\_img](./inst/img/ridl_api_key.png)
 
-    library(tidyverse)
-    search_datasets("ACLED Mali", rows = 2) %>% ## search dataset in HDX, limit the results to two rows
-      pluck(1) %>% ## select the first dataset
-      get_resource(1) %>% ## pick the first resource
-      read_resource() ## read this HXLated data into R
-    ## # A tibble: 2,516 x 30
-    ##    data_id   iso event_id_cnty event_id_no_cnty event_date  year
-    ##  *   <dbl> <dbl> <chr>                    <dbl> <date>     <dbl>
-    ##  1 2942561   466 MLI2605                   2605 2019-01-26  2019
-    ##  2 2942562   466 MLI2606                   2606 2019-01-26  2019
-    ##  3 2942557   466 MLI2601                   2601 2019-01-25  2019
-    ##  4 2942558   466 MLI2602                   2602 2019-01-25  2019
-    ##  5 2942559   466 MLI2603                   2603 2019-01-25  2019
-    ##  6 2942560   466 MLI2604                   2604 2019-01-25  2019
-    ##  7 2942555   466 MLI2599                   2599 2019-01-24  2019
-    ##  8 2942556   466 MLI2600                   2600 2019-01-24  2019
-    ##  9 2942553   466 MLI2597                   2597 2019-01-23  2019
-    ## 10 2942554   466 MLI2598                   2598 2019-01-23  2019
-    ## # … with 2,506 more rows, and 24 more variables:
-    ## #   time_precision <dbl>, event_type <chr>, actor1 <chr>,
-    ## #   assoc_actor_1 <chr>, inter1 <dbl>, actor2 <chr>,
-    ## #   assoc_actor_2 <chr>, inter2 <dbl>, interaction <dbl>,
-    ## #   region <chr>, country <chr>, admin1 <chr>, admin2 <chr>,
-    ## #   admin3 <chr>, location <chr>, latitude <dbl>,
-    ## #   longitude <dbl>, geo_precision <dbl>, source <chr>,
-    ## #   source_scale <chr>, notes <chr>, fatalities <dbl>,
-    ## #   timestamp <dbl>, iso3 <chr>
+You can either edit directly the `.Renviron` file or access it by
+calling `usethis::edit_r_environ()` (assuming you have the `usethis`
+package installed) and entering:
 
-`read_resource` will not work with resources in HDX, so far the
-following format are supported: `csv`, `xlsx`, `xls`, `json`, `geojson`,
-`zipped shapefile`, `kmz`, `zipped geodatabase` and `zipped geopackage`.
-I will consider adding more data types in the future, feel free to file
-an issue if it doesn’t work as expected or you want to add a support for
-a format.
+``` bash
+RIDL_API_KEY=xxxxxxxxxxxxxxxxxx
+```
+
+Once the environment variable is set you will need to restart your
+session.
+
+``` r
+get_ridl_config()
+## <RIDL Configuration>
+##   RIDL site url: https://ridl.unhcr.org
+##   RIDL API key: xxxxxxxxxxxxxxxxxx
+```
+
+You can also configure directly the `ridl` package using the
+`set_ridl_config` function and check the config using `get_ridl_config`
+
+``` r
+set_ridl_config(ridl_key = "xxxxxxxxxxxxxxxxxx")
+get_ridl_config()
+## <RIDL Configuration>
+##   RIDL site url: https://ridl.unhcr.org
+##   RIDL API key: xxxxxxxxxxxxxxxxxx
+```
+
+Now that we are connected to RIDL, we can search for dataset using
+`search_datasets`.
+
+``` r
+search_datasets("mali", visibility = "public", rows = 2) ## search internally public dataset in RIDL, limit the results to two rows
+## [[1]]
+## <RIDL Dataset> 6f37029d-0ec2-4322-88ed-6447b2eebf3a
+##   Title: Socio-economic assessment of Malian refugees in Burkina Faso 2016
+##   Name: unhcr-bfa-2016-sea-1-1
+##   Visibility: public
+##   Resources (up to 5): DDI XML, DDI RDF, UNHCR_BFA_2016_SEA_household_v1_1, UNHCR_BFA_2016_SEA_individual_v1_1, UNHCR_BFA_2016_final report
+
+## [[2]]
+## <RIDL Dataset> 59573073-aef6-42c1-a9db-efae3f95051c
+##   Title: Socio-economic assessment of refugees in Mauritania's Mberra camp 2017
+##   Name: unhcr-mrt-2017-sea-1-1
+##   Visibility: public
+##   Resources (up to 5): DDI XML, DDI RDF, UNHCR_MRT_2017_SEA_household_v1_1, UNHCR_MRT_2017_SEA_individual_v1_1, UNHCR_MRT_2017_SEA_questionnaire
+
+## attr(,"class")
+## [1] "datasets_list"
+```
+
+We can select a particular dataset from the list of datasets using `R`
+function to access elements from list (e.g `[[`). In this example, we
+will use `purrr::pluck` since it plays well with the pipe operator.
+
+``` r
+library(tidyverse)
+search_datasets("mali", visibility = "public", rows = 2) %>%
+  pluck(1) %>%
+  list_dataset_resources(format = "stata") %>%
+  pluck(1) %>%
+  read_resource()
+## + # A tibble: 1,690 x 459
+##     hhid   q002a    q006    q008  q102  q113    q200    q201
+##    <dbl> <dbl+l> <dbl+l> <dbl+l> <dbl> <dbl> <dbl+l> <dbl+l>
+##  1 10004 1 [Cam… 1 [Oui] 1 [Pré…     3     0 2 [Dou… 1 [For…
+##  2 10008 1 [Cam… 1 [Oui] 1 [Pré…     3     1 2 [Dou… 1 [For…
+##  3 10012 1 [Cam… 1 [Oui] 1 [Pré…     7     1 2 [Dou… 1 [For…
+##  4 10016 1 [Cam… 1 [Oui] 1 [Pré…     2     1 2 [Dou… 1 [For…
+##  5 10020 1 [Cam… 1 [Oui] 1 [Pré…     6     1 2 [Dou… 1 [For…
+##  6 10024 1 [Cam… 1 [Oui] 1 [Pré…     3     1 2 [Dou… 1 [For…
+##  7 10028 1 [Cam… 1 [Oui] 1 [Pré…     5     1 2 [Dou… 1 [For…
+##  8 10032 1 [Cam… 1 [Oui] 1 [Pré…     7     1 2 [Dou… 1 [For…
+##  9 10036 1 [Cam… 1 [Oui] 1 [Pré…     4     3 2 [Dou… 1 [For…
+## 10 10040 1 [Cam… 1 [Oui] 1 [Pré…     2     1 2 [Dou… 1 [For…
+## # … with 1,680 more rows, and 451 more variables:
+## #   q202 <dbl+lbl>, q203 <dbl>, q204 <dbl+lbl>, q205 <dbl+lbl>,
+## #   q206_1 <dbl+lbl>, q206_2 <dbl+lbl>, q206_3 <dbl+lbl>,
+## #   q206_4 <dbl+lbl>, q206_5 <dbl+lbl>, q206_6 <dbl+lbl>,
+## #   q207 <dbl+lbl>, q208 <dbl+lbl>, q209 <dbl+lbl>, q210 <dbl>,
+## #   q211 <dbl+lbl>, q21201 <dbl+lbl>, q21202 <dbl+lbl>,
+## #   q21203 <dbl+lbl>, q213 <dbl+lbl>, q214 <dbl>,
+## #   q215 <dbl+lbl>, q216 <dbl>, q217 <dbl+lbl>, q218 <dbl>,
+## #   q219 <dbl+lbl>, q220 <dbl+lbl>, q221 <dbl+lbl>,
+## #   q222 <dbl+lbl>, q223 <dbl+lbl>, q224 <dbl+lbl>, q225 <dbl>,
+## #   q226 <dbl+lbl>, q227 <dbl>, q22801 <dbl+lbl>,
+## #   q22802 <dbl+lbl>, q22803 <dbl+lbl>, q22804 <dbl+lbl>,
+## #   q22805 <dbl+lbl>, q22806 <dbl+lbl>, q22807 <dbl+lbl>,
+## #   q22808 <dbl+lbl>, q22809 <dbl+lbl>, q22810 <dbl+lbl>,
+## #   q22811 <dbl+lbl>, q229 <dbl+lbl>, q230 <dbl>,
+## #   q231 <dbl+lbl>, q232 <dbl>, q23301 <dbl+lbl>,
+## #   q23302 <dbl+lbl>, q23303 <dbl+lbl>, q23304 <dbl+lbl>,
+## #   q23305 <dbl+lbl>, q23306 <dbl+lbl>, q23307 <dbl+lbl>,
+## #   q23308 <dbl+lbl>, q23309 <dbl+lbl>, q23310 <dbl+lbl>,
+## #   q23311 <dbl+lbl>, q234 <dbl+lbl>, q23501 <dbl+lbl>,
+## #   q23502 <dbl+lbl>, q23503 <dbl+lbl>, q23504 <dbl+lbl>,
+## #   q23505 <dbl+lbl>, q23506 <dbl+lbl>, q23507 <dbl+lbl>,
+## #   q23508 <dbl+lbl>, q23509 <dbl+lbl>, q23510 <dbl+lbl>,
+## #   q23511 <dbl+lbl>, q23512 <dbl+lbl>, q23513 <dbl+lbl>,
+## #   q23514 <dbl+lbl>, q23515 <dbl+lbl>, q23516 <dbl+lbl>,
+## #   q23517 <dbl+lbl>, q23518 <dbl+lbl>, q23601 <dbl+lbl>,
+## #   q23602 <dbl+lbl>, q23603 <dbl+lbl>, q23604 <dbl+lbl>,
+## #   q23605 <dbl+lbl>, q23606 <dbl+lbl>, q23607 <dbl+lbl>,
+## #   q23608 <dbl+lbl>, q23609 <dbl+lbl>, q23610 <dbl+lbl>,
+## #   q23611 <dbl+lbl>, q23612 <dbl+lbl>, q23613 <dbl+lbl>,
+## #   q23614 <dbl+lbl>, q237 <dbl+lbl>, q238 <dbl+lbl>,
+## #   q23901 <dbl+lbl>, q23902 <dbl+lbl>, q23903 <dbl+lbl>,
+## #   q23904 <dbl+lbl>, q23909 <dbl+lbl>, q240 <dbl+lbl>, …
+```
+
+We access all resources within the dataset page with the
+`list_dataset_resources` function and finally read the data directly
+into the `R` session using `read_resource`.
+
+`read_resource` will not work with all resources in RIDL, so far the
+following format are supported: `csv`, `xlsx`, `xls`, `stata`, `dta`,
+`json`, `geojson`, `zipped shapefile`, `kmz`, `zipped geodatabase` and
+`zipped geopackage`. I will consider adding more data types in the
+future, feel free to file an issue if it doesn’t work as expected or you
+want to add a support for a format.
 
 ### Reading dataset directly
 
 We can also use `pull_dataset` to directly read and access a dataset
 object.
 
-    pull_dataset("acled-data-for-mali") %>%
-      get_resource(1) %>%
-      read_resource()
-    ## # A tibble: 3,990 x 31
-    ##    data_id   iso event_id_cnty event_id_no_cnty event_date  year
-    ##      <dbl> <dbl> <chr>                    <dbl> <date>     <dbl>
-    ##  1 7173324   466 MLI4111                   4111 2020-07-31  2020
-    ##  2 7173322   466 MLI4109                   4109 2020-07-29  2020
-    ##  3 7173323   466 MLI4110                   4110 2020-07-29  2020
-    ##  4 7173423   466 MLI4107                   4107 2020-07-28  2020
-    ##  5 7173761   466 MLI4108                   4108 2020-07-28  2020
-    ##  6 7173702   466 MLI4104                   4104 2020-07-27  2020
-    ##  7 7173732   466 MLI4103                   4103 2020-07-27  2020
-    ##  8 7173319   466 MLI4102                   4102 2020-07-27  2020
-    ##  9 7173320   466 MLI4105                   4105 2020-07-27  2020
-    ## 10 7173321   466 MLI4106                   4106 2020-07-27  2020
-    ## # … with 3,980 more rows, and 25 more variables:
-    ## #   time_precision <dbl>, event_type <chr>,
-    ## #   sub_event_type <chr>, actor1 <chr>, assoc_actor_1 <chr>,
-    ## #   inter1 <dbl>, actor2 <chr>, assoc_actor_2 <chr>,
-    ## #   inter2 <dbl>, interaction <dbl>, region <chr>,
-    ## #   country <chr>, admin1 <chr>, admin2 <chr>, admin3 <chr>,
-    ## #   location <chr>, latitude <dbl>, longitude <dbl>,
-    ## #   geo_precision <dbl>, source <chr>, source_scale <chr>,
-    ## #   notes <chr>, fatalities <dbl>, timestamp <dbl>, iso3 <chr>
+``` r
+dataset_name <- "official-cross-border-figures-of-venezuelan-individuals"
+pull_dataset(dataset_name) %>%
+  get_dataset_resource(1) %>%
+  read_resource()
+## + Reading sheet:  VEN_Official Borders Figures
+## # A tibble: 1,314 x 5
+##    Country `Mov Type`  `Border Point` Month_Year Total_individua…
+##    <chr>   <chr>       <chr>          <chr>                 <dbl>
+##  1 Ecuador Entry from… Aeropuerto In… January-20                0
+##  2 Ecuador Entry from… Aeropuerto In… February-…                1
+##  3 Ecuador Entry from… Aeropuerto In… March-20                  0
+##  4 Ecuador Entry from… Aeropuerto In… April-20                  0
+##  5 Ecuador Entry from… Aeropuerto In… May-20                    0
+##  6 Ecuador Entry from… Aeropuerto In… June-20                   2
+##  7 Ecuador Entry from… Aeropuerto In… July-20                   2
+##  8 Ecuador Entry from… Aeropuerto In… August-20                 2
+##  9 Ecuador Entry from… Aeropuerto In… September…               NA
+## 10 Ecuador Entry from… Aeropuerto In… January-20                0
+# … with 1,304 more rows
+```
 
-A step by step tutorial to getting data from rhdx
--------------------------------------------------
-
-### Connect to a server
-
-In order to connect to HDX, we can use the `set_rhdx_config` function
-
-    set_rhdx_config(hdx_site = "prod")
-
-### Search datasets
-
-Once a server is chosen, we can now search from dataset using the
-`search_datasets` In this case we will limit just to two results (`rows`
-parameter).
-
-    list_of_ds <- search_datasets("displaced Nigeria", rows = 2)
-    list_of_ds
-    ## [[1]]
-    ## <HDX Dataset> 4fbc627d-ff64-4bf6-8a49-59904eae15bb
-    ##   Title: Nigeria - Internally displaced persons - IDPs
-    ##   Name: idmc-idp-data-for-nigeria
-    ##   Date: 01/01/2009-12/31/2016
-    ##   Tags (up to 5): displacement, idmc, population
-    ##   Locations (up to 5): nga
-    ##   Resources (up to 5): displacement_data, conflict_data, disaster_data
-
-    ## [[2]]
-    ## <HDX Dataset> 4adf7874-ae01-46fd-a442-5fc6b3c9dff1
-    ##   Title: Nigeria Baseline Assessment Data [IOM DTM]
-    ##   Name: nigeria-baseline-data-iom-dtm
-    ##   Date: 01/31/2018
-    ##   Tags (up to 5): adamawa, assessment, baseline-data, baseline-dtm, bauchi
-    ##   Locations (up to 5): nga
-    ##   Resources (up to 5): DTM Nigeria Baseline Assessment Round 21, DTM Nigeria Baseline Assessment Round 20, DTM Nigeria Baseline Assessment Round 19, DTM Nigeria Baseline Assessment Round 18, DTM Nigeria Baseline Assessment Round 17
-
-### Choose the dataset you want to manipulate in R, in this case we will take the first one.
-
-The result of `search_datasets` is a list of HDX datasets, you can
-manipulate this list like any other `list` in `R`. We can use
-`purrr::pluck` to select the element we want in our list, here it is the
-first.
-
-    ds <- pluck(list_of_ds, 1)
-    ds
-    ## <HDX Dataset> 4fbc627d-ff64-4bf6-8a49-59904eae15bb
-    ##   Title: Nigeria - Internally displaced persons - IDPs
-    ##   Name: idmc-idp-data-for-nigeria
-    ##   Date: 01/01/2009-12/31/2016
-    ##   Tags (up to 5): displacement, idmc, population
-    ##   Locations (up to 5): nga
-    ##   Resources (up to 5): displacement_data, conflict_data, disaster_data
-
-### List all resources in the dataset
-
-With our dataset, the next step is to list all the resources. If you are
-not familiar with CKAN terminology, `resources` refer to the actual
-files shared in a dataset page and you can download. Each dataset page
-contains one or more resources.
-
-    get_resources(ds)
-    ## [[1]]
-    ## <HDX Resource> f57be018-116e-4dd9-a7ab-8002e7627f36
-    ##   Name: displacement_data
-    ##   Description: Internally displaced persons - IDPs (new displacement associated with conflict and violence)
-    ##   Size:
-    ##   Format: JSON
-
-    ## [[2]]
-    ## <HDX Resource> 6261856c-afb9-4746-b340-9cf531cbd38f
-    ##   Name: conflict_data
-    ##   Description: Internally displaced persons - IDPs (people displaced by conflict and violence)
-    ##   Size:
-    ##   Format: JSON
-
-    ## [[3]]
-    ## <HDX Resource> b8ff1f4b-105c-4a6c-bf54-a543a486ab7e
-    ##   Name: disaster_data
-    ##   Description: Internally displaced persons - IDPs (new displacement associated with disasters)
-    ##   Size:
-    ##   Format: JSON
-
-### Choose a resource we need to download/read
-
-For this example, we are looking for the displacement data and it’s the
-first resource in the dataset page. We can use `pluck` on the list of
-resources or the helper function
-`get_resource(resource, resource_index)` to select the resource we want
-to use. The selected resource can be then downloaded and store for
-further use or directly read into your R session using the
-`read_resource` function. The resource is a `json` file and it can be
-read directly using `jsonlite` package, we added a `simplify_json`
-option to get a `vector` or a `data.frame` when possible instead of a
-`list`.
-
-    idp_nga_rs <- get_resource(ds, 1)
-    idp_nga_df <- read_resource(idp_nga_rs, simplify_json = TRUE, download_folder = tempdir())
-    idp_nga_df
-    ## # A tibble: 11 x 7
-    ##    ISO3  Name   Year `Conflict Stock… `Conflict New D…
-    ##    <chr> <chr> <dbl>            <dbl>            <dbl>
-    ##  1 NGA   Nige…  2009               NA             5000
-    ##  2 NGA   Nige…  2010               NA             5000
-    ##  3 NGA   Nige…  2011               NA            65000
-    ##  4 NGA   Nige…  2012               NA            63000
-    ##  5 NGA   Nige…  2013          3300000           471000
-    ##  6 NGA   Nige…  2014          1075000           975000
-    ##  7 NGA   Nige…  2015          2096000           737000
-    ##  8 NGA   Nige…  2016          1955000           501000
-    ##  9 NGA   Nige…  2017          1707000           279000
-    ## 10 NGA   Nige…  2018          2216000           541000
-    ## 11 NGA   Nige…  2019          2583000           248000
-    ## # … with 2 more variables: `Disaster New Displacements` <dbl>,
-    ## #   `Disaster Stock Displacement` <dbl>
-
-### Using `magrittr` pipe
-
-All these operations can be chained using pipes `%>%` and allow for a
-powerful grammar to easily get humanitarian data in R.
-
-    library(tidyverse)
-
-    set_rhdx_config(hdx_site = "prod")
-
-    idp_nga_df <-
-      search_datasets("displaced Nigeria", rows = 2) %>%
-      pluck(1) %>%
-      get_resource(1) %>% ## get the first resource
-      read_resource(simplify_json = TRUE, download_folder = tempdir()) ## the file will be downloaded in a temporary directory
-
-    idp_nga_df
-    ## # A tibble: 11 x 7
-    ##    ISO3  Name   Year `Conflict Stock… `Conflict New D…
-    ##    <chr> <chr> <dbl>            <dbl>            <dbl>
-    ##  1 NGA   Nige…  2009               NA             5000
-    ##  2 NGA   Nige…  2010               NA             5000
-    ##  3 NGA   Nige…  2011               NA            65000
-    ##  4 NGA   Nige…  2012               NA            63000
-    ##  5 NGA   Nige…  2013          3300000           471000
-    ##  6 NGA   Nige…  2014          1075000           975000
-    ##  7 NGA   Nige…  2015          2096000           737000
-    ##  8 NGA   Nige…  2016          1955000           501000
-    ##  9 NGA   Nige…  2017          1707000           279000
-    ## 10 NGA   Nige…  2018          2216000           541000
-    ## 11 NGA   Nige…  2019          2583000           248000
-    ## # … with 2 more variables: `Disaster New Displacements` <dbl>,
-    ## #   `Disaster Stock Displacement` <dbl>
-
-Meta
-----
+## Meta
 
 -   Please [report any issues or
-    bugs](https://gitlab.com/dickoa/rhdx/issues).
+    bugs](https://gitlab.com/dickoa/ridl/issues).
 -   License: MIT
 -   Please note that this project is released with a [Contributor Code
     of Conduct](CONDUCT.md). By participating in this project you agree
