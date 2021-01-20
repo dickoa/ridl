@@ -1,0 +1,83 @@
+# HDX configuration
+hdx_prod_site:
+  url: "https://data.humdata.org"
+hdx_demo_site:
+  url: "https://demo.data-humdata-org.ahconu.org"
+hdx_stage_site:
+  url: "https://stage.data-humdata-org.ahconu.org"
+hdx_feature_site:
+  url: "https://feature.data-humdata-org.ahconu.org"
+hdx_dev_site:
+  url: "https://dev.data-humdata-org.ahconu.org"
+dataset:
+  required_fields:
+    - name
+    - private
+    - title
+    - notes
+    - dataset_source
+    - owner_org
+    - maintainer
+    - dataset_date
+    - data_update_frequency
+    - groups
+    - license_id
+    - methodology
+    - tags
+dataset-requestable:
+  required_fields:
+    - name
+    - title
+    - notes
+    - dataset_source
+    - owner_org
+    - maintainer
+    - dataset_date
+    - data_update_frequency
+    - groups
+    - tags
+    - field_names
+    - file_types
+    - num_of_rows
+resource:
+  required_fields:
+    - package_id
+    - name
+    - format
+    - description
+    - url_type
+    - resource_type
+showcase:
+  required_fields:
+    - name
+    - title
+    - notes
+    - url
+    - image_url
+    - tags
+user:
+  required_fields:
+    - name
+    - email
+    - password
+    - fullname
+    - about
+  ignore_on_update: password
+organization:
+  required_fields:
+    - name
+    - title
+    - description
+"resource view":
+  required_fields:
+    - resource_id
+    - title
+    - view_type
+vocabulary:
+  required_fields:
+    - name
+    - tags
+approved_tags_vocabulary: Topics
+tags_list_url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRjeajloIuQl8mfTSHU71ZgbHSgYYUgHrLqyjHSuQJ-zMqS3SVM9hJqMs72L-84LQ/pub?gid=1739051517&single=true&output=csv"
+tags_mapping_url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRjeajloIuQl8mfTSHU71ZgbHSgYYUgHrLqyjHSuQJ-zMqS3SVM9hJqMs72L-84LQ/pub?gid=334970416&single=true&output=csv"
+# https://docs.google.com/spreadsheets/d/1_nhIETuzJhlsNEOv39PhZ66lpENTlfjH/edit#gid=334970416

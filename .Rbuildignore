@@ -1,0 +1,8 @@
+.gitlab-ci.yml
+CODE_OF_CONDUCT.md
+README.Rmd
+README.html
+appveyor.yml
+codecov.yml
+cran-comments.md
+pkgdown/*
