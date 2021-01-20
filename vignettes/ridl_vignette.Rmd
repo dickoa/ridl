@@ -13,7 +13,7 @@ The [UNHCR RIDL platform](https://ridl.unhcr.org) is UNHCR internal platform to 
 This package is not on yet on CRAN and to install it, you will need the [`remotes`](https://github.com/r-lib/remotes) package.
 You can get `ridl` from Gitlab or Github (mirror)
 
-```{r}
+```{r, eval = TRUE}
 ## install.packages("remotes")
 remotes::install_gitlab("dickoa/ridl")
 ```
