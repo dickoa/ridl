@@ -100,7 +100,7 @@ is_valid_uuid <- function(x) {
 #' @noRd
 #' @importFrom utils packageVersion
 get_user_agent <- function(x) {
-  ridl_version <- packageVersion("rhdx")
+  ridl_version <- packageVersion("ridl")
   os <- Sys.info()[["sysname"]]
   os_version <- paste(Sys.info()[["release"]], Sys.info()[["version"]])
   r_version <- paste0(R.version$major, ".",
