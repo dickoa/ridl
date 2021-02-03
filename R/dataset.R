@@ -119,7 +119,7 @@ Dataset <- R6::R6Class(
     #' Browse the dataset page on RIDL
     browse = function() {
       url <- private$configuration$get_ridl_url()
-      browseURL(url = paste0(url, "dataset/", self$data$name))
+      browseURL(url = paste0(url, "/dataset/", self$data$name))
     },
 
     #' @description

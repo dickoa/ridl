@@ -52,7 +52,7 @@ Container <- R6::R6Class(
     #' Browse the Container page on RIDL
     browse = function() {
       url <- private$configuration$get_ridl_site_url()
-      browseURL(url = paste0(url, "organization/", self$data$name))
+      browseURL(url = paste0(url, "/organization/", self$data$name))
     },
 
     #' @description

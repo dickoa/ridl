@@ -274,7 +274,7 @@ Resource <- R6::R6Class(
       url <- private$configuration$get_ridl_site_url()
       dataset_id <- self$data$package_id
       resource_id <- self$data$id
-      browseURL(url = paste0(url, "dataset/",
+      browseURL(url = paste0(url, "/dataset/",
                              dataset_id, "/resource/", resource_id))
     },
 
