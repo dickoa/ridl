@@ -274,11 +274,11 @@ delete_all_dataset_resources <- function(dataset) {
                           paste0("visibility:", visibility),
                           sep = " AND ")
   cc <- crul::Paginator$new(client = configuration$remoteclient(),
-                            by = "query_params",
+                            by = "limit_offset",
                             limit_param = "rows",
                             offset_param = "start",
                             limit = rows,
-                            limit_chunk = page_size)
+                            chunk = page_size)
   suppressMessages(cc$get(path = paste0("/api/3/action/", "package_search"),
                           list(q = query, fq = filter_query, ...)))
   list_of_ds <- fromJSON(cc$parse(),

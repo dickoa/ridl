@@ -13,7 +13,7 @@ BugReports: https://gitlab.com/dickoa/ridl/issues
 Depends:
     R (>= 3.5)
 Imports:
-    crul (>= 0.8),
+    crul (>= 1.1),
     magrittr,
     jsonlite,
     yaml,
