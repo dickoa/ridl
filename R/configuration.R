@@ -13,8 +13,8 @@
 #' set_ridl_config()
 #' get_rhd_config()
 #' }
-Configuration <- R6::R6Class(
-  classname = "Configuration",
+RIDLConfig <- R6::R6Class(
+  classname = "RIDLConfig",
   private = list(shared = .ridl_env),
   public = list(
     #' @field data all info in list.
@@ -59,7 +59,6 @@ Configuration <- R6::R6Class(
     #' Configuration credentials when using a RIDL API key
     get_credentials = function() {
     },
-
 
     #' @description
     #' Specify a RIDL API key
@@ -123,11 +122,11 @@ Configuration <- R6::R6Class(
     #' @param ridl_key a character value, the API key
     setup = function(ridl_key = NULL, configuration = NULL) {
       if (!is.null(configuration)) {
-        if (!inherits(configuration, "Configuration"))
-          stop("Not a 'Configuration' object!", call. = FALSE)
+        if (!inherits(configuration, "RIDLConfig,"))
+          stop("Not a 'RIDLConfig' object!", call. = FALSE)
         private$shared$configuration <- configuration
       } else {
-        private$shared$configuration <- Configuration$new(ridl_key = ridl_key,
+        private$shared$configuration <- RIDLConfig$new(ridl_key = ridl_key,
                                                           ridl_config = ridl_config)
       }
     },
@@ -167,7 +166,7 @@ Configuration <- R6::R6Class(
 #' @export
 create_ridl_config <- function(ridl_key = NULL,
                                user_agent = NULL) {
-  Configuration$new(ridl_key = ridl_key,
+  RIDLConfig$new(ridl_key = ridl_key,
                     user_agent = user_agent)
 }
 
@@ -200,10 +199,10 @@ create_ridl_config <- function(ridl_key = NULL,
 set_ridl_config <- function(ridl_key = NULL,
                             user_agent = NULL,
                             configuration = NULL) {
-  if (!is.null(configuration) & inherits(configuration, "Configuration")) {
+  if (!is.null(configuration) & inherits(configuration, "RIDLConfig")) {
     .ridl_env$configuration <- configuration
   } else {
-    .ridl_env$configuration <- Configuration$new(ridl_key = ridl_key,
+    .ridl_env$configuration <- RIDLConfig$new(ridl_key = ridl_key,
                                                  user_agent = user_agent)
   }
 }
@@ -220,7 +219,6 @@ get_ridl_config <- function() {
 #'
 #' Delete the configuration settings for using ridl.
 #'
-#' @rdname delete_ridl_config
 #'
 #' @details Delete RIDL config
 #'

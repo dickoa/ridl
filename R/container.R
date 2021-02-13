@@ -2,10 +2,8 @@
 #'
 #' RIDL Container
 #'
-#' @format NULL
-#' @usage NULL
-Container <- R6::R6Class(
-  classname = "Container",
+RIDLContainer <- R6::R6Class(
+  classname = "RIDLContainer",
   inherit = RIDLObject,
 
   private = list(
@@ -23,7 +21,7 @@ Container <- R6::R6Class(
     #' @param configuration a Configuration object
     #' @return A Container object
     initialize = function(initial_data = NULL, configuration = NULL) {
-      if (is.null(configuration) | !inherits(configuration, "Configuration")) {
+      if (is.null(configuration) | !inherits(configuration, "RIDLConfig")) {
         private$configuration <- get_ridl_config()
       } else {
         private$configuration <- configuration
@@ -79,7 +77,7 @@ Container <- R6::R6Class(
 #' @export
 #' @aliases Container
 #' @importFrom tibble as_tibble
-as_tibble.Container <- function(x, ...) {
+as_tibble.RIDLContainer <- function(x, ...) {
   df <- tibble::tibble(container_id = x$data$id,
                        container_name = x$data$name)
   df$container <- list(x)
@@ -88,21 +86,21 @@ as_tibble.Container <- function(x, ...) {
 
 #' @export
 #' @aliases Container
-as.list.Container <- function(x, ...) {
+as.list.RIDLContainer <- function(x, ...) {
   x$as_list()
 }
 
 #' @noRd
 .pull_container  <-  function(identifier = NULL,
                                  include_datasets = FALSE, configuration = NULL, ...) {
-  if (!is.null(configuration) & inherits(configuration, "Configuration"))
+  if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
     set_ridl_config(configuration = configuration)
   configuration <- get_ridl_config()
   res <- configuration$call_action("organization_show",
                                    list(id = identifier,
                                         type = "data-container",
                                         include_datasets = include_datasets, ...))
-  Container$new(initial_data = res, configuration = configuration)
+  RIDLContainer$new(initial_data = res, configuration = configuration)
 }
 
 #' Read a RIDL container
@@ -121,7 +119,7 @@ pull_container <- memoise::memoise(.pull_container)
 
 #' @rdname browse
 #' @export
-browse.Container <- function(x, ...)
+browse.RIDLContainer <- function(x, ...)
   x$browse()
 
 #' List RIDL container
@@ -146,7 +144,7 @@ browse.Container <- function(x, ...)
                                include_user = FALSE,
                                include_tags = FALSE,
                                configuration = NULL, ...) {
-  if (!is.null(configuration) & inherits(configuration, "Configuration"))
+  if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
     set_ridl_config(configuration = configuration)
   configuration <- get_ridl_config()
   data <- drop_nulls(list(sort = sort,

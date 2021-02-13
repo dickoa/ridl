@@ -1,10 +1,9 @@
 #' RIDL Dataset
 #'
-#' Dataset class containing all logic for accessing,
+#' RIDLDataset class containing all logic for accessing,
 #' creating, and updating datasets and associated resources.
-#'
-Dataset <- R6::R6Class(
-  classname = "Dataset",
+RIDLDataset <- R6::R6Class(
+  classname = "RIDLDataset",
   inherit = RIDLObject,
 
   private = list(
@@ -22,7 +21,7 @@ Dataset <- R6::R6Class(
     #' @param configuration a Configuration object
     #' @return A Dataset object
     initialize = function(initial_data = NULL, configuration = NULL) {
-      if (is.null(configuration) | !inherits(configuration, "Configuration")) {
+      if (is.null(configuration) | !inherits(configuration, "RIDLConfig")) {
         private$configuration <- get_ridl_config()
       } else {
         private$configuration <- configuration
@@ -35,17 +34,17 @@ Dataset <- R6::R6Class(
       if ("resources" %in% key)
         self$resources <- lapply(self$data$resources,
                                  function(x)
-                                   Resource$new(initial_data = x,
+                                   RIDLResource$new(initial_data = x,
                                                 configuration = configuration))
     },
 
     #' @description
-    #' Get a specific resource of the dataset
+    #' Get the nth resource of the dataset
     #'
     #' @param index integer, the index of the resource to access
     #'
     #' @return a Resource object, the selected resource
-    get_dataset_resource = function(index) {
+    get_nth_resource = function(index) {
       n_res <- self$data$num_resources
       if (index > n_res)
         stop("Just ", n_res, "resource(s) available!",
@@ -60,7 +59,7 @@ Dataset <- R6::R6Class(
     #' @param format character, format of the resources
     #'
     #' @return a list of Resource objects, all resources available in the dataset
-    list_dataset_resources = function(pattern = NULL, format = NULL) {
+    list_resources = function(pattern = NULL, format = NULL) {
       l <- self$resources
 
       if (!is.null(pattern)) {
@@ -79,7 +78,7 @@ Dataset <- R6::R6Class(
       if (is.null(l) | length(l) < 1)
         l <- list()
 
-      class(l) <- "resources_list"
+      class(l) <- "ridl_resources_list"
       l
     },
 
@@ -95,12 +94,12 @@ Dataset <- R6::R6Class(
     #' Delete a resource by its index
     #'
     #' @param index, the index of the resource to delete
-    delete_dataset_resource = function(index = 1L) {
+    delete_nth_resource = function(index = 1L) {
       n_resources <- self$data$num_resources
       if (n_resources == 0)
-        stop("No resources to delete!", call. = FALSE)
+        stop("No Resources to delete!", call. = FALSE)
       if (index > n_resources)
-        stop("Just ", n_resources, " resource(s) available!",
+        stop("Just ", n_resources, " Resource(s) available!",
              call. = FALSE)
       self$data$resources[[index]] <- NULL
       self$resources[[index]] <- NULL
@@ -109,7 +108,7 @@ Dataset <- R6::R6Class(
 
     #' @description
     #' Delete all resources from a dataset
-    delete_all_dataset_resources = function() {
+    delete_resources = function() {
       self$resources <- NULL
       self$data$resources <- NULL
       self$data$num_resources <- 0
@@ -134,21 +133,12 @@ Dataset <- R6::R6Class(
     #' Get the dataset date
     #'
     #' @return a date, the dataset date.
-    get_dataset_date_range = function() {
+    get_date_range = function() {
       date_start <- self$data$date_range_start
       date_end <- self$data$date_range_end
       if (is.null(date))
         date <- ""
       date
-    },
-
-    #' @description
-    #' Get the dataset maintainer
-    #'
-    #' @return An User object, the maintainer of the dataset
-    get_maintainer = function() {
-      id <- self$data$maintainer
-      pull_user(id)
     },
 
     #' @description
@@ -184,9 +174,10 @@ Dataset <- R6::R6Class(
 
 #' @export
 #' @aliases Dataset
-as.list.Dataset <- function(x, ...) {
+as.list.RIDLDataset <- function(x, ...) {
   x$as_list()
 }
+
 
 #' Add resource to dataset
 #'
@@ -196,9 +187,9 @@ as.list.Dataset <- function(x, ...) {
 #' @param index integer; resource position in the dataset
 #' @export
 #' @return Resource
-get_dataset_resource <- function(dataset, index) {
+get_dataset_nth_resource <- function(dataset, index) {
   assert_dataset(dataset)
-  dataset$get_dataset_resource(index)
+  dataset$get_nth_resource(index)
 }
 
 #' Add resource to dataset
@@ -214,8 +205,8 @@ get_dataset_resource <- function(dataset, index) {
 list_dataset_resources <- function(dataset, pattern = NULL,
                           format = NULL) {
   assert_dataset(dataset)
-  dataset$list_dataset_resources(pattern = pattern,
-                                 format = format)
+  dataset$list_resources(pattern = pattern,
+                         format = format)
 }
 
 #' Delete resource from dataset
@@ -229,9 +220,26 @@ list_dataset_resources <- function(dataset, pattern = NULL,
 #'
 #' @return Dataset the dataset without the resource
 #' @export
-delete_dataset_resource <- function(dataset, index) {
+delete_dataset_nth_resource <- function(dataset, index) {
   assert_dataset(dataset)
-  dataset$delete_dataset_resource(index)
+  dataset$delete_nth_resource(index)
+  dataset
+}
+
+#' Delete resource from dataset
+#'
+#' Delete resource from dataset
+#'
+#' @details Delete resource from dataset
+#'
+#' @param dataset Dataset the dataset from which we one to remove the resource
+#' @param index integer the index of the resource to be removed
+#'
+#' @return Dataset the dataset without the resource
+#' @export
+delete_dataset_nth_resource <- function(dataset, index) {
+  assert_dataset(dataset)
+  dataset$delete_nth_resource(index)
   dataset
 }
 
@@ -245,9 +253,9 @@ delete_dataset_resource <- function(dataset, index) {
 #'
 #' @return Dataset without resources
 #' @export
-delete_all_dataset_resources <- function(dataset) {
+delete_dataset_resources <- function(dataset) {
   assert_dataset(dataset)
-  dataset$delete_all_dataset_resources()
+  dataset$delete_resources()
   dataset
 }
 
@@ -259,9 +267,10 @@ delete_all_dataset_resources <- function(dataset) {
                                visibility = c("all", "public", "restricted"),
                                filter_query = "",
                                rows = 10L,
-                               start = 0L, page_size = 1000L,
+                               start = 0L,
+                               page_size = 1000L,
                                configuration = NULL, ...) {
-  if (!is.null(configuration) & inherits(configuration, "Configuration"))
+  if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
     set_ridl_config(configuration = configuration)
   configuration <- get_ridl_config()
   visibility <- match.arg(visibility)
@@ -285,9 +294,9 @@ delete_all_dataset_resources <- function(dataset) {
                          simplifyVector = FALSE)$result$results
   list_of_ds <- lapply(list_of_ds,
                        function(x)
-                         Dataset$new(initial_data = x,
-                                     configuration = configuration))
-  class(list_of_ds) <- "datasets_list"
+                         RIDLDataset$new(initial_data = x,
+                                         configuration = configuration))
+  class(list_of_ds) <- "ridl_datasets_list"
   list_of_ds
 }
 
@@ -324,13 +333,13 @@ search_datasets <- memoise(.search_datasets)
 
 #' @noRd
 .pull_dataset <-  function(identifier, configuration = NULL) {
-  if (!is.null(configuration) & inherits(configuration, "Configuration"))
+  if (!is.null(configuration) &  inherits(configuration, "RIDLConfig"))
     set_ridl_config(configuration = configuration)
   configuration <- get_ridl_config()
   res <- configuration$call_action("package_show",
                                    list(id = identifier))
-  Dataset$new(initial_data = res,
-              configuration = configuration)
+  RIDLDataset$new(initial_data = res,
+                  configuration = configuration)
 }
 
 #' Pull RIDL dataset into R
@@ -373,7 +382,7 @@ pull_dataset <- memoise(.pull_dataset)
 #'  list_datasets(limit = 10L)
 #' }
 .list_datasets  <-  function(limit = NULL, offset = NULL, configuration = NULL) {
-  if (!is.null(configuration) & inherits(configuration, "Configuration"))
+  if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
     set_ridl_config(configuration = configuration)
   configuration <- get_ridl_config()
   data <- drop_nulls(list(offset = offset, limit = limit))
@@ -388,7 +397,7 @@ list_datasets <- memoise(.list_datasets)
 
 #' @rdname browse
 #' @export
-browse.Dataset <- function(x, ...)
+browse.RIDLDataset <- function(x, ...)
   x$browse()
 
 #' Dataset organization name
@@ -408,9 +417,31 @@ browse.Dataset <- function(x, ...)
 #'  res <- search_dataset(rows = 3L)
 #'  get_container_name(res[[1]])
 #' }
-get_container_name <- function(dataset) {
+get_dataset_container_name <- function(dataset) {
   assert_dataset(dataset)
   dataset$data$organization$name
+}
+
+
+#' Dataset container
+#'
+#' Get the container where the data is share
+#'
+#' @param dataset RIDLDataset, the dataset
+#'
+#' @return A \code{RIDLContainer}
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' # Setting the config to use RIDL default server
+#'  set_ridl_config()
+#'  res <- search_dataset(rows = 3L, visibility = "public")
+#'  get_dataset_container(res[[1]])
+#' }
+get_dataset_container <- function(dataset) {
+  assert_dataset(dataset)
+  dataset$get_container()
 }
 
 #' Dataset resources format
@@ -431,9 +462,9 @@ get_container_name <- function(dataset) {
 #'  res <- search_dataset(rows = 3L)
 #'  get_resources_formats(res[[1]])
 #' }
-get_resources_formats <- function(dataset) {
+get_dataset_resources_formats <- function(dataset) {
   assert_dataset(dataset)
-  vapply(dataset$get_resources(),
+  vapply(dataset$list_resources(),
          function(resource)
            resource$get_format(), character(1))
 }
@@ -455,74 +486,9 @@ get_resources_formats <- function(dataset) {
 #'  res <- search_dataset(rows = 3L)
 #'  get_tags_names(res[[1]])
 #' }
-get_tags_names <- function(dataset) {
+get_dataset_tags_names <- function(dataset) {
   assert_dataset(dataset)
   vapply(dataset$data$tags,
          function(tag) tag$name,
          character(1))
-}
-
-#' Add resource to dataset
-#'
-#' Add resource to dataset
-#'
-#' @param dataset Dataset
-#' @param index integer, resource position in the dataset
-#'
-#' @export
-#' @return Resource
-get_dataset_resource <- function(dataset, index) {
-  assert_dataset(dataset)
-  dataset$get_dataset_resource(index)
-}
-
-#' Add resource to dataset
-#'
-#' Add resource to dataset
-#'
-#' @param dataset Dataset
-#' @param pattern regex pattern in resource name
-#' @param format format of the resources
-#'
-#' @export
-#' @return resource_list
-list_all_dataset_resources <- function(dataset,
-                                      pattern = NULL,
-                                      format = NULL) {
-  assert_dataset(dataset)
-  dataset$list_all_dataset_resources(pattern = pattern, format = format)
-}
-
-#' Delete resource from dataset
-#'
-#' Delete resource from dataset
-#'
-#' @details Delete resource from dataset
-#'
-#' @param dataset Dataset the dataset from which we one to remove the resource
-#' @param index Integer the index of the resource to be removed
-#'
-#' @return Dataset the dataset without the resource
-#' @export
-delete_dataset_resource <- function(dataset, index) {
-  assert_dataset(dataset)
-  dataset$delete_dataset_resource(index)
-  dataset
-}
-
-
-#' Delete all resource from dataset
-#'
-#' Delete all resource from dataset
-#'
-#' @param dataset A Dataset, the dataset to remove
-#'
-#' @details Delete all resources from dataset
-#'
-#' @return Dataset without resources
-#' @export
-delete_all_dataset_resources <- function(dataset) {
-  assert_dataset(dataset)
-  dataset$delete_all_dataset_resources()
-  dataset
 }

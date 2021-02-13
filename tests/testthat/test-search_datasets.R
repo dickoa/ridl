@@ -1,8 +1,22 @@
 context("search_datasets")
 
-test_that("Search datasets returns the correct output", {
+test_that("search_datasets returns the correct output", {
   skip_on_cran()
   set_ridl_config()
   expect_is(search_datasets(),
-            "datasets_list")
+            "ridl_datasets_list")
+})
+
+test_that("search_datasets can return only public datasets", {
+  skip_on_cran()
+  set_ridl_config()
+  vcr::use_cassette("search_datasets", {
+    output <- search_datasets(visibility = "public",
+                              rows = 10L)
+  })
+  visibility <- vapply(output, function(ds) ds$data$visibility,
+                       character(1))
+  expect_length(visibility, 10L)
+  expect_equal(unique(visibility),
+               "public")
 })

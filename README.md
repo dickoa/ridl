@@ -183,7 +183,7 @@ object.
 ``` r
 dataset_name <- "official-cross-border-figures-of-venezuelan-individuals"
 pull_dataset(dataset_name) %>%
-  get_dataset_resource(1) %>%
+  get_dataset_nth_resource(1) %>%
   read_resource()
 ## + Reading sheet:  VEN_Official Borders Figures
 ## # A tibble: 1,314 x 5

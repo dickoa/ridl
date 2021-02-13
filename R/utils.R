@@ -3,7 +3,8 @@
 magrittr::`%>%`
 
 #' @noRd
-is_null_recursive <- function(x) is.null(x) | all(vapply(x, is.null, logical(1)))
+is_null_recursive <- function(x)
+  is.null(x) | all(vapply(x, is.null, logical(1)))
 
 #' @noRd
 drop_nulls <- function(x) {
@@ -25,32 +26,39 @@ check_config_params <- function(ridl_key = NULL, user_agent = NULL) {
 
 #' @noRd
 assert_configuration <- function(configuration)
-  if (is.null(configuration) | !inherits(configuration, "Configuration"))
+  if (is.null(configuration) | !inherits(configuration, "RIDLConfig"))
     stop("RIDL configuration not set! Use `set_ridl_config`", call. = FALSE)
 
 #' @noRd
 assert_dataset <- function(x) {
-  if (!inherits(x, "Dataset"))
+  if (!inherits(x, "RIDLDataset"))
     stop("Not an RIDL dataset!", call. = FALSE)
 }
 
 #' @noRd
 assert_datasets_list <- function(x) {
-  if (!inherits(x, "datasets_list"))
+  if (!inherits(x, "ridl_datasets_list"))
     stop("Not a list of RIDL Datasets!", call. = FALSE)
   invisible(x)
 }
 
 #' @noRd
 assert_resource <- function(x) {
-  if (!inherits(x, "Resource"))
+  if (!inherits(x, "RIDLResource"))
     stop("Not an RIDL Resource object!", call. = FALSE)
   invisible(x)
 }
 
 #' @noRd
-assert_organization <- function(x) {
-  if (!inherits(x, "Container"))
+assert_resources_list <- function(x) {
+  if (!inherits(x, "ridl_resources_list"))
+    stop("Not a list of RIDL Resources!", call. = FALSE)
+  invisible(x)
+}
+
+#' @noRd
+assert_container <- function(x) {
+  if (!inherits(x, "RIDLContainer"))
     stop("Not an RIDL Container object!", call. = FALSE)
   invisible(x)
 }
