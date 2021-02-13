@@ -33,6 +33,7 @@ creating, and updating datasets and associated resources.
 \item \href{#method-number_of_resources}{\code{RIDLDataset$number_of_resources()}}
 \item \href{#method-delete_nth_resource}{\code{RIDLDataset$delete_nth_resource()}}
 \item \href{#method-delete_resources}{\code{RIDLDataset$delete_resources()}}
+\item \href{#method-add_resource}{\code{RIDLDataset$add_resource()}}
 \item \href{#method-browse}{\code{RIDLDataset$browse()}}
 \item \href{#method-get_configuration}{\code{RIDLDataset$get_configuration()}}
 \item \href{#method-get_date_range}{\code{RIDLDataset$get_date_range()}}
@@ -151,6 +152,27 @@ Delete all resources from a dataset
 \if{html}{\out{<div class="r">}}\preformatted{RIDLDataset$delete_resources()}\if{html}{\out{</div>}}
 }
 
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-add_resource"></a>}}
+\if{latex}{\out{\hypertarget{method-add_resource}{}}}
+\subsection{Method \code{add_resource()}}{
+
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RIDLDataset$add_resource(resource, ignore_dataset_id = FALSE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{resource}}{RIDLResource, the resource}
+
+\item{\code{ignore_dataset_id}}{logical, ignore the dataset id
+
+Add a resource to a dataset}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-browse"></a>}}

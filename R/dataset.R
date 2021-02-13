@@ -115,6 +115,29 @@ RIDLDataset <- R6::R6Class(
     },
 
     #' @description
+    #'
+    #' @param resource RIDLResource, the resource
+    #' @param ignore_dataset_id logical, ignore the dataset id
+    #'
+    #' Add a resource to a dataset
+    add_resource = function(resource, ignore_dataset_id = FALSE) {
+      if (!inherits(resource, "RIDLResource"))
+        stop("Not of class `Resource` please use `RIDLResource$new()` to create a resource first!", call. = FALSE)
+      if ("package_id" %in% names(resource$data))
+        stop("This Resource already have a dataset id", call. = FALSE)
+      if (length(self$data$resources) > 0) {
+        i <- self$data$num_resources
+        self$data$resources[[i + 1]] <- resource$data
+        self$resources[[i + 1]] <- RIDLResource$new(resource$data)
+        self$data$num_resources <- self$data$num_resources + 1
+      } else {
+        self$data$resources[[1]] <- resource$data
+        self$resources <- list(RIDLResource$new(resource$data))
+        self$data$num_resources <- 1L
+      }
+    },
+
+    #' @description
     #' Browse the dataset page on RIDL
     browse = function() {
       url <- private$configuration$get_ridl_url()
@@ -491,4 +514,84 @@ get_dataset_tags_names <- function(dataset) {
   vapply(dataset$data$tags,
          function(tag) tag$name,
          character(1))
+}
+
+#' Add a Resource to a dataset
+#'
+#' Add a Resource to a dataset
+#'
+#'
+#' @param dataset RIDLDataset, the dataset
+#' @param resource RIDLResource, the resource
+#' @param ignore_dataset_id logical, ignore the dataset id
+#' @param configuration RIDLConfig, the configuration
+#'
+#' @return A RIDLDataset
+#' @export
+add_dataset_resource <- function(dataset, resource, ignore_dataset_id = FALSE, configuration = NULL) {
+  if (!is.null(configuration) &  inherits(configuration, "RIDLConfig"))
+    set_ridl_config(configuration = configuration)
+  configuration <- get_ridl_config()
+  assert_dataset(dataset)
+  assert_resource(resource)
+  dataset$add_resource(resource,
+                       ignore_dataset_id = ignore_dataset_id)
+  dataset
+}
+
+
+#' Add organization to dataset
+#'
+#' Add organization to dataset
+#'
+#' @param dataset RIDLDataset
+#' @param Container charater, valid RIDL container name
+#'
+#' @return A RIDLDataset
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' }
+add_dataset_container <- function(dataset, container) {
+  assert_dataset(dataset)
+  assert_container_name(container)
+  dataset$add_container(container)
+  dataset
+}
+
+#' Create a RIDL dataset from list
+#'
+#' Create a RIDL dataset from list with required fields
+#'
+#' @param initial_data List, list of data
+#'
+#'
+#' @return Dataset the dataset
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#'
+#'  metadata <- list(name = "hum-dataset",
+#'                   date = "09/25/2018",
+#'                   title = "Humanitarian dataset")
+#'  res <- create_data(metdata)
+#'  res
+#' }
+create_dataset <- function(initial_data) {
+  RIDLDataset$new(initial_data)
+}
+
+#' @noRd
+.push_dataset <-  function(dataset, configuration = NULL) {
+  if (!is.null(configuration) &  inherits(configuration, "RIDLConfig"))
+    set_ridl_config(configuration = configuration)
+  configuration <- get_ridl_config()
+  assert_dataset(dataset)
+  data <- dataset$data
+  res <- configuration$call_action("package_create",
+                                   body = data,
+                                   verb = "post")
+  res
 }
