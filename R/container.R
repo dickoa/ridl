@@ -163,3 +163,7 @@ browse.RIDLContainer <- function(x, ...)
 #' @rdname list_containers
 #' @export
 list_containers <- memoise::memoise(.list_containers)
+
+#' @rdname list_containers
+#' @export
+list_container_names <- memoise::memoise(.list_containers)

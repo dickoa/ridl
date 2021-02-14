@@ -4,10 +4,12 @@
 \alias{create_dataset}
 \title{Create a RIDL dataset from list}
 \usage{
-create_dataset(initial_data)
+create_dataset(initial_data, configuration = NULL)
 }
 \arguments{
 \item{initial_data}{List, list of data}
+
+\item{configuration}{RIDLConfig, RIDL configuration used}
 }
 \value{
 Dataset the dataset
@@ -18,10 +20,9 @@ Create a RIDL dataset from list with required fields
 \examples{
 \dontrun{
 
- metadata <- list(name = "hum-dataset",
-                  date = "09/25/2018",
-                  title = "Humanitarian dataset")
- res <- create_data(metdata)
+ dsdata <- list(name = "hum-dataset",
+                title = "Humanitarian dataset")
+ res <- create_dataset(dsdata)
  res
 }
 }

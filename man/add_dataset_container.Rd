@@ -4,12 +4,15 @@
 \alias{add_dataset_container}
 \title{Add organization to dataset}
 \usage{
-add_dataset_container(dataset, container)
+add_dataset_container(dataset, container_name, configuration = NULL)
 }
 \arguments{
-\item{dataset}{RIDLDataset}
+\item{dataset}{RIDLDataset, the dataset}
 
-\item{Container}{charater, valid RIDL container name}
+\item{container_name}{charater, A valid RIDL container name, you can use
+\code{list_containers()} to have the list of all containers}
+
+\item{configuration}{RIDLConfig, the RIDL configuration}
 }
 \value{
 A RIDLDataset
@@ -19,5 +22,7 @@ Add organization to dataset
 }
 \examples{
 \dontrun{
+ ds <- create_dataset(list(name = "cool-dataset"))
+ add_dataset_container(ds, "zimbabwe-shelter-nfi")
 }
 }

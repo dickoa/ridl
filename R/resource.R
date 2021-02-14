@@ -137,52 +137,7 @@ RIDLResource <- R6::R6Class(
              xls = read_ridl_excel(file_path, sheet = sheet, hxl = hxl, ...),
              stata = read_ridl_stata(file_path, ...),
              dta = read_ridl_stata(file_path, ...),
-             json = read_ridl_json(file_path, simplify_json = simplify_json, ...),
-             geojson = read_ridl_vector(file_path, layer = layer, ...),
-             kmz = read_ridl_vector(file_path, layer = layer, ...),
-             geodatabase = read_ridl_vector(file_path, layer = layer, ...),
-             shp = read_ridl_vector(file_path, layer = layer, ...),
-             geopackage = read_ridl_vector(file_path, layer = layer, ...),
-             kml = read_ridl_vector(file_path, layer = layer, ...),
-             geotiff = read_ridl_raster(file_path, ...))
-    },
-
-    #' @description
-    #' Get spatial (vector) resource list of layers
-    #'
-    #'
-    #' @param download_folder a character value, folder to save the downloaded resource
-    #' @param format character; file format
-    #' @param force_download a logical value, if TRUE force download
-    #' @param quiet_download a logical value, if TRUE silent download
-    #'
-    #' @return a the list of layers available in the resource
-    get_layers = function(format = NULL, download_folder = NULL,
-                          quiet_download = TRUE, force_download = FALSE) {
-
-      if (!is.null(private$download_folder_) & is.null(download_folder))
-        folder <- self$download_folder()
-
-      file_path <- self$download(folder = download_folder,
-                                 quiet = quiet_download, force = force_download)
-
-      if (is.null(format))
-        format <- self$get_format()
-
-      supported_geo_format <- c("geojson", "shp", "geopackage",
-                                "kmz", "geodatabase", "kml")
-
-      if (!format %in% supported_geo_format)
-        stop("This (spatial) vector format is not yet supported",
-             call. = FALSE)
-
-      switch(format,
-             geojson = get_ridl_layers_(file_path),
-             shp = get_ridl_layers_(file_path),
-             geodatabase = get_ridl_layers_(file_path),
-             geopackage = get_ridl_layers_(file_path),
-             kml = get_ridl_layers_(file_path),
-             kmz = get_ridl_layers_(file_path))
+             json = read_ridl_json(file_path, simplify_json = simplify_json, ...))
     },
 
     #' @description
@@ -337,23 +292,6 @@ download_resource <- function(resource, folder = NULL,
                     quiet = quiet, force = force, ...)
 }
 
-#' List layers available in spatial resources on RIDL
-#'
-#' List layers available in spatial resources on RIDL
-#' @param resource Resource, a RIDL resource
-#' @param format character; file format
-#' @param download_folder Character, path of the directory where you will store the data
-#' @param quiet Logical, no progress bar from download (default = FALSE)
-#'
-#' @return the layers name
-#' @export
-get_resource_layers <- function(resource, format = NULL,
-                                download_folder = NULL, quiet = TRUE) {
-  assert_resource(resource)
-  resource$get_layers(format = format,
-                      download_folder = download_folder, quiet = quiet)
-}
-
 #' Get the names of the sheets of XLS(X) resources
 #'
 #'  Get the names of the sheets of XLS(X) resources
@@ -503,6 +441,32 @@ as_tibble.resources_list <- function(x, ...) {
 #'  res
 #' }
 pull_resource <- memoise(.pull_resource)
+
+#' Create a RIDL resource from list
+#'
+#' Create a RIDL resource from list with required fields
+#'
+#' @param initial_data List, list of data
+#' @param configuration RIDLConfig, the configuration used
+#'
+#' @return Resource the resource
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#'
+#'  rsdata <- list(name = "hum-resource",
+#'                 title = "Humanitarian resource")
+#'  res <- create_resource(rsdata)
+#'  res
+#' }
+create_resource <- function(initial_data, configuration = NULL) {
+  if (!is.null(configuration) &  inherits(configuration, "RIDLConfig"))
+    set_ridl_config(configuration = configuration)
+  configuration <- get_ridl_config()
+  assert_valid_resource_data(initial_data)
+  RIDLResource$new(initial_data)
+}
 
 #' @rdname browse
 #' @export

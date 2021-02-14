@@ -43,6 +43,16 @@ assert_datasets_list <- function(x) {
 }
 
 #' @noRd
+assert_valid_dataset_data <- function(x) {
+  TRUE
+}
+
+#' @noRd
+assert_valid_resource_data <- function(x) {
+  TRUE
+}
+
+#' @noRd
 assert_resource <- function(x) {
   if (!inherits(x, "RIDLResource"))
     stop("Not an RIDL Resource object!", call. = FALSE)
@@ -60,6 +70,14 @@ assert_resources_list <- function(x) {
 assert_container <- function(x) {
   if (!inherits(x, "RIDLContainer"))
     stop("Not an RIDL Container object!", call. = FALSE)
+  invisible(x)
+}
+
+#' @noRd
+assert_container_name <- function(x) {
+  l <- list_container_names()
+  if (!x %in% l)
+    stop("Not a valid RIDL container name", call. = FALSE)
   invisible(x)
 }
 
@@ -204,46 +222,11 @@ read_ridl_stata <- function(file, ...) {
   read_dta(file, ...)
 }
 
-#' @importFrom sf st_layers
-#' @noRd
-get_ridl_layers_ <- function(file = NULL) {
-  check_packages("sf")
-  zipped <- grepl("\\.zip$", file, ignore.case = TRUE)
-  if (zipped)
-    file <- file.path("/vsizip", file)
-  st_layers(file)$name
-}
-
 #' @importFrom readxl excel_sheets
 #' @noRd
 get_ridl_sheets_ <- function(file = NULL) {
   check_packages("readxl")
   excel_sheets(file)
-}
-
-#' @importFrom sf read_sf st_layers
-#' @noRd
-read_ridl_vector <- function(file = NULL, layer = NULL, ...) {
-  check_packages("sf")
-  zipped <- grepl("\\.zip$", file, ignore.case = TRUE)
-  if (zipped)
-    file <- file.path("/vsizip", file)
-  if (is.null(layer)) {
-    layer <- st_layers(file)$name[1]
-    message("Reading layer: ", layer, "\n")
-  }
-  read_sf(dsn = file, layer = layer, ...)
-}
-
-
-#' @importFrom stars read_stars
-#' @noRd
-read_ridl_raster <- function(file = NULL, ...) {
-  check_packages("stars")
-  zipped <- grepl("\\.zip$", file, ignore.case = TRUE)
-  if (zipped)
-    file <- file.path("/vsizip", file)
-  read_stars(file, ...)
 }
 
 #' Encode URL from proxy.hxlstandard

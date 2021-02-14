@@ -20,8 +20,6 @@ Imports:
     readr,
     readxl,
     haven,
-    sf,
-    stars,
     memoise,
     hoardr,
     tibble,

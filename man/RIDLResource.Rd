@@ -29,7 +29,6 @@ and updating resources
 \item \href{#method-download}{\code{RIDLResource$download()}}
 \item \href{#method-download_folder}{\code{RIDLResource$download_folder()}}
 \item \href{#method-read_resource}{\code{RIDLResource$read_resource()}}
-\item \href{#method-get_layers}{\code{RIDLResource$get_layers()}}
 \item \href{#method-get_sheets}{\code{RIDLResource$get_sheets()}}
 \item \href{#method-get_dataset}{\code{RIDLResource$get_dataset()}}
 \item \href{#method-get_required_fields}{\code{RIDLResource$get_required_fields()}}
@@ -159,37 +158,6 @@ Read a Resource object directly into memory
 \subsection{Returns}{
 a \code{tibble}, a \code{sf}, a \code{stars} or a \code{list} depending
 on the type of resource read
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_layers"></a>}}
-\if{latex}{\out{\hypertarget{method-get_layers}{}}}
-\subsection{Method \code{get_layers()}}{
-Get spatial (vector) resource list of layers
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RIDLResource$get_layers(
-  format = NULL,
-  download_folder = NULL,
-  quiet_download = TRUE,
-  force_download = FALSE
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{format}}{character; file format}
-
-\item{\code{download_folder}}{a character value, folder to save the downloaded resource}
-
-\item{\code{quiet_download}}{a logical value, if TRUE silent download}
-
-\item{\code{force_download}}{a logical value, if TRUE force download}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-a the list of layers available in the resource
 }
 }
 \if{html}{\out{<hr>}}

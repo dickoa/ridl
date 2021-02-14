@@ -3,11 +3,14 @@
 \name{.list_datasets}
 \alias{.list_datasets}
 \alias{list_datasets}
+\alias{list_dataset_names}
 \title{List datasets}
 \usage{
 .list_datasets(limit = NULL, offset = NULL, configuration = NULL)
 
 list_datasets(limit = NULL, offset = NULL, configuration = NULL)
+
+list_dataset_names(limit = NULL, offset = NULL, configuration = NULL)
 }
 \arguments{
 \item{limit}{integer; limit}

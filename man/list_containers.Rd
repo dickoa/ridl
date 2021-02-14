@@ -3,6 +3,7 @@
 \name{.list_containers}
 \alias{.list_containers}
 \alias{list_containers}
+\alias{list_container_names}
 \title{List RIDL container}
 \usage{
 .list_containers(
@@ -17,6 +18,17 @@
 )
 
 list_containers(
+  sort = "name asc",
+  all_fields = FALSE,
+  include_dataset_count = TRUE,
+  include_groups = FALSE,
+  include_user = FALSE,
+  include_tags = FALSE,
+  configuration = NULL,
+  ...
+)
+
+list_container_names(
   sort = "name asc",
   all_fields = FALSE,
   include_dataset_count = TRUE,

@@ -34,6 +34,7 @@ creating, and updating datasets and associated resources.
 \item \href{#method-delete_nth_resource}{\code{RIDLDataset$delete_nth_resource()}}
 \item \href{#method-delete_resources}{\code{RIDLDataset$delete_resources()}}
 \item \href{#method-add_resource}{\code{RIDLDataset$add_resource()}}
+\item \href{#method-add_container}{\code{RIDLDataset$add_container()}}
 \item \href{#method-browse}{\code{RIDLDataset$browse()}}
 \item \href{#method-get_configuration}{\code{RIDLDataset$get_configuration()}}
 \item \href{#method-get_date_range}{\code{RIDLDataset$get_date_range()}}
@@ -170,6 +171,23 @@ Delete all resources from a dataset
 \item{\code{ignore_dataset_id}}{logical, ignore the dataset id
 
 Add a resource to a dataset}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-add_container"></a>}}
+\if{latex}{\out{\hypertarget{method-add_container}{}}}
+\subsection{Method \code{add_container()}}{
+Add a container to a dataset
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RIDLDataset$add_container(container_name)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{container_name}}{the name of the container to add}
 }
 \if{html}{\out{</div>}}
 }

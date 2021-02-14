@@ -35,7 +35,7 @@ RIDLDataset <- R6::R6Class(
         self$resources <- lapply(self$data$resources,
                                  function(x)
                                    RIDLResource$new(initial_data = x,
-                                                configuration = configuration))
+                                                    configuration = configuration))
     },
 
     #' @description
@@ -138,6 +138,13 @@ RIDLDataset <- R6::R6Class(
     },
 
     #' @description
+    #' Add a container to a dataset
+    #' @param container_name the name of the container to add
+    add_container = function(container_name) {
+      self$data$owner_org <- container_name
+    },
+
+    #' @description
     #' Browse the dataset page on RIDL
     browse = function() {
       url <- private$configuration$get_ridl_url()
@@ -188,6 +195,7 @@ RIDLDataset <- R6::R6Class(
         cat("  Title: ", self$data$title, "\n", sep = "")
         cat("  Name: ", self$data$name, "\n", sep = "")
         cat("  Visibility: ", self$data$visibility, "\n", sep = "")
+        cat("  Container: ", self$data$organization$title, "\n", sep = "")
         cat("  Resources (up to 5): ",
             sift_res(self$data$resources), "\n", sep = "")
       invisible(self)
@@ -418,6 +426,11 @@ pull_dataset <- memoise(.pull_dataset)
 #' @export
 list_datasets <- memoise(.list_datasets)
 
+#' @rdname list_datasets
+#' @importFrom memoise memoise
+#' @export
+list_dataset_names <- memoise(.list_datasets)
+
 #' @rdname browse
 #' @export
 browse.RIDLDataset <- function(x, ...)
@@ -544,19 +557,26 @@ add_dataset_resource <- function(dataset, resource, ignore_dataset_id = FALSE, c
 #'
 #' Add organization to dataset
 #'
-#' @param dataset RIDLDataset
-#' @param Container charater, valid RIDL container name
+#' @param dataset RIDLDataset, the dataset
+#' @param container_name charater, A valid RIDL container name, you can use
+#' \code{list_containers()} to have the list of all containers
+#' @param configuration  RIDLConfig, the RIDL configuration
 #'
 #' @return A RIDLDataset
 #' @export
 #'
 #' @examples
 #' \dontrun{
+#'  ds <- create_dataset(list(name = "cool-dataset"))
+#'  add_dataset_container(ds, "zimbabwe-shelter-nfi")
 #' }
-add_dataset_container <- function(dataset, container) {
+add_dataset_container <- function(dataset, container_name, configuration = NULL) {
+  if (!is.null(configuration) &  inherits(configuration, "RIDLConfig"))
+    set_ridl_config(configuration = configuration)
+  configuration <- get_ridl_config()
   assert_dataset(dataset)
-  assert_container_name(container)
-  dataset$add_container(container)
+  assert_container_name(container_name)
+  dataset$add_container(container_name)
   dataset
 }
 
@@ -565,7 +585,7 @@ add_dataset_container <- function(dataset, container) {
 #' Create a RIDL dataset from list with required fields
 #'
 #' @param initial_data List, list of data
-#'
+#' @param configuration RIDLConfig, RIDL configuration used
 #'
 #' @return Dataset the dataset
 #' @export
@@ -573,13 +593,16 @@ add_dataset_container <- function(dataset, container) {
 #' @examples
 #' \dontrun{
 #'
-#'  metadata <- list(name = "hum-dataset",
-#'                   date = "09/25/2018",
-#'                   title = "Humanitarian dataset")
-#'  res <- create_data(metdata)
+#'  dsdata <- list(name = "hum-dataset",
+#'                 title = "Humanitarian dataset")
+#'  res <- create_dataset(dsdata)
 #'  res
 #' }
-create_dataset <- function(initial_data) {
+create_dataset <- function(initial_data, configuration = NULL) {
+  if (!is.null(configuration) &  inherits(configuration, "RIDLConfig"))
+    set_ridl_config(configuration = configuration)
+  configuration <- get_ridl_config()
+  assert_valid_dataset_data(initial_data)
   RIDLDataset$new(initial_data)
 }
 
