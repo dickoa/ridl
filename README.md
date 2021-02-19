@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# ridl <img src="inst/img/hex_ridl.png" align="right" height="139" />
+# ridl <img src="https://gitlab.com/dickoa/ridl/-/raw/master/inst/img/hex_ridl.png" align="right" height="139" />
 
 [![Project Status: Active - Initial development is in progress, but
 there has not yet been a stable, usable release suitable for the

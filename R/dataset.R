@@ -395,13 +395,23 @@ search_datasets <- memoise(.search_datasets)
 pull_dataset <- memoise(.pull_dataset)
 
 
-#' List datasets
-#'
+#' @noRd
+.list_datasets  <-  function(limit = NULL, offset = NULL, configuration = NULL) {
+  if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
+    set_ridl_config(configuration = configuration)
+  configuration <- get_ridl_config()
+  data <- drop_nulls(list(offset = offset, limit = limit))
+  res <- configuration$call_action("package_list", data)
+  unlist(res)
+}
+
 #' List datasets
 #'
 #' @param limit  integer; limit
 #' @param offset integer; offset
 #' @param configuration a Configuration object
+#'
+#' @importFrom memoise memoise
 #'
 #' @rdname list_datasets
 #' @return A vector of datasets names
@@ -412,17 +422,7 @@ pull_dataset <- memoise(.pull_dataset)
 #'  set_ridl_config()
 #'  list_datasets(limit = 10L)
 #' }
-.list_datasets  <-  function(limit = NULL, offset = NULL, configuration = NULL) {
-  if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
-    set_ridl_config(configuration = configuration)
-  configuration <- get_ridl_config()
-  data <- drop_nulls(list(offset = offset, limit = limit))
-  res <- configuration$call_action("package_list", data)
-  unlist(res)
-}
-
-#' @rdname list_datasets
-#' @importFrom memoise memoise
+#'
 #' @export
 list_datasets <- memoise(.list_datasets)
 
