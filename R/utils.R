@@ -182,13 +182,6 @@ is_valid_tag <- function(tag) {
   grepl(x = ltag, pattern = pattern)
 }
 
-#' @importFrom jsonlite fromJSON
-#' @noRd
-read_ridl_json <- function(file, simplify_json = FALSE, ...) {
-  check_packages("jsonlite")
-  fromJSON(file, simplifyVector = simplify_json, ...)
-}
-
 #' @importFrom readr read_delim default_locale locale
 #' @noRd
 read_ridl_delim <- function(file, hxl = FALSE, delim = NULL, locale = default_locale(), ...) {

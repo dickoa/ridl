@@ -122,21 +122,7 @@ pull_container <- memoise::memoise(.pull_container)
 browse.RIDLContainer <- function(x, ...)
   x$browse()
 
-#' List RIDL container
-#'
-#' List RIDL container
-#'
-#' @param sort Character how to sort the results. Default is "name asc"
-#' @param all_fields Logical, include all fields
-#' @param include_dataset_count Logical include count in the result
-#' @param include_groups Logical, whether or not to include locations
-#' @param include_user Logical, whether or not to include user
-#' @param include_tags Logical whether or not to include tags
-#' @param configuration Configuration
-#' @param ... extra paramaters
-#'
-#' @rdname list_containers
-#' @return A list of containers on RIDL
+#' @noRd
 .list_containers  <-  function(sort = "name asc",
                                all_fields = FALSE,
                                include_dataset_count = TRUE,
@@ -160,7 +146,24 @@ browse.RIDLContainer <- function(x, ...)
   res
 }
 
+
+#' List RIDL container
+#'
+#' List RIDL container
+#'
+#' @param sort Character how to sort the results. Default is "name asc"
+#' @param all_fields Logical, include all fields
+#' @param include_dataset_count Logical include count in the result
+#' @param include_groups Logical, whether or not to include locations
+#' @param include_user Logical, whether or not to include user
+#' @param include_tags Logical whether or not to include tags
+#' @param configuration Configuration
+#' @param ... extra paramaters
+#'
+#' @importFrom memoise memoise
+#'
 #' @rdname list_containers
+#' @return A list of containers on RIDL
 #' @export
 list_containers <- memoise::memoise(.list_containers)
 

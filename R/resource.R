@@ -135,9 +135,12 @@ RIDLResource <- R6::R6Class(
              csv = read_ridl_delim(file_path, hxl = hxl, ...),
              xlsx = read_ridl_excel(file_path, sheet = sheet, hxl = hxl, ...),
              xls = read_ridl_excel(file_path, sheet = sheet, hxl = hxl, ...),
+             `.csv` = read_ridl_delim(file_path, hxl = hxl, ...),
+             `.xlsx` = read_ridl_excel(file_path, sheet = sheet, hxl = hxl, ...),
+             `.xls` = read_ridl_excel(file_path, sheet = sheet, hxl = hxl, ...),
              stata = read_ridl_stata(file_path, ...),
              dta = read_ridl_stata(file_path, ...),
-             json = read_ridl_json(file_path, simplify_json = simplify_json, ...))
+             `.dta` = read_ridl_stata(file_path, ...))
     },
 
     #' @description

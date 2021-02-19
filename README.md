@@ -8,12 +8,8 @@ there has not yet been a stable, usable release suitable for the
 public.](http://www.repostatus.org/badges/latest/wip.svg)](http://www.repostatus.org/#wip)
 [![GitLab CI Build
 Status](https://gitlab.com/dickoa/ridl/badges/master/pipeline.svg)](https://gitlab.com/dickoa/ridl/pipelines)
-[![Travis build
-status](https://api.travis-ci.org/dickoa/ridl.svg?branch=master)](https://travis-ci.org/dickoa/ridl)
-[![AppVeyor build
-status](https://ci.appveyor.com/api/projects/status/gitlab/dickoa/ridl?branch=master&svg=true)](https://ci.appveyor.com/project/dickoa/ridl)
 [![Codecov Code
-Coverage](https://codecov.io/gh/dickoa/ridl/branch/master/graph/badge.svg)](https://codecov.io/gh/dickoa/ridl)
+Coverage](https://codecov.io/gl/dickoa/ridl/branch/master/graph/badge.svg)](https://codecov.io/gh/dickoa/ridl)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/ridl)](https://cran.r-project.org/package=ridl)
 [![License:
@@ -102,12 +98,42 @@ search_datasets("mali", visibility = "public", rows = 2) ## search internally pu
 ##   Resources (up to 5): DDI XML, DDI RDF, UNHCR_MRT_2017_SEA_household_v1_1, UNHCR_MRT_2017_SEA_individual_v1_1, UNHCR_MRT_2017_SEA_questionnaire
 
 ## attr(,"class")
-## [1] "datasets_list"
+## [1] "ridl_datasets_list"
 ```
 
 We can select a particular dataset from the list of datasets using `R`
 function to access elements from list (e.g `[[`). In this example, we
-will use `purrr::pluck` since it plays well with the pipe operator.
+will use `purrr::pluck` since it plays well with the pipe operator
+`%>%`. Once the dataset selected, it’s possible to list all its
+resources using `list_dataset_resources`.
+
+``` r
+library(tidyverse)
+search_datasets("mali", visibility = "public", rows = 2) %>%
+  pluck(1) %>%
+  list_dataset_resources(format = "stata")
+## <RIDL Resource> 026f9547-d7b2-4ec3-bbaa-5096837b1f01
+##   Name: UNHCR_BFA_2016_SEA_household_v1_1
+##   Description: BFA SEA household level data
+##   Type: microdata
+##   Size: 1278720
+##   Format: Stata
+
+## [[2]]
+## <RIDL Resource> 30ab9f7a-9b84-4695-88ba-7504a4aed9e2
+##   Name: UNHCR_BFA_2016_SEA_individual_v1_1
+##   Description: BFA SEA individual data
+##   Type: microdata
+##   Size: 143744
+##   Format: Stata
+
+## attr(,"class")
+## [1] "ridl_resources_list"
+```
+
+A `ridl_resources_list` is a simple `R` `list` and can be manipulated
+using `purrr::pluck` to select the one you want to read
+(`read_resource`) or download (`download_resource`).
 
 ``` r
 library(tidyverse)
@@ -164,16 +190,17 @@ search_datasets("mali", visibility = "public", rows = 2) %>%
 ## #   q23904 <dbl+lbl>, q23909 <dbl+lbl>, q240 <dbl+lbl>, …
 ```
 
-We access all resources within the dataset page with the
-`list_dataset_resources` function and finally read the data directly
-into the `R` session using `read_resource`.
-
 `read_resource` will not work with all resources in RIDL, so far the
-following format are supported: `csv`, `xlsx`, `xls`, `stata`, `dta`,
-`json`, `geojson`, `zipped shapefile`, `kmz`, `zipped geodatabase` and
-`zipped geopackage`. I will consider adding more data types in the
-future, feel free to file an issue if it doesn’t work as expected or you
-want to add a support for a format.
+following format are supported: `csv`, `xlsx`, `xls`, `dta` (`Stata`).
+
+I will consider adding more data types in the future, feel free to file
+an issue if it doesn’t work as expected or you want to add a support for
+a new format.
+
+For Excel files (`xlsx` and `xls`), you can also use
+`get_resource_sheets` to list available sheets and use the `sheet`
+paramater in `read_resource` to specify the sheet you want to read
+(default is to read the first sheet).
 
 ### Reading dataset directly
 
@@ -184,6 +211,38 @@ object.
 dataset_name <- "official-cross-border-figures-of-venezuelan-individuals"
 pull_dataset(dataset_name) %>%
   get_dataset_nth_resource(1) %>%
+  read_resource()
+## + Reading sheet:  VEN_Official Borders Figures
+## # A tibble: 1,314 x 5
+##    Country `Mov Type`  `Border Point` Month_Year Total_individua…
+##    <chr>   <chr>       <chr>          <chr>                 <dbl>
+##  1 Ecuador Entry from… Aeropuerto In… January-20                0
+##  2 Ecuador Entry from… Aeropuerto In… February-…                1
+##  3 Ecuador Entry from… Aeropuerto In… March-20                  0
+##  4 Ecuador Entry from… Aeropuerto In… April-20                  0
+##  5 Ecuador Entry from… Aeropuerto In… May-20                    0
+##  6 Ecuador Entry from… Aeropuerto In… June-20                   2
+##  7 Ecuador Entry from… Aeropuerto In… July-20                   2
+##  8 Ecuador Entry from… Aeropuerto In… August-20                 2
+##  9 Ecuador Entry from… Aeropuerto In… September…               NA
+## 10 Ecuador Entry from… Aeropuerto In… January-20                0
+# … with 1,304 more rows
+```
+
+If you know the id of a `RIDL Resource` object you can also use directly
+`pull_resource` to access directly the desired resource.
+
+``` r
+pull_dataset(dataset_name) %>%
+  get_dataset_nth_resource(1)
+## + <RIDL Resource> 68e39d44-88ae-49f9-b492-3635341c92be
+##   Name: VEN_OfficialFiguresBorders
+##   Description: Compilation of official figures on Venezuelan population per month per entry-exit point.
+##   Type: microdata
+##   Size: 39998
+##   Format: XLSX
+
+pull_resource("68e39d44-88ae-49f9-b492-3635341c92be")
   read_resource()
 ## + Reading sheet:  VEN_Official Borders Figures
 ## # A tibble: 1,314 x 5
