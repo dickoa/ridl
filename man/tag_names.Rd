@@ -4,7 +4,7 @@
 \alias{tag_names.RIDLDataset}
 \alias{tag_names}
 \alias{tag_names.default}
-\title{Dataset tags name}
+\title{Get the dataset tag names}
 \usage{
 \method{tag_names}{RIDLDataset}(dataset)
 
@@ -19,12 +19,11 @@ tag_names(dataset)
 Character Tags of the dataset
 }
 \description{
-Gets dataset tags name
+Get the dataset tags name
 }
 \examples{
 \dontrun{
  # Setting the config to use RIDL
- set_ridl_config()
  res <- search_dataset(rows = 3L)
  get_tags_names(res[[1]])
 }

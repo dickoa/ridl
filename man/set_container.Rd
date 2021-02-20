@@ -4,7 +4,7 @@
 \alias{set_container.RIDLDataset}
 \alias{set_container}
 \alias{set_container.default}
-\title{Add organization to dataset}
+\title{Add a dataset to a container}
 \usage{
 \method{set_container}{RIDLDataset}(dataset, container_name, configuration = NULL)
 
@@ -24,7 +24,7 @@ set_container(dataset, container_name, configuration)
 A RIDLDataset
 }
 \description{
-Add organization to dataset
+Add a dataset to a container
 }
 \examples{
 \dontrun{

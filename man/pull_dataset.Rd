@@ -2,14 +2,14 @@
 % Please edit documentation in R/dataset.R
 \name{pull_dataset}
 \alias{pull_dataset}
-\title{Pull RIDL dataset into R}
+\title{Pull a RIDL dataset}
 \usage{
 pull_dataset(identifier, configuration = NULL)
 }
 \arguments{
-\item{identifier}{Character dataset keyword}
+\item{identifier}{character, name or id of the dataset}
 
-\item{configuration}{a Configuration object}
+\item{configuration}{RIDLConfig, the configuration to use if any}
 }
 \value{
 Dataset the dataset
@@ -20,8 +20,7 @@ Read a RIDL dataset from its name or id
 \examples{
 \dontrun{
 # Setting the config to use RIDL default server
- set_ridl_config()
- res <- pull_dataset("mali-3wop")
+ res <- pull_dataset("unhcr-mrt-2017-sea-1-1")
  res
 }
 }

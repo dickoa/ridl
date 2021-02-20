@@ -2,7 +2,7 @@
 % Please edit documentation in R/resource.R
 \name{ridl_resource}
 \alias{ridl_resource}
-\title{Create a RIDL Resource from list}
+\title{Create a RIDL resource from list}
 \usage{
 ridl_resource(initial_data, configuration = NULL)
 }
@@ -15,7 +15,7 @@ ridl_resource(initial_data, configuration = NULL)
 Resource the resource
 }
 \description{
-Create a RIDL Resource from list with required fields
+Create a RIDL resource from list with required fields
 }
 \examples{
 \dontrun{

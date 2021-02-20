@@ -229,11 +229,11 @@ as_tibble.ridl_datasets_list <- function(x) {
   Reduce(rbind, l)
 }
 
-#' Access the nth resource of a dataset or a list of resources
+#' Access the nth resource of a dataset
 #'
-#' Access the nth resource of a dataset or a list of resources
+#' Access the nth resource of a dataset
 #'
-#' @param dataset a RIDLDataset or a ridl_resource_list
+#' @param dataset a RIDLDataset
 #' @param n integer, resource position in the dataset
 #'
 #' @rdname get_nth_resource
@@ -378,12 +378,12 @@ search_datasets <- memoise(.search_datasets)
                   configuration = configuration)
 }
 
-#' Pull RIDL dataset into R
+#' Pull a RIDL dataset
 #'
 #' Read a RIDL dataset from its name or id
 #'
-#' @param identifier Character dataset keyword
-#' @param configuration a Configuration object
+#' @param identifier character, name or id of the dataset
+#' @param configuration RIDLConfig, the configuration to use if any
 #'
 #' @rdname pull_dataset
 #' @return Dataset the dataset
@@ -393,12 +393,10 @@ search_datasets <- memoise(.search_datasets)
 #' @examples
 #' \dontrun{
 #' # Setting the config to use RIDL default server
-#'  set_ridl_config()
-#'  res <- pull_dataset("mali-3wop")
+#'  res <- pull_dataset("unhcr-mrt-2017-sea-1-1")
 #'  res
 #' }
 pull_dataset <- memoise(.pull_dataset)
-
 
 #' @noRd
 .list_datasets  <-  function(container = NULL, configuration = NULL) {
@@ -419,7 +417,7 @@ list_datasets.default <- memoise(.list_datasets)
 browse.RIDLDataset <- function(x, ...)
   x$browse()
 
-#' Dataset container
+#' Get the dataset container
 #'
 #' Get the container where the data is share
 #'
@@ -433,7 +431,6 @@ browse.RIDLDataset <- function(x, ...)
 #' @examples
 #' \dontrun{
 #' # Setting the config to use RIDL default server
-#'  set_ridl_config()
 #'  res <- search_dataset(rows = 3L, visibility = "public")
 #'  get_container(res[[1]])
 #' }
@@ -441,9 +438,9 @@ get_container.RIDLDataset <- function(dataset) {
   dataset$get_container()
 }
 
-#' Dataset tags name
+#' Get the dataset tag names
 #'
-#' Gets dataset tags name
+#' Get the dataset tags name
 #'
 #' @param dataset Dataset
 #'
@@ -455,7 +452,6 @@ get_container.RIDLDataset <- function(dataset) {
 #' @examples
 #' \dontrun{
 #'  # Setting the config to use RIDL
-#'  set_ridl_config()
 #'  res <- search_dataset(rows = 3L)
 #'  get_tags_names(res[[1]])
 #' }
@@ -466,9 +462,9 @@ tag_names.RIDLDataset <- function(dataset) {
          character(1))
 }
 
-#' Dataset tags name
+#' Get the number of resources in the dataset
 #'
-#' Gets dataset tags name
+#' Get the number of resources in the dataset
 #'
 #' @param dataset RIDLDataset
 #'
@@ -511,9 +507,9 @@ add_resource.RIDLDataset <- function(dataset, resource, ignore_dataset_id = FALS
   dataset
 }
 
-#' Add organization to dataset
+#' Add a dataset to a container
 #'
-#' Add organization to dataset
+#' Add a dataset to a container
 #'
 #' @param dataset RIDLDataset, the dataset
 #' @param container_name charater, A valid RIDL container name, you can use

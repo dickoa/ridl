@@ -461,9 +461,9 @@ as_tibble.ridl_resources_list <- function(x, ...) {
 #' }
 pull_resource <- memoise(.pull_resource)
 
-#' Create a RIDL Resource from list
+#' Create a RIDL resource from list
 #'
-#' Create a RIDL Resource from list with required fields
+#' Create a RIDL resource from list with required fields
 #'
 #' @param initial_data list, list of data
 #' @param configuration RIDLConfig, a configuration

@@ -4,7 +4,7 @@
 \alias{get_nth_resource.RIDLDataset}
 \alias{get_nth_resource}
 \alias{get_nth_resource.default}
-\title{Access the nth resource of a dataset or a list of resources}
+\title{Access the nth resource of a dataset}
 \usage{
 \method{get_nth_resource}{RIDLDataset}(dataset, n)
 
@@ -13,7 +13,7 @@ get_nth_resource(dataset, n)
 \method{get_nth_resource}{default}(dataset, n)
 }
 \arguments{
-\item{dataset}{a RIDLDataset or a ridl_resource_list}
+\item{dataset}{a RIDLDataset}
 
 \item{n}{integer, resource position in the dataset}
 }
@@ -21,5 +21,5 @@ get_nth_resource(dataset, n)
 a RIDLResource
 }
 \description{
-Access the nth resource of a dataset or a list of resources
+Access the nth resource of a dataset
 }

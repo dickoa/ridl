@@ -26,10 +26,24 @@ knitr::opts_chunk$set(
 [![CRAN status](https://www.r-pkg.org/badges/version/ridl)](https://cran.r-project.org/package=ridl)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-`ridl` is an R client for the [UNHCR RIDL platform](https://ridl.unhcr.org).
+`ridl` is an R client for the [UNHCR Raw Internal Data Library (RIDL) platform](https://ridl.unhcr.org).
 
 ## Introduction
 The [UNHCR RIDL platform](https://ridl.unhcr.org) is UNHCR internal platform to easily store, find and analyze raw data.
+
+### RIDL concepts
+
+In order to easily use the `ridl` package, it's important to understand some key concepts of this platform. RIDL documentation is available [here](https://im.unhcr.org/ridl) for more details.
+
+#### `Container`
+A `container` is a placeholder where we can share data on `RIDL`.
+A `container` is represented in the `ridl` package as a `RIDLContainer` object and can hold zero or multiple `datasets`.
+
+#### `Dataset`
+A `dataset` is a placeholder where we can share data files (`resources`). In a dataset page there's some metadata that give you enough context and information to properly store the data files and use them. A data file e.g an Excel file is called a `resource` and many of them can be shared in `dataset` page. In the `ridl` package, a `RIDLDataset` object is used to represent a `dataset`.
+
+#### `Resource`
+A `resource` is a file shared in `dataset` page, it includes `microdata` and supporting documents like reports or survey forms. A `RIDLResource` class is used to implement all the logic needed to manipulate RIDL `resource`.
 
 ## Installation
 
@@ -64,13 +78,14 @@ RIDL_API_KEY=xxxxxxxxxxxxxxxxxx
 Once the environment variable is set you will need to restart your session.
 
 ```{r}
+library("ridl")
 get_ridl_config()
 ## <RIDL Configuration>
 ##   RIDL site url: https://ridl.unhcr.org
 ##   RIDL API key: xxxxxxxxxxxxxxxxxx
 ```
 
-You can also configure directly the `ridl` package using the `set_ridl_config` function and check the config using `get_ridl_config`
+You can also configure directly the `ridl` package using the `set_ridl_config` function and check the config using `get_ridl_config` but it's not persistent if you close your session.
 
 ```{r}
 set_ridl_config(ridl_key = "xxxxxxxxxxxxxxxxxx")
@@ -102,7 +117,7 @@ search_datasets("mali", visibility = "public", rows = 2) ## search internally pu
 ## [1] "ridl_datasets_list"
 ```
 
-We can select a particular dataset from the list of datasets using `R` function to access elements from list (e.g `[[`). In this example, we can use `purrr::pluck` or `dplyr::nth` since they play well with the pipe operator `%>%`. Once the dataset selected, it's possible to list all its resources using `list_resources`.
+We can select a particular `dataset` from the list (a `ridl_datasets_list` is a list) of datasets using `R` function to access elements from list (e.g `[[`). In this example, we can use either `purrr::pluck` or `dplyr::nth` since they both play well with the pipe operator `%>%`. Once the dataset selected, it's possible to list all its `resources` using `list_resources`.
 
 
 ```{r, eval = FALSE}
@@ -249,6 +264,32 @@ pull_resource("68e39d44-88ae-49f9-b492-3635341c92be") %>%
 # … with 1,304 more rows
 ```
 
+## Some other handy functions
+
+```{r, eval = FALSE}
+ct <- list_containers()
+head(ct)
+## [1] "afghanistan"      "africa"           "algeria"
+## [4] "algeria-sens"     "algeria-wash-kap" "americas"
+
+grep("niger-", ct, ignore.case = TRUE, value = TRUE)
+## [1] "niger-protection" "niger-sens"
+
+pull_container("niger-protection")
+## <RIDL Container> d341942e-547e-404b-bcdf-c72b2cd85530
+##   Name: niger-protection
+##   Display name: Niger: Protection
+##   No. Datasets: 5
+##   No. Members: 3
+
+pull_container("niger-protection") %>%
+  list_datasets()
+## [1] "enrolement-pdi-tillaberi-tillaberi-niger-2020"
+## [2] "identify-asylum-seekers-in-migration-flow-agadez-niger-2018-2019-2020"
+## [3] "monitoring-the-migration-flow-1-agadez-niger-2019-2020"
+## [4] "enrolement-pdi-tahoua-aout-2020-tahoua-niger-2020"
+## [5] "enrolement-pdi-maradi-maradi-niger-2020"
+```
 
 ## Meta
 

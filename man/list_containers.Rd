@@ -3,7 +3,7 @@
 \name{list_containers.default}
 \alias{list_containers.default}
 \alias{list_containers}
-\title{List RIDL container}
+\title{List RIDL containers}
 \usage{
 \method{list_containers}{default}(
   sort = c("title asc", "name", "package_count", "title"),
@@ -21,5 +21,5 @@ list_containers(sort, configuration)
 A list of containers on RIDL
 }
 \description{
-List RIDL container
+List RIDL containers
 }

@@ -4,7 +4,7 @@
 \alias{n_resources.RIDLDataset}
 \alias{n_resources}
 \alias{n_resources.default}
-\title{Dataset tags name}
+\title{Get the number of resources in the dataset}
 \usage{
 \method{n_resources}{RIDLDataset}(dataset)
 
@@ -19,7 +19,7 @@ n_resources(dataset)
 integer, the number of resources
 }
 \description{
-Gets dataset tags name
+Get the number of resources in the dataset
 }
 \examples{
 \dontrun{

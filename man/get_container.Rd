@@ -4,7 +4,7 @@
 \alias{get_container.RIDLDataset}
 \alias{get_container}
 \alias{get_container.default}
-\title{Dataset container}
+\title{Get the dataset container}
 \usage{
 \method{get_container}{RIDLDataset}(dataset)
 
@@ -24,7 +24,6 @@ Get the container where the data is share
 \examples{
 \dontrun{
 # Setting the config to use RIDL default server
- set_ridl_config()
  res <- search_dataset(rows = 3L, visibility = "public")
  get_container(res[[1]])
 }

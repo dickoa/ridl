@@ -137,9 +137,9 @@ browse.RIDLContainer <- function(x, ...)
   unlist(res)
 }
 
-#' List RIDL container
+#' List RIDL containers
 #'
-#' List RIDL container
+#' List RIDL containers
 #'
 #' @param sort character how to sort the results. Default is "name asc"
 #' @param configuration RIDLConfig, a configuration
