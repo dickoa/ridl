@@ -103,15 +103,15 @@ search_datasets("mali", visibility = "public", rows = 2) ## search internally pu
 
 We can select a particular dataset from the list of datasets using `R`
 function to access elements from list (e.g `[[`). In this example, we
-will use `purrr::pluck` since it plays well with the pipe operator
-`%>%`. Once the dataset selected, it’s possible to list all its
-resources using `list_dataset_resources`.
+can use `purrr::pluck` or `dplyr::nth` since they play well with the
+pipe operator `%>%`. Once the dataset selected, it’s possible to list
+all its resources using `list_resources`.
 
 ``` r
 library(tidyverse)
 search_datasets("mali", visibility = "public", rows = 2) %>%
-  pluck(1) %>%
-  list_dataset_resources(format = "stata")
+  nth(1) %>%
+  list_resources(format = "stata")
 ## <RIDL Resource> 026f9547-d7b2-4ec3-bbaa-5096837b1f01
 ##   Name: UNHCR_BFA_2016_SEA_household_v1_1
 ##   Description: BFA SEA household level data
@@ -132,15 +132,15 @@ search_datasets("mali", visibility = "public", rows = 2) %>%
 ```
 
 A `ridl_resources_list` is a simple `R` `list` and can be manipulated
-using `purrr::pluck` to select the one you want to read
+using `purrr::pluck` or `dplyr::nth` to select the one you want to read
 (`read_resource`) or download (`download_resource`).
 
 ``` r
 library(tidyverse)
 search_datasets("mali", visibility = "public", rows = 2) %>%
-  pluck(1) %>%
-  list_dataset_resources(format = "stata") %>%
-  pluck(1) %>%
+  nth(1) %>%
+  list_resources(format = "stata") %>%
+  nth(1) %>%
   read_resource()
 ## + # A tibble: 1,690 x 459
 ##     hhid   q002a    q006    q008  q102  q113    q200    q201
@@ -210,7 +210,7 @@ object.
 ``` r
 dataset_name <- "official-cross-border-figures-of-venezuelan-individuals"
 pull_dataset(dataset_name) %>%
-  get_dataset_nth_resource(1) %>%
+  get_nth_resource(1) %>%
   read_resource()
 ## + Reading sheet:  VEN_Official Borders Figures
 ## # A tibble: 1,314 x 5
@@ -234,7 +234,7 @@ If you know the id of a `RIDL Resource` object you can also use directly
 
 ``` r
 pull_dataset(dataset_name) %>%
-  get_dataset_nth_resource(1)
+  get_nth_resource(1)
 ## + <RIDL Resource> 68e39d44-88ae-49f9-b492-3635341c92be
 ##   Name: VEN_OfficialFiguresBorders
 ##   Description: Compilation of official figures on Venezuelan population per month per entry-exit point.
@@ -242,7 +242,7 @@ pull_dataset(dataset_name) %>%
 ##   Size: 39998
 ##   Format: XLSX
 
-pull_resource("68e39d44-88ae-49f9-b492-3635341c92be")
+pull_resource("68e39d44-88ae-49f9-b492-3635341c92be") %>%
   read_resource()
 ## + Reading sheet:  VEN_Official Borders Figures
 ## # A tibble: 1,314 x 5

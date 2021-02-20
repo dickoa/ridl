@@ -48,4 +48,5 @@ Search and find datasets on RIDL
  # Setting the config to use RIDL default server
  search_datasets("displaced nigeria", rows = 3L)
 }
+
 }

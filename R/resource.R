@@ -16,11 +16,12 @@ RIDLResource <- R6::R6Class(
     data = NULL,
 
     #' @description
-    #' Create a new Resource object
+    #' Create a new RIDLResource object
     #'
     #' @param initial_data list with required field to create a resource
-    #' @param configuration a Configuration object
-    #' @return A new Resource object
+    #' @param configuration a RIDLConfig object
+    #'
+    #' @return A RIDLResource object
     initialize = function(initial_data = NULL, configuration = NULL) {
       if (is.null(configuration) | !inherits(configuration, "RIDLConfig")) {
         private$configuration <- get_ridl_config()
@@ -51,10 +52,10 @@ RIDLResource <- R6::R6Class(
     #' @param filename a character, filename of the dataset
     #' @param quiet a logical value, silent download if TRUE
     #' @param force a logical value, force download
-    #' @param ... other `download.file` parameters
+    #'
     #' @return a character, the file path
     download = function(folder = NULL, filename = NULL,
-                        quiet = TRUE, force = FALSE, ...) {
+                        quiet = TRUE, force = FALSE) {
 
 
       if (is.null(folder)) {
@@ -99,22 +100,20 @@ RIDLResource <- R6::R6Class(
     },
 
     #' @description
-    #' Read a Resource object directly into memory
+    #' Read a resource object directly into memory
     #'
     #'
     #' @param sheet a character value, only for resource in Excel format
-    #' @param layer a character value, only for spatial (vector) resource
-    #' @param format a character value, file format;
+    #' @param format character, specify file format in case the automatic reader doesn't work as expected
     #' @param download_folder a character value, folder to save the downloaded resource
-    #' @param simplify_json a logical value
     #' @param force_download a logical value, if TRUE force download
     #' @param quiet_download a logical value, if TRUE silent download
     #' @param ... other parameters
-    #' @return a `tibble`, a `sf`, a `stars` or a `list` depending
-    #' on the type of resource read
-    read_resource = function(sheet = NULL, layer = NULL,
-                             format = NULL, download_folder = NULL,
-                             simplify_json = TRUE, force_download = FALSE,
+
+    #' @return A \code{tibble}
+    read_resource = function(sheet = NULL, format = NULL,
+                             download_folder = NULL,
+                             force_download = FALSE,
                              quiet_download = TRUE, ...) {
 
       if (!is.null(private$download_folder_) & is.null(download_folder))
@@ -128,7 +127,7 @@ RIDLResource <- R6::R6Class(
         format <- self$get_format()
 
       hxl <- any(grepl("hxl",
-                       get_dataset_tags_names(self$get_dataset()),
+                       tag_names(self$get_dataset()),
                        ignore.case = TRUE))
 
       switch(format,
@@ -148,11 +147,11 @@ RIDLResource <- R6::R6Class(
     #'
     #'
     #' @param download_folder a character value, folder to save the downloaded resource
-    #' @param format character; file format
+    #' @param format character, specify file format in case the automatic reader doesn't work as expected
     #' @param force_download a logical value, if TRUE force download
     #' @param quiet_download a logical value, if TRUE silent download
     #'
-    #' @return a the list of layers available in the resource
+    #' @return the names of the sheets of XLS(X) resources
     get_sheets = function(format = NULL, download_folder = NULL,
                           quiet_download = TRUE, force_download = FALSE) {
 
@@ -162,7 +161,7 @@ RIDLResource <- R6::R6Class(
       file_path <- self$download(folder = download_folder,
                                  quiet = quiet,
                                  force = force_download)
-
+y
       if (is.null(format))
       format <- self$get_format()
 
@@ -176,7 +175,8 @@ RIDLResource <- R6::R6Class(
 
     #' @description
     #' Get the resource dataset.
-    #' @return a Dataset, the dataset containing the resource
+    #'
+    #' @return a RIDLDataset, the dataset containing the resource
     get_dataset = function() {
       dataset_id <- self$data$package_id
       if (is.null(dataset_id)) {
@@ -250,7 +250,7 @@ RIDLResource <- R6::R6Class(
 )
 
 #' @export
-#' @aliases Resource
+#' @aliases RIDLResource
 #' @importFrom tibble as_tibble
 as_tibble.RIDLResource <- function(x, ...) {
   df <- tibble::tibble(
@@ -263,7 +263,14 @@ as_tibble.RIDLResource <- function(x, ...) {
 }
 
 #' @export
-#' @aliases Resource
+#' @aliases RIDLResource
+as_tibble.ridl_resources_list <- function(x) {
+  l <- lapply(x, as_tibble)
+  Reduce(rbind, l)
+}
+
+#' @export
+#' @aliases RIDLResource
 as.list.RIDLResource <- function(x, ...) {
   x$as_list()
 }
@@ -272,14 +279,14 @@ as.list.RIDLResource <- function(x, ...) {
 #'
 #' Download a RIDL resource into a specific folder
 #'
-#' @param resource Resource, a RIDL resource
+#' @param resource RIDLResource, a RIDL resource
 #' @param folder character, path of the directory where you will store the data
 #' @param filename character, name of the file you will download
-#' @param quiet logical, no progress bar from download (default = `FALSE`)
-#' @param force logical force download (default = `FALSE`)
+#' @param quiet logical, no progress bar from download (default = \code{FALSE})
+#' @param force logical, force download (default = \code{FALSE})
 #' @param ... extra paramaters
 #'
-#' @return Resource
+#' @return character, the download folder path
 #' @export
 #'
 #' @examples
@@ -297,85 +304,82 @@ download_resource <- function(resource, folder = NULL,
 
 #' Get the names of the sheets of XLS(X) resources
 #'
-#'  Get the names of the sheets of XLS(X) resources
+#' Get the names of the sheets of XLS(X) resources
+#'
 #' @param resource Resource, a RIDL resource
-#' @param format character; file format
+#' @param format character, specify file format in case the automatic reader doesn't work as expected
 #' @param download_folder character, path of the directory where you will store the data
 #' @param quiet logical, no progress bar from download (default = FALSE)
 #'
+#' @rdname get_sheets
+#'
 #' @return the names of the sheets of XLS(X) resources
+#'
 #' @export
-get_resource_sheets <- function(resource, format = NULL,
-                                download_folder = NULL, quiet = TRUE) {
-  assert_resource(resource)
+get_sheets.RIDLResource <- function(resource,
+                                    format = NULL,
+                                    download_folder = NULL,
+                                    quiet = TRUE) {
   resource$get_sheets(format = format,
-                      download_folder = download_folder, quiet = quiet)
+                      download_folder = download_folder,
+                      quiet = quiet)
 }
 
 #' Get the file format of the resource
 #'
 #' Get the file format of the resource
-#' @param resource Resource, a RIDL resource
+#'
+#' @param resource RIDLResource, a RIDL resource
+#'
+#' @rdname get_format
 #'
 #' @return A character, the format of the resource
+#'
 #' @export
-get_resource_format <- function(resource) {
-  assert_resource(resource)
+get_format.RIDLResource <- function(resource) {
   resource$get_format()
 }
 
 #' Get the dataset containing the resource
 #'
-#' @param resource Resource, a RIDL resource
+#' @param resource RIDLResource, a RIDL resource
 #'
-#' @return a Dataset, the dataset containing the resource
+#' @rdname get_dataset
+#'
+#' @return a RIDLDataset, the dataset containing the resource
+#'
 #' @export
-get_resource_dataset <- function(resource) {
-  assert_resource(resource)
+ get_dataset.RIDLResource <- function(resource) {
   resource$get_dataset()
 }
 
-#' Read resource
+#' Read a RIDL Resource
 #'
-#' Read resource
-#' @param resource Resource, a RIDL resource
+#' Read a RIDL Resource
 #'
-#' @param sheet Character, the name of the sheet to read if XLS(X) resources. The first sheet is read by default.
-#' @param layer Character, the name of the layer to read if spatial data. The first sheet is read by default.
-#' @param format Character, file format, csv, zipped csv, excel, xlsx, zipped shapefile, etc.
-#' @param download_folder Character, the path of the folder to store the
+#' @param resource RIDLResource, a RIDL resource
+#'
+#' @param sheet character, the name of the sheet to read if XLS(X) resources. The first sheet is read by default.
+#' @param format character, file format, csv, zipped csv, excel, xlsx, zipped shapefile, etc.
+#' @param download_folder character, the path of the folder to store the
 #' downloaded data
-#' @param simplify_json Logical, if TRUE simplifies nested lists into vectors
-#'  and data frames for JSON resources
-#' @param force_download Logical, force download if TRUE
+#' @param force_download logical, force download if TRUE
 #' @param quiet_download logical, silent download
 #' @param ... extra parameters
-#' @return an `tibble`, a `list`, a `stars` or a `sf` object depending
-#' on the type of resource you are reading from RIDL
+#' @return A \code{tibble}
+#'
 #' @export
 read_resource <- function(resource, sheet = NULL,
-                          layer = NULL, format = NULL,
-                          download_folder = NULL, simplify_json = TRUE,
+                          format = NULL, download_folder = NULL,
                           force_download = FALSE, quiet_download = TRUE, ...) {
   assert_resource(resource)
   resource$read_resource(sheet = sheet,
-                         layer = layer,
                          format = format,
                          download_folder = download_folder,
-                         simplify_json = simplify_json,
                          force_download = force_download,
                          quiet_download = quiet_download,
                          ...)
 }
-
-
-#' @export
-#' @aliases Resource
-as_tibble.resources_list <- function(x, ...) {
-  l <- lapply(x, as_tibble)
-  Reduce(rbind, l)
-}
-
 
 #' @rdname search_resources
 #' @noRd
@@ -391,45 +395,57 @@ as_tibble.resources_list <- function(x, ...) {
   list_of_rs
 }
 
-#' Search resources
+#' Search for resources
 #'
-#' Search Resources
+#' Search for resources
 #'
 #' @importFrom memoise memoise
 #'
-#' @param query Character, a query
-#' @param configuration a Configuration object
+#' @param query character, a query
+#' @param configuration RIDLConfig, a configuration
 #' @param ... extra params
+#'
 #' @rdname search_resources
+#' @details Search and find datasets on RIDL
+#'
+#'
+#' @return A list of RIDLDataset
+#'
+#' @examples
+#' \dontrun{
+#'  # Setting the config to use RIDL default server
+#'  search_resources("format:xlsx")
+#' }
 #' @export
 search_resources <- memoise(.search_resources)
 
 #' @export
+#' @importFrom tibble as_tibble
 #' @aliases Resource
-as_tibble.resources_list <- function(x, ...) {
+as_tibble.ridl_resources_list <- function(x, ...) {
   l <- lapply(x, as_tibble)
   Reduce(rbind, l)
 }
-
 
 #' @noRd
 .pull_resource <- function(identifier, configuration = NULL) {
   if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
     set_ridl_config(configuration = configuration)
   configuration <- get_ridl_config()
-  res <- configuration$call_action("resource_show", list(id = identifier))
+  res <- configuration$call_action("resource_show",
+                                   list(id = identifier))
   RIDLResource$new(initial_data = res,
-               configuration = configuration)
+                   configuration = configuration)
 }
 
-#' Read a RIDL resource
+#' Pull a RIDL Resource
 #'
-#' Read a RIDL resource
+#' Pull a RIDL Resource
 #'
 #' @importFrom memoise memoise
 #'
-#' @param identifier Character resource uuid
-#' @param configuration a Configuration object
+#' @param identifier character, a RIDLResource id
+#' @param configuration RIDLConfig, the configuration used
 #'
 #' @rdname pull_resource
 #'
@@ -438,19 +454,19 @@ as_tibble.resources_list <- function(x, ...) {
 #'
 #' @examples
 #' \dontrun{
-#' #Setting the config to use RIDL default server
+#'  # Setting the config to use RIDL default server
 #'  set_ridl_config()
 #'  res <- pull_resource("98aa1742-b5d3-40c3-94c6-01e31ded6e84")
 #'  res
 #' }
 pull_resource <- memoise(.pull_resource)
 
-#' Create a RIDL resource from list
+#' Create a RIDL Resource from list
 #'
-#' Create a RIDL resource from list with required fields
+#' Create a RIDL Resource from list with required fields
 #'
-#' @param initial_data List, list of data
-#' @param configuration RIDLConfig, the configuration used
+#' @param initial_data list, list of data
+#' @param configuration RIDLConfig, a configuration
 #'
 #' @return Resource the resource
 #' @export
@@ -460,10 +476,10 @@ pull_resource <- memoise(.pull_resource)
 #'
 #'  rsdata <- list(name = "hum-resource",
 #'                 title = "Humanitarian resource")
-#'  res <- create_resource(rsdata)
+#'  res <- ridl_resource(rsdata)
 #'  res
 #' }
-create_resource <- function(initial_data, configuration = NULL) {
+ridl_resource <- function(initial_data, configuration = NULL) {
   if (!is.null(configuration) &  inherits(configuration, "RIDLConfig"))
     set_ridl_config(configuration = configuration)
   configuration <- get_ridl_config()

@@ -2,45 +2,37 @@
 % Please edit documentation in R/resource.R
 \name{read_resource}
 \alias{read_resource}
-\title{Read resource}
+\title{Read a RIDL Resource}
 \usage{
 read_resource(
   resource,
   sheet = NULL,
-  layer = NULL,
   format = NULL,
   download_folder = NULL,
-  simplify_json = TRUE,
   force_download = FALSE,
   quiet_download = TRUE,
   ...
 )
 }
 \arguments{
-\item{resource}{Resource, a RIDL resource}
+\item{resource}{RIDLResource, a RIDL resource}
 
-\item{sheet}{Character, the name of the sheet to read if XLS(X) resources. The first sheet is read by default.}
+\item{sheet}{character, the name of the sheet to read if XLS(X) resources. The first sheet is read by default.}
 
-\item{layer}{Character, the name of the layer to read if spatial data. The first sheet is read by default.}
+\item{format}{character, file format, csv, zipped csv, excel, xlsx, zipped shapefile, etc.}
 
-\item{format}{Character, file format, csv, zipped csv, excel, xlsx, zipped shapefile, etc.}
-
-\item{download_folder}{Character, the path of the folder to store the
+\item{download_folder}{character, the path of the folder to store the
 downloaded data}
 
-\item{simplify_json}{Logical, if TRUE simplifies nested lists into vectors
-and data frames for JSON resources}
-
-\item{force_download}{Logical, force download if TRUE}
+\item{force_download}{logical, force download if TRUE}
 
 \item{quiet_download}{logical, silent download}
 
 \item{...}{extra parameters}
 }
 \value{
-an \code{tibble}, a \code{list}, a \code{stars} or a \code{sf} object depending
-on the type of resource you are reading from RIDL
+A \code{tibble}
 }
 \description{
-Read resource
+Read a RIDL Resource
 }

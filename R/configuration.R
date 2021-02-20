@@ -160,26 +160,27 @@ RIDLConfig <- R6::R6Class(
 #'
 #' Create and RIDL configuration object
 #' @param ridl_key Character for the CKAN API key, it is required to push data into RIDL
-#' @param user_agent a character value, A user agent
-#' you can push metdata and data to RIDL
-#' @return An RIDL Configuration object
+#' @param user_agent a character value, a user agent string
+#'
+#' @rdname ridl_config
+#'
+#' @return A RIDLConfig object
 #' @export
-create_ridl_config <- function(ridl_key = NULL,
-                               user_agent = NULL) {
+ridl_config <- function(ridl_key = NULL,
+                        user_agent = NULL) {
   RIDLConfig$new(ridl_key = ridl_key,
-                    user_agent = user_agent)
+                 user_agent = user_agent)
 }
 
-#' Set ridl config
+#' Set your RIDL configuration
 #'
-#' Sets the configuration settings for using ridl.
+#' Sets the configuration settings for using RIDL.
 #'
-#' @param ridl_key Character for the CKAN API key, it is required to push data into RIDL
-#' @param user_agent a character value, A user agent
-#' you can push metdata and data to RIDL
+#' @param ridl_key character, the CKAN API key, it is required to push data into RIDL
+#' @param user_agent a character, A user agent string
 #' @param configuration Configuration object.
 #'
-#' @rdname set_ridl_config
+#' @rdname ridl_config
 #'
 #' @details Setting up a configuration will help you access from a RIDL server
 #'
@@ -190,7 +191,7 @@ create_ridl_config <- function(ridl_key = NULL,
 #' @examples
 #' \dontrun{
 #' # Setting the config to use RIDL default server
-#' set_ridl_config(ridl_site = "demo")
+#' set_ridl_config(ridl_key = "xxxxxxxxxx")
 #'
 #' # You can check your configuration using \code{get_ridl_config}
 #' config <- get_ridl_config()
@@ -207,7 +208,7 @@ set_ridl_config <- function(ridl_key = NULL,
   }
 }
 
-#' @rdname set_ridl_config
+#' @rdname ridl_config
 #' @export
 get_ridl_config <- function() {
   configuration <- .ridl_env$configuration
@@ -215,15 +216,13 @@ get_ridl_config <- function() {
   configuration$read()
 }
 
-#' Delete ridl config
+#' Delete the ridl config
 #'
-#' Delete the configuration settings for using ridl.
+#' Delete the configuration settings for using RIDL
 #'
 #'
 #' @details Delete RIDL config
 #'
-#'
-#' @return None
 #' @export
 #'
 #' @examples

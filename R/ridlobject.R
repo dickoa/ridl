@@ -56,3 +56,157 @@ RIDLObject <- R6::R6Class(
     }
   )
 )
+
+#' @rdname tag_names
+#' @export
+tag_names <- function(dataset)
+  UseMethod("tag_names")
+
+#' @rdname tag_names
+#' @export
+tag_names.default <- function(dataset) {
+  stop("Only available for a RIDLDataset object",
+       call. = TRUE)
+}
+
+#' @rdname list_datasets
+#' @export
+list_datasets <- function(container, configuration)
+  UseMethod("list_datasets")
+
+#' @rdname list_containers
+#' @export
+list_containers <- function(sort, configuration)
+  UseMethod("list_containers")
+
+#' @rdname get_format
+#' @export
+get_format <- function(resource)
+  UseMethod("get_format")
+
+#' @rdname get_format
+#' @export
+get_format.default <- function(resource) {
+  stop("Only available for a RIDLResource object",
+       call. = TRUE)
+}
+
+#' @rdname get_sheets
+#' @export
+get_sheets <- function(resource, format, download_folder, quiet)
+  UseMethod("get_sheets")
+
+#' @rdname get_sheets
+#' @export
+get_sheets.default <- function(resource, format, download_folder, quiet) {
+  stop("Only available for a RIDLResource object",
+       call. = TRUE)
+}
+
+#' @rdname get_dataset
+#' @export
+get_dataset <- function(resource)
+  UseMethod("get_dataset")
+
+#' @rdname get_dataset
+#' @export
+get_dataset.default <- function(resource) {
+  stop("Only available for a RIDLResource object",
+       call. = TRUE)
+}
+
+#' @rdname get_nth_resource
+#' @export
+get_nth_resource <- function(dataset, n)
+  UseMethod("get_nth_resource")
+
+#' @rdname get_nth_resource
+#' @export
+get_nth_resource.default <- function(dataset, n) {
+  stop("Only available for a RIDLDataset object",
+       call. = TRUE)
+}
+
+#' @rdname list_resources
+#' @export
+list_resources <- function(dataset, pattern, format)
+  UseMethod("list_resources")
+
+#' @rdname list_resources
+#' @export
+list_resources.default <- function(dataset, pattern, format) {
+    stop("Only available for a RIDLDataset object",
+       call. = TRUE)
+}
+
+#' @rdname delete_nth_resource
+#' @export
+delete_nth_resource <- function(dataset, n)
+  UseMethod("delete_nth_resource")
+
+#' @rdname delete_nth_resource
+#' @export
+delete_nth_resource.default <- function(dataset, n) {
+  stop("Only available for a RIDLDataset object",
+       call. = TRUE)
+}
+
+#' @rdname delete_resources
+#' @export
+delete_resources <- function(dataset)
+  UseMethod("delete_resources")
+
+#' @rdname delete_resources
+#' @export
+delete_resources.default <- function(dataset) {
+  stop("Only available for a RIDLDataset object",
+       call. = TRUE)
+}
+
+#' @rdname add_resource
+#' @export
+add_resource <- function(dataset, resource, ignore_dataset_id, configuration)
+  UseMethod("add_resource")
+
+#' @rdname add_resource
+#' @export
+add_resource.default <- function(dataset, resource, ignore_dataset_id, configuration) {
+  stop("It's only working with RIDLDataset",
+       call. = FALSE)
+}
+
+#' @rdname set_container
+#' @export
+set_container <- function(dataset, container_name, configuration)
+  UseMethod("set_container")
+
+#' @rdname set_container
+#' @export
+set_container.default <- function(dataset, container_name, configuration) {
+  stop("It's only working with RIDLDataset",
+       call. = FALSE)
+}
+
+#' @rdname get_container
+#' @export
+get_container <- function(dataset)
+  UseMethod("get_container")
+
+#' @rdname get_container
+#' @export
+get_container.default <- function(dataset) {
+  stop("Only available for a RIDLDataset object",
+       call. = TRUE)
+}
+
+#' @rdname n_resources
+#' @export
+n_resources <- function(dataset)
+  UseMethod("n_resources")
+
+#' @rdname n_resources
+#' @export
+n_resources.default <- function(dataset) {
+  stop("It only works with RIDLDataset object",
+       call. = TRUE)
+}

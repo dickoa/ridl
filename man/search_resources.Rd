@@ -2,17 +2,29 @@
 % Please edit documentation in R/resource.R
 \name{search_resources}
 \alias{search_resources}
-\title{Search resources}
+\title{Search for resources}
 \usage{
 search_resources(query = "*:*", configuration = NULL, ...)
 }
 \arguments{
-\item{query}{Character, a query}
+\item{query}{character, a query}
 
-\item{configuration}{a Configuration object}
+\item{configuration}{RIDLConfig, a configuration}
 
 \item{...}{extra params}
 }
+\value{
+A list of RIDLDataset
+}
 \description{
-Search Resources
+Search for resources
+}
+\details{
+Search and find datasets on RIDL
+}
+\examples{
+\dontrun{
+ # Setting the config to use RIDL default server
+ search_resources("format:xlsx")
+}
 }

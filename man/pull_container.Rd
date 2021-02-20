@@ -2,11 +2,11 @@
 % Please edit documentation in R/container.R
 \name{pull_container}
 \alias{pull_container}
-\title{Read a RIDL container}
+\title{Pull a RIDL container}
 \usage{
 pull_container(
   identifier = NULL,
-  include_datasets = FALSE,
+  include_datasets = TRUE,
   configuration = NULL,
   ...
 )
@@ -21,8 +21,8 @@ pull_container(
 \item{...}{Extra parameters}
 }
 \value{
-RIDL container
+A RIDLContainer
 }
 \description{
-Read a RIDL container
+Pull a RIDL container
 }

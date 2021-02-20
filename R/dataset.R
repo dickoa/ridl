@@ -41,15 +41,15 @@ RIDLDataset <- R6::R6Class(
     #' @description
     #' Get the nth resource of the dataset
     #'
-    #' @param index integer, the index of the resource to access
+    #' @param n integer, the index of the resource to access
     #'
     #' @return a Resource object, the selected resource
-    get_nth_resource = function(index) {
+    get_nth_resource = function(n) {
       n_res <- self$data$num_resources
-      if (index > n_res)
+      if (n > n_res)
         stop("Just ", n_res, "resource(s) available!",
              call. = FALSE)
-      self$resources[[index]]
+      self$resources[[n]]
     },
 
     #' @description
@@ -85,8 +85,8 @@ RIDLDataset <- R6::R6Class(
     #' @description
     #' Get number of dataset resources
     #'
-    #' @return The number of Resource objects
-    number_of_resources = function() {
+    #' @return The number of RIDLResource objects
+    n_resources = function() {
       length(self$resources)
     },
 
@@ -140,7 +140,7 @@ RIDLDataset <- R6::R6Class(
     #' @description
     #' Add a container to a dataset
     #' @param container_name the name of the container to add
-    add_container = function(container_name) {
+    set_container = function(container_name) {
       self$data$owner_org <- container_name
     },
 
@@ -166,9 +166,11 @@ RIDLDataset <- R6::R6Class(
     get_date_range = function() {
       date_start <- self$data$date_range_start
       date_end <- self$data$date_range_end
-      if (is.null(date))
-        date <- ""
-      date
+      if (is.null(date_start))
+        date_start <- ""
+      if (is.null(date_end))
+        date_end <- ""
+      c(date_start, date_end)
     },
 
     #' @description
@@ -209,68 +211,70 @@ as.list.RIDLDataset <- function(x, ...) {
   x$as_list()
 }
 
-
-#' Add resource to dataset
-#'
-#' Add resource to dataset
-#'
-#' @param dataset Dataset
-#' @param index integer; resource position in the dataset
 #' @export
-#' @return Resource
-get_dataset_nth_resource <- function(dataset, index) {
-  assert_dataset(dataset)
-  dataset$get_nth_resource(index)
+#' @aliases RIDLDataset
+#' @importFrom tibble as_tibble
+as_tibble.RIDLDataset <- function(x, ...) {
+  tibble::tibble(dataset_title = tolower(x$data$title),
+                 dataset_name = x$data$name,
+                 container_name = x$data$owner_org,
+                 n_resources = n_resources(x),
+                 dataset = list(x))
 }
 
-#' Add resource to dataset
+#' @export
+#' @aliases RIDLResource
+as_tibble.ridl_datasets_list <- function(x) {
+  l <- lapply(x, as_tibble)
+  Reduce(rbind, l)
+}
+
+#' Access the nth resource of a dataset or a list of resources
 #'
-#' Add resource to dataset
+#' Access the nth resource of a dataset or a list of resources
 #'
-#' @param dataset Dataset
-#' @param pattern character, regex pattern in resource name
-#' @param format character, format of the resources
+#' @param dataset a RIDLDataset or a ridl_resource_list
+#' @param n integer, resource position in the dataset
+#'
+#' @rdname get_nth_resource
 #'
 #' @export
-#' @return resource_list
-list_dataset_resources <- function(dataset, pattern = NULL,
-                          format = NULL) {
-  assert_dataset(dataset)
+#' @return a RIDLResource
+get_nth_resource.RIDLDataset <- function(dataset, n) {
+  dataset$get_nth_resource(n)
+}
+
+#' List all the resources in a dataset
+#'
+#' List all the resources in a dataset
+#'
+#' @param dataset RIDLDataset
+#' @param pattern character, regex pattern to match resource name
+#' @param format character, format of the resources
+#'
+#' @rdname list_resources
+#'
+#' @export
+#' @return A ridl_resources_list
+list_resources.RIDLDataset <- function(dataset, pattern = NULL,
+                                       format = NULL) {
   dataset$list_resources(pattern = pattern,
                          format = format)
 }
 
-#' Delete resource from dataset
+#' Delete resource from a dataset
 #'
-#' Delete resource from dataset
+#' Delete resource from a dataset
 #'
-#' @details Delete resource from dataset
+#' @param dataset RIDLDataset the dataset from which we one to remove the resource
+#' @param n integer the index of the resource to be removed
 #'
-#' @param dataset Dataset the dataset from which we one to remove the resource
-#' @param index integer the index of the resource to be removed
-#'
-#' @return Dataset the dataset without the resource
-#' @export
-delete_dataset_nth_resource <- function(dataset, index) {
-  assert_dataset(dataset)
-  dataset$delete_nth_resource(index)
-  dataset
-}
-
-#' Delete resource from dataset
-#'
-#' Delete resource from dataset
-#'
-#' @details Delete resource from dataset
-#'
-#' @param dataset Dataset the dataset from which we one to remove the resource
-#' @param index integer the index of the resource to be removed
+#' @rdname delete_nth_resource
 #'
 #' @return Dataset the dataset without the resource
 #' @export
-delete_dataset_nth_resource <- function(dataset, index) {
-  assert_dataset(dataset)
-  dataset$delete_nth_resource(index)
+delete_nth_resource.RIDLDataset <- function(dataset, n) {
+  dataset$delete_nth_resource(n)
   dataset
 }
 
@@ -280,18 +284,17 @@ delete_dataset_nth_resource <- function(dataset, index) {
 #'
 #' @param dataset A Dataset, the dataset to remove
 #'
-#' @details Delete all resources from dataset
+#' @rdname delete_resources
 #'
 #' @return Dataset without resources
 #' @export
-delete_dataset_resources <- function(dataset) {
-  assert_dataset(dataset)
+delete_resources.RIDLDataset <- function(dataset) {
   dataset$delete_resources()
   dataset
 }
 
-#' need to solve the issue with start and paginator
 #' @importFrom jsonlite fromJSON
+#' @importFrom crul Paginator
 #' @rdname search_datasets
 #' @noRd
 .search_datasets  <-  function(query = "*:*",
@@ -313,12 +316,12 @@ delete_dataset_resources <- function(dataset) {
     filter_query <- paste(filter_query,
                           paste0("visibility:", visibility),
                           sep = " AND ")
-  cc <- crul::Paginator$new(client = configuration$remoteclient(),
-                            by = "limit_offset",
-                            limit_param = "rows",
-                            offset_param = "start",
-                            limit = rows,
-                            chunk = page_size)
+  cc <- Paginator$new(client = configuration$remoteclient(),
+                      by = "limit_offset",
+                      limit_param = "rows",
+                      offset_param = "start",
+                      limit = rows,
+                      chunk = page_size)
   suppressMessages(cc$get(path = paste0("/api/3/action/", "package_search"),
                           list(q = query, fq = filter_query, ...)))
   list_of_ds <- fromJSON(cc$parse(),
@@ -356,7 +359,9 @@ delete_dataset_resources <- function(dataset) {
 #'  # Setting the config to use RIDL default server
 #'  search_datasets("displaced nigeria", rows = 3L)
 #' }
+#'
 #' @rdname search_datasets
+#'
 #' @importFrom memoise memoise
 #' @export
 search_datasets <- memoise(.search_datasets)
@@ -364,7 +369,7 @@ search_datasets <- memoise(.search_datasets)
 
 #' @noRd
 .pull_dataset <-  function(identifier, configuration = NULL) {
-  if (!is.null(configuration) &  inherits(configuration, "RIDLConfig"))
+  if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
     set_ridl_config(configuration = configuration)
   configuration <- get_ridl_config()
   res <- configuration$call_action("package_show",
@@ -396,74 +401,31 @@ pull_dataset <- memoise(.pull_dataset)
 
 
 #' @noRd
-.list_datasets  <-  function(limit = NULL, offset = NULL, configuration = NULL) {
+.list_datasets  <-  function(container = NULL, configuration = NULL) {
   if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
     set_ridl_config(configuration = configuration)
   configuration <- get_ridl_config()
-  data <- drop_nulls(list(offset = offset, limit = limit))
-  res <- configuration$call_action("package_list", data)
+  res <- configuration$call_action("package_list")
   unlist(res)
 }
 
-#' List datasets
-#'
-#' @param limit  integer; limit
-#' @param offset integer; offset
-#' @param configuration a Configuration object
-#'
-#' @importFrom memoise memoise
-#'
 #' @rdname list_datasets
-#' @return A vector of datasets names
-#'
-#' @examples
-#' \dontrun{
-#' # Setting the config to use RIDL default server
-#'  set_ridl_config()
-#'  list_datasets(limit = 10L)
-#' }
-#'
 #' @export
-list_datasets <- memoise(.list_datasets)
+list_datasets.default <- memoise(.list_datasets)
 
-#' @rdname list_datasets
-#' @importFrom memoise memoise
-#' @export
-list_dataset_names <- memoise(.list_datasets)
 
 #' @rdname browse
 #' @export
 browse.RIDLDataset <- function(x, ...)
   x$browse()
 
-#' Dataset organization name
-#'
-#' Get the organization sharing the data
-#'
-#' @param dataset Dataset
-#'
-#'
-#' @return Character The name of the organization sharing the data
-#' @export
-#'
-#' @examples
-#' \dontrun{
-#' # Setting the config to use RIDL default server
-#'  set_ridl_config()
-#'  res <- search_dataset(rows = 3L)
-#'  get_container_name(res[[1]])
-#' }
-get_dataset_container_name <- function(dataset) {
-  assert_dataset(dataset)
-  dataset$data$organization$name
-}
-
-
 #' Dataset container
 #'
 #' Get the container where the data is share
 #'
 #' @param dataset RIDLDataset, the dataset
+#'
+#' @rdname get_container
 #'
 #' @return A \code{RIDLContainer}
 #' @export
@@ -473,36 +435,10 @@ get_dataset_container_name <- function(dataset) {
 #' # Setting the config to use RIDL default server
 #'  set_ridl_config()
 #'  res <- search_dataset(rows = 3L, visibility = "public")
-#'  get_dataset_container(res[[1]])
+#'  get_container(res[[1]])
 #' }
-get_dataset_container <- function(dataset) {
-  assert_dataset(dataset)
+get_container.RIDLDataset <- function(dataset) {
   dataset$get_container()
-}
-
-#' Dataset resources format
-#'
-#' Gets format of all resources from the datasets
-#'
-#' @param dataset Dataset
-#'
-#'
-#'
-#' @return Character Format of the resources
-#' @export
-#'
-#' @examples
-#' \dontrun{
-#' # Setting the config to use RIDL default server
-#'  set_ridl_config()
-#'  res <- search_dataset(rows = 3L)
-#'  get_resources_formats(res[[1]])
-#' }
-get_dataset_resources_formats <- function(dataset) {
-  assert_dataset(dataset)
-  vapply(dataset$list_resources(),
-         function(resource)
-           resource$get_format(), character(1))
 }
 
 #' Dataset tags name
@@ -511,6 +447,7 @@ get_dataset_resources_formats <- function(dataset) {
 #'
 #' @param dataset Dataset
 #'
+#' @rdname tag_names
 #'
 #' @return Character Tags of the dataset
 #' @export
@@ -522,11 +459,33 @@ get_dataset_resources_formats <- function(dataset) {
 #'  res <- search_dataset(rows = 3L)
 #'  get_tags_names(res[[1]])
 #' }
-get_dataset_tags_names <- function(dataset) {
-  assert_dataset(dataset)
+#' @export
+tag_names.RIDLDataset <- function(dataset) {
   vapply(dataset$data$tags,
          function(tag) tag$name,
          character(1))
+}
+
+#' Dataset tags name
+#'
+#' Gets dataset tags name
+#'
+#' @param dataset RIDLDataset
+#'
+#' @rdname n_resources
+#'
+#' @return integer, the number of resources
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#'  # Setting the config to use RIDL
+#'  res <- search_dataset(rows = 3L, visibility = "public")
+#'  n_resources(res[[2]])
+#' }
+#' @export
+n_resources.RIDLDataset <- function(dataset) {
+  dataset$n_resources()
 }
 
 #' Add a Resource to a dataset
@@ -539,19 +498,18 @@ get_dataset_tags_names <- function(dataset) {
 #' @param ignore_dataset_id logical, ignore the dataset id
 #' @param configuration RIDLConfig, the configuration
 #'
+#' @rdname add_resource
+#'
 #' @return A RIDLDataset
 #' @export
-add_dataset_resource <- function(dataset, resource, ignore_dataset_id = FALSE, configuration = NULL) {
-  if (!is.null(configuration) &  inherits(configuration, "RIDLConfig"))
+add_resource.RIDLDataset <- function(dataset, resource, ignore_dataset_id = FALSE, configuration = NULL) {
+  if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
     set_ridl_config(configuration = configuration)
-  configuration <- get_ridl_config()
-  assert_dataset(dataset)
   assert_resource(resource)
   dataset$add_resource(resource,
                        ignore_dataset_id = ignore_dataset_id)
   dataset
 }
-
 
 #' Add organization to dataset
 #'
@@ -562,21 +520,21 @@ add_dataset_resource <- function(dataset, resource, ignore_dataset_id = FALSE, c
 #' \code{list_containers()} to have the list of all containers
 #' @param configuration  RIDLConfig, the RIDL configuration
 #'
+#' @rdname set_container
+#'
 #' @return A RIDLDataset
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#'  ds <- create_dataset(list(name = "cool-dataset"))
-#'  add_dataset_container(ds, "zimbabwe-shelter-nfi")
+#'  ds <- ridl_dataset(list(name = "cool-dataset"))
+#'  set_container(ds, "zimbabwe-shelter-nfi")
 #' }
-add_dataset_container <- function(dataset, container_name, configuration = NULL) {
-  if (!is.null(configuration) &  inherits(configuration, "RIDLConfig"))
+set_container.RIDLDataset <- function(dataset, container_name, configuration = NULL) {
+  if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
     set_ridl_config(configuration = configuration)
-  configuration <- get_ridl_config()
-  assert_dataset(dataset)
   assert_container_name(container_name)
-  dataset$add_container(container_name)
+  dataset$set_container(container_name)
   dataset
 }
 
@@ -584,10 +542,10 @@ add_dataset_container <- function(dataset, container_name, configuration = NULL)
 #'
 #' Create a RIDL dataset from list with required fields
 #'
-#' @param initial_data List, list of data
+#' @param data List, list of data
 #' @param configuration RIDLConfig, RIDL configuration used
 #'
-#' @return Dataset the dataset
+#' @return RIDLDataset the dataset
 #' @export
 #'
 #' @examples
@@ -595,15 +553,15 @@ add_dataset_container <- function(dataset, container_name, configuration = NULL)
 #'
 #'  dsdata <- list(name = "hum-dataset",
 #'                 title = "Humanitarian dataset")
-#'  res <- create_dataset(dsdata)
+#'  res <- ridl_dataset(dsdata)
 #'  res
 #' }
-create_dataset <- function(initial_data, configuration = NULL) {
-  if (!is.null(configuration) &  inherits(configuration, "RIDLConfig"))
+ridl_dataset <- function(data, configuration = NULL) {
+  if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
     set_ridl_config(configuration = configuration)
   configuration <- get_ridl_config()
-  assert_valid_dataset_data(initial_data)
-  RIDLDataset$new(initial_data)
+  assert_valid_dataset_data(data)
+  RIDLDataset$new(data, configuration)
 }
 
 #' @noRd

@@ -9,7 +9,8 @@ RIDL Container
 RIDL Container
 }
 \details{
-RIDL Container
+RIDLContainer, it contains all the logic for creating, checking,
+and updating resources
 }
 \section{Super class}{
 \code{\link[ridl:RIDLObject]{ridl::RIDLObject}} -> \code{RIDLContainer}
@@ -25,7 +26,7 @@ RIDL Container
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{RIDLContainer$new()}}
-\item \href{#method-get_datasets}{\code{RIDLContainer$get_datasets()}}
+\item \href{#method-list_datasets}{\code{RIDLContainer$list_datasets()}}
 \item \href{#method-browse}{\code{RIDLContainer$browse()}}
 \item \href{#method-as_list}{\code{RIDLContainer$as_list()}}
 \item \href{#method-print}{\code{RIDLContainer$print()}}
@@ -62,16 +63,16 @@ A Container object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_datasets"></a>}}
-\if{latex}{\out{\hypertarget{method-get_datasets}{}}}
-\subsection{Method \code{get_datasets()}}{
+\if{html}{\out{<a id="method-list_datasets"></a>}}
+\if{latex}{\out{\hypertarget{method-list_datasets}{}}}
+\subsection{Method \code{list_datasets()}}{
 Get the list of datasets within the container
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RIDLContainer$get_datasets()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RIDLContainer$list_datasets()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
-list of Dataset objects
+list of RIDLDataset objects
 }
 }
 \if{html}{\out{<hr>}}

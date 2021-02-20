@@ -75,7 +75,7 @@ assert_container <- function(x) {
 
 #' @noRd
 assert_container_name <- function(x) {
-  l <- list_container_names()
+  l <- list_containers()
   if (!x %in% l)
     stop("Not a valid RIDL container name", call. = FALSE)
   invisible(x)

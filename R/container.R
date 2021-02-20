@@ -1,7 +1,7 @@
 #' RIDL Container
 #'
-#' RIDL Container
-#'
+#' RIDLContainer, it contains all the logic for creating, checking,
+#' and updating resources
 RIDLContainer <- R6::R6Class(
   classname = "RIDLContainer",
   inherit = RIDLObject,
@@ -32,18 +32,14 @@ RIDLContainer <- R6::R6Class(
       self$data <- initial_data
     },
 
-
     #' @description
     #' Get the list of datasets within the container
-    #' @return list of Dataset objects
-    get_datasets = function() {
+    #' @return list of RIDLDataset objects
+    list_datasets = function() {
       if (!"packages" %in% names(self$data))
-        stop("No datasets available, use Container$pull with `include_datasets = TRUE` and try again!",
+        stop("No datasets available in this RIDLContainer!",
              call. = FALSE)
-      list_of_ds <- lapply(self$data$packages,
-                           function(x) Dataset$new(initial_data = x))
-      class(list_of_ds) <- "datasets_list"
-      list_of_ds
+      vapply(self$data$packages, function(x) x$name, character(1))
     },
 
     #' @description
@@ -75,7 +71,7 @@ RIDLContainer <- R6::R6Class(
 )
 
 #' @export
-#' @aliases Container
+#' @aliases RIDLContainer
 #' @importFrom tibble as_tibble
 as_tibble.RIDLContainer <- function(x, ...) {
   df <- tibble::tibble(container_id = x$data$id,
@@ -85,27 +81,29 @@ as_tibble.RIDLContainer <- function(x, ...) {
 }
 
 #' @export
-#' @aliases Container
+#' @aliases RIDLContainer
 as.list.RIDLContainer <- function(x, ...) {
   x$as_list()
 }
 
 #' @noRd
 .pull_container  <-  function(identifier = NULL,
-                                 include_datasets = FALSE, configuration = NULL, ...) {
+                              include_datasets = TRUE, configuration = NULL, ...) {
   if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
     set_ridl_config(configuration = configuration)
   configuration <- get_ridl_config()
   res <- configuration$call_action("organization_show",
                                    list(id = identifier,
                                         type = "data-container",
-                                        include_datasets = include_datasets, ...))
-  RIDLContainer$new(initial_data = res, configuration = configuration)
+                                        include_datasets = include_datasets,
+                                        ...))
+  RIDLContainer$new(initial_data = res,
+                    configuration = configuration)
 }
 
-#' Read a RIDL container
+#' Pull a RIDL container
 #'
-#' Read a RIDL container
+#' Pull a RIDL container
 #'
 #' @param identifier character resource uuid
 #' @param configuration a RIDL configuration object
@@ -113,7 +111,7 @@ as.list.RIDLContainer <- function(x, ...) {
 #' @param ... Extra parameters
 #' @rdname pull_container
 #'
-#' @return RIDL container
+#' @return A RIDLContainer
 #' @export
 pull_container <- memoise::memoise(.pull_container)
 
@@ -123,50 +121,56 @@ browse.RIDLContainer <- function(x, ...)
   x$browse()
 
 #' @noRd
-.list_containers  <-  function(sort = "name asc",
-                               all_fields = FALSE,
-                               include_dataset_count = TRUE,
-                               include_groups = FALSE,
-                               include_user = FALSE,
-                               include_tags = FALSE,
-                               configuration = NULL, ...) {
+.list_containers  <-  function(sort = c("title asc", "name",
+                                        "package_count", "title"),
+                                    configuration = NULL) {
   if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
     set_ridl_config(configuration = configuration)
   configuration <- get_ridl_config()
+  sort <- match.arg(sort)
   data <- drop_nulls(list(sort = sort,
-                          all_fields = all_fields,
-                          include_dataset_count = include_dataset_count,
-                          include_groups = include_groups,
-                          include_user = include_user,
-                          include_tags = include_tags,
+                          all_fields = FALSE,
+                          include_dataset_count = FALSE,
                           type = "data-container"))
-  res <- configuration$call_action("organization_list", data)
-  if (isFALSE(all_fields))
-    res <- unlist(res)
-  res
+  res <- configuration$call_action("organization_list",
+                                   data)
+  unlist(res)
 }
 
-
 #' List RIDL container
 #'
 #' List RIDL container
 #'
-#' @param sort Character how to sort the results. Default is "name asc"
-#' @param all_fields Logical, include all fields
-#' @param include_dataset_count Logical include count in the result
-#' @param include_groups Logical, whether or not to include locations
-#' @param include_user Logical, whether or not to include user
-#' @param include_tags Logical whether or not to include tags
-#' @param configuration Configuration
-#' @param ... extra paramaters
+#' @param sort character how to sort the results. Default is "name asc"
+#' @param configuration RIDLConfig, a configuration
 #'
 #' @importFrom memoise memoise
 #'
 #' @rdname list_containers
+#'
 #' @return A list of containers on RIDL
 #' @export
-list_containers <- memoise::memoise(.list_containers)
+list_containers.default <- memoise::memoise(.list_containers)
 
-#' @rdname list_containers
+#' List RIDL datasets
+#'
+#' @param container RIDLContainer, the container containing the datasets
+#' @param configuration a RIDLConfig, the configuration object
+#'
+#' @importFrom memoise memoise
+#'
+#' @rdname list_datasets
+#'
+#' @return A vector of datasets names
+#'
+#' @examples
+#' \dontrun{
+#' # Setting the config to use RIDL default server
+#'  set_ridl_config()
+#'  list_datasets()
+#' }
+#'
 #' @export
-list_container_names <- memoise::memoise(.list_containers)
+list_datasets.RIDLContainer <- function(container = NULL, configuration = NULL) {
+  container$list_datasets()
+}

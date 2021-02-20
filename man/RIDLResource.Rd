@@ -51,7 +51,7 @@ and updating resources
 \if{html}{\out{<a id="method-new"></a>}}
 \if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
-Create a new Resource object
+Create a new RIDLResource object
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{RIDLResource$new(initial_data = NULL, configuration = NULL)}\if{html}{\out{</div>}}
 }
@@ -61,12 +61,12 @@ Create a new Resource object
 \describe{
 \item{\code{initial_data}}{list with required field to create a resource}
 
-\item{\code{configuration}}{a Configuration object}
+\item{\code{configuration}}{a RIDLConfig object}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A new Resource object
+A RIDLResource object
 }
 }
 \if{html}{\out{<hr>}}
@@ -79,8 +79,7 @@ Download a RIDL resource
   folder = NULL,
   filename = NULL,
   quiet = TRUE,
-  force = FALSE,
-  ...
+  force = FALSE
 )}\if{html}{\out{</div>}}
 }
 
@@ -94,8 +93,6 @@ Download a RIDL resource
 \item{\code{quiet}}{a logical value, silent download if TRUE}
 
 \item{\code{force}}{a logical value, force download}
-
-\item{\code{...}}{other \code{download.file} parameters}
 }
 \if{html}{\out{</div>}}
 }
@@ -120,14 +117,12 @@ a character, folder with the latest downloaded resource
 \if{html}{\out{<a id="method-read_resource"></a>}}
 \if{latex}{\out{\hypertarget{method-read_resource}{}}}
 \subsection{Method \code{read_resource()}}{
-Read a Resource object directly into memory
+Read a resource object directly into memory
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{RIDLResource$read_resource(
   sheet = NULL,
-  layer = NULL,
   format = NULL,
   download_folder = NULL,
-  simplify_json = TRUE,
   force_download = FALSE,
   quiet_download = TRUE,
   ...
@@ -139,13 +134,9 @@ Read a Resource object directly into memory
 \describe{
 \item{\code{sheet}}{a character value, only for resource in Excel format}
 
-\item{\code{layer}}{a character value, only for spatial (vector) resource}
-
-\item{\code{format}}{a character value, file format;}
+\item{\code{format}}{character, specify file format in case the automatic reader doesn't work as expected}
 
 \item{\code{download_folder}}{a character value, folder to save the downloaded resource}
-
-\item{\code{simplify_json}}{a logical value}
 
 \item{\code{force_download}}{a logical value, if TRUE force download}
 
@@ -156,8 +147,7 @@ Read a Resource object directly into memory
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-a \code{tibble}, a \code{sf}, a \code{stars} or a \code{list} depending
-on the type of resource read
+A \code{tibble}
 }
 }
 \if{html}{\out{<hr>}}
@@ -177,7 +167,7 @@ Get the list of sheets name of resource
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{format}}{character; file format}
+\item{\code{format}}{character, specify file format in case the automatic reader doesn't work as expected}
 
 \item{\code{download_folder}}{a character value, folder to save the downloaded resource}
 
@@ -188,7 +178,7 @@ Get the list of sheets name of resource
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-a the list of layers available in the resource
+the names of the sheets of XLS(X) resources
 }
 }
 \if{html}{\out{<hr>}}
@@ -201,7 +191,7 @@ Get the resource dataset.
 }
 
 \subsection{Returns}{
-a Dataset, the dataset containing the resource
+a RIDLDataset, the dataset containing the resource
 }
 }
 \if{html}{\out{<hr>}}

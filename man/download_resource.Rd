@@ -14,7 +14,7 @@ download_resource(
 )
 }
 \arguments{
-\item{resource}{Resource, a RIDL resource}
+\item{resource}{RIDLResource, a RIDL resource}
 
 \item{folder}{character, path of the directory where you will store the data}
 
@@ -22,12 +22,12 @@ download_resource(
 
 \item{quiet}{logical, no progress bar from download (default = \code{FALSE})}
 
-\item{force}{logical force download (default = \code{FALSE})}
+\item{force}{logical, force download (default = \code{FALSE})}
 
 \item{...}{extra paramaters}
 }
 \value{
-Resource
+character, the download folder path
 }
 \description{
 Download a RIDL resource into a specific folder

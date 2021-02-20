@@ -2,15 +2,12 @@
 % Please edit documentation in R/configuration.R
 \name{delete_ridl_config}
 \alias{delete_ridl_config}
-\title{Delete ridl config}
+\title{Delete the ridl config}
 \usage{
 delete_ridl_config()
 }
-\value{
-None
-}
 \description{
-Delete the configuration settings for using ridl.
+Delete the configuration settings for using RIDL
 }
 \details{
 Delete RIDL config

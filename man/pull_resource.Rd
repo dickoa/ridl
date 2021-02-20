@@ -2,24 +2,24 @@
 % Please edit documentation in R/resource.R
 \name{pull_resource}
 \alias{pull_resource}
-\title{Read a RIDL resource}
+\title{Pull a RIDL Resource}
 \usage{
 pull_resource(identifier, configuration = NULL)
 }
 \arguments{
-\item{identifier}{Character resource uuid}
+\item{identifier}{character, a RIDLResource id}
 
-\item{configuration}{a Configuration object}
+\item{configuration}{RIDLConfig, the configuration used}
 }
 \value{
 Resource
 }
 \description{
-Read a RIDL resource
+Pull a RIDL Resource
 }
 \examples{
 \dontrun{
-#Setting the config to use RIDL default server
+ # Setting the config to use RIDL default server
  set_ridl_config()
  res <- pull_resource("98aa1742-b5d3-40c3-94c6-01e31ded6e84")
  res
