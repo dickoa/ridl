@@ -98,7 +98,7 @@ get_ridl_config()
 Now that we are connected to RIDL, we can search for dataset using `search_datasets`.
 
 ```{r}
-search_datasets("mali", visibility = "public", rows = 2) ## search internally public dataset in RIDL, limit the results to two rows
+search_ridl_dataset("mali", visibility = "public", rows = 2) ## search internally public dataset in RIDL, limit the results to two rows
 ## [[1]]
 ## <RIDL Dataset> 6f37029d-0ec2-4322-88ed-6447b2eebf3a
 ##   Title: Socio-economic assessment of Malian refugees in Burkina Faso 2016
@@ -117,14 +117,14 @@ search_datasets("mali", visibility = "public", rows = 2) ## search internally pu
 ## [1] "ridl_datasets_list"
 ```
 
-We can select a particular `dataset` from the list (a `ridl_datasets_list` is a list) of datasets using `R` function to access elements from list (e.g `[[`). In this example, we can use either `purrr::pluck` or `dplyr::nth` since they both play well with the pipe operator `%>%`. Once the dataset selected, it's possible to list all its `resources` using `list_resources`.
+We can select a particular `dataset` from the list (a `ridl_dataset_list` is a list) of `dataset` using `R` function to access elements from list (e.g `[[`). In this example, we can use either `purrr::pluck` or `dplyr::nth` since they both play well with the pipe operator `%>%`. Once the dataset selected, it's possible to list all its `resource` objects using `list_ridl_resource`.
 
 
 ```{r, eval = FALSE}
 library(tidyverse)
-search_datasets("mali", visibility = "public", rows = 2) %>%
+search_ridl_dataset("mali", visibility = "public", rows = 2) %>%
   nth(1) %>%
-  list_resources(format = "stata")
+  list_ridl_resource(format = "stata")
 ## <RIDL Resource> 026f9547-d7b2-4ec3-bbaa-5096837b1f01
 ##   Name: UNHCR_BFA_2016_SEA_household_v1_1
 ##   Description: BFA SEA household level data
@@ -141,18 +141,18 @@ search_datasets("mali", visibility = "public", rows = 2) %>%
 ##   Format: Stata
 
 ## attr(,"class")
-## [1] "ridl_resources_list"
+## [1] "ridl_resource_list"
 ```
 
-A `ridl_resources_list` is a simple `R` `list` and can be manipulated using `purrr::pluck` or `dplyr::nth` to select the one you want to read (`read_resource`) or download (`download_resource`).
+A `ridl_resource_list` is a simple `R` `list` and can be manipulated using `purrr::pluck` or `dplyr::nth` to select the one you want to `read` into your `R` session or `download`.
 
 ```{r, eval = FALSE}
 library(tidyverse)
-search_datasets("mali", visibility = "public", rows = 2) %>%
+search_ridl_dataset("mali", visibility = "public", rows = 2) %>%
   nth(1) %>%
-  list_resources(format = "stata") %>%
+  list_ridl_resource(format = "stata") %>%
   nth(1) %>%
-  read_resource()
+  read()
 ## + # A tibble: 1,690 x 459
 ##     hhid   q002a    q006    q008  q102  q113    q200    q201
 ##    <dbl> <dbl+l> <dbl+l> <dbl+l> <dbl> <dbl> <dbl+l> <dbl+l>
@@ -201,21 +201,22 @@ search_datasets("mali", visibility = "public", rows = 2) %>%
 ## #   q23904 <dbl+lbl>, q23909 <dbl+lbl>, q240 <dbl+lbl>, …
 ```
 
-`read_resource` will not work with all resources in RIDL, so far the following format are supported: `csv`, `xlsx`, `xls`, `dta` (`Stata`).
+`read` will not work with all resources in RIDL, so far the following format are supported: `csv`, `xlsx`, `xls`, `dta` (`Stata`).
 
 I will consider adding more data types in the future, feel free to file an issue if it doesn't work as expected or you want to add a support for a new format.
 
-For Excel files (`xlsx` and `xls`), you can also use `get_resource_sheets` to list available sheets and use the `sheet` paramater in `read_resource` to specify the sheet you want to read (default is to read the first sheet).
+For Excel files (`xlsx` and `xls`), you can also use `get_sheets` to list available sheets and use the `sheet` paramater in `read` to specify the sheet you want to read (default is to read the first sheet).
 
 ### Reading dataset directly
 
-We can also use `pull_dataset` to directly read and access a dataset object.
+We can also use `pull_ridl_dataset` to directly read and access a dataset object.
 
 ```{r, eval = FALSE}
 dataset_name <- "official-cross-border-figures-of-venezuelan-individuals"
-pull_dataset(dataset_name) %>%
-  get_nth_resource(1) %>%
-  read_resource()
+pull_ridl_dataset(dataset_name) %>%
+  list_ridl_resource() %>%
+  nth(1) %>%
+  read()
 ## + Reading sheet:  VEN_Official Borders Figures
 ## # A tibble: 1,314 x 5
 ##    Country `Mov Type`  `Border Point` Month_Year Total_individua…
@@ -236,8 +237,9 @@ pull_dataset(dataset_name) %>%
 If you know the id of a `RIDL Resource` object you can also use directly `pull_resource` to access directly the desired resource.
 
 ```{r, eval = FALSE}
-pull_dataset(dataset_name) %>%
-  get_nth_resource(1)
+pull_ridl_dataset(dataset_name) %>%
+  list_ridl_resource() %>%
+  nth(1)
 ## + <RIDL Resource> 68e39d44-88ae-49f9-b492-3635341c92be
 ##   Name: VEN_OfficialFiguresBorders
 ##   Description: Compilation of official figures on Venezuelan population per month per entry-exit point.
@@ -245,8 +247,8 @@ pull_dataset(dataset_name) %>%
 ##   Size: 39998
 ##   Format: XLSX
 
-pull_resource("68e39d44-88ae-49f9-b492-3635341c92be") %>%
-  read_resource()
+pull_ridl_resource("68e39d44-88ae-49f9-b492-3635341c92be") %>%
+  read()
 ## + Reading sheet:  VEN_Official Borders Figures
 ## # A tibble: 1,314 x 5
 ##    Country `Mov Type`  `Border Point` Month_Year Total_individua…
@@ -267,23 +269,23 @@ pull_resource("68e39d44-88ae-49f9-b492-3635341c92be") %>%
 ## Some other handy functions
 
 ```{r, eval = FALSE}
-ct <- list_containers()
+ct <- list_ridl_container(sort = "package_count")
 head(ct)
-## [1] "afghanistan"      "africa"           "algeria"
-## [4] "algeria-sens"     "algeria-wash-kap" "americas"
+## [1] "ethiopia-sens"    "data-deposit"     "kenya-sens"
+## [4] "afghanistan"      "bangladesh-sens"  "south-sudan-sens"
 
 grep("niger-", ct, ignore.case = TRUE, value = TRUE)
 ## [1] "niger-protection" "niger-sens"
 
-pull_container("niger-protection")
+pull_ridl_container("niger-protection")
 ## <RIDL Container> d341942e-547e-404b-bcdf-c72b2cd85530
 ##   Name: niger-protection
 ##   Display name: Niger: Protection
 ##   No. Datasets: 5
 ##   No. Members: 3
 
-pull_container("niger-protection") %>%
-  list_datasets()
+pull_ridl_container("niger-protection") %>%
+  list_ridl_dataset()
 ## [1] "enrolement-pdi-tillaberi-tillaberi-niger-2020"
 ## [2] "identify-asylum-seekers-in-migration-flow-agadez-niger-2018-2019-2020"
 ## [3] "monitoring-the-migration-flow-1-agadez-niger-2019-2020"

@@ -28,12 +28,12 @@ and updating resources
 \item \href{#method-new}{\code{RIDLResource$new()}}
 \item \href{#method-download}{\code{RIDLResource$download()}}
 \item \href{#method-download_folder}{\code{RIDLResource$download_folder()}}
-\item \href{#method-read_resource}{\code{RIDLResource$read_resource()}}
+\item \href{#method-read}{\code{RIDLResource$read()}}
 \item \href{#method-get_sheets}{\code{RIDLResource$get_sheets()}}
-\item \href{#method-get_dataset}{\code{RIDLResource$get_dataset()}}
+\item \href{#method-get_ridl_dataset}{\code{RIDLResource$get_ridl_dataset()}}
+\item \href{#method-get_format}{\code{RIDLResource$get_format()}}
 \item \href{#method-get_required_fields}{\code{RIDLResource$get_required_fields()}}
 \item \href{#method-check_required_field}{\code{RIDLResource$check_required_field()}}
-\item \href{#method-get_format}{\code{RIDLResource$get_format()}}
 \item \href{#method-as_list}{\code{RIDLResource$as_list()}}
 \item \href{#method-browse}{\code{RIDLResource$browse()}}
 \item \href{#method-print}{\code{RIDLResource$print()}}
@@ -114,12 +114,12 @@ a character, folder with the latest downloaded resource
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-read_resource"></a>}}
-\if{latex}{\out{\hypertarget{method-read_resource}{}}}
-\subsection{Method \code{read_resource()}}{
+\if{html}{\out{<a id="method-read"></a>}}
+\if{latex}{\out{\hypertarget{method-read}{}}}
+\subsection{Method \code{read()}}{
 Read a resource object directly into memory
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RIDLResource$read_resource(
+\if{html}{\out{<div class="r">}}\preformatted{RIDLResource$read(
   sheet = NULL,
   format = NULL,
   download_folder = NULL,
@@ -182,16 +182,29 @@ the names of the sheets of XLS(X) resources
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_dataset"></a>}}
-\if{latex}{\out{\hypertarget{method-get_dataset}{}}}
-\subsection{Method \code{get_dataset()}}{
+\if{html}{\out{<a id="method-get_ridl_dataset"></a>}}
+\if{latex}{\out{\hypertarget{method-get_ridl_dataset}{}}}
+\subsection{Method \code{get_ridl_dataset()}}{
 Get the resource dataset.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RIDLResource$get_dataset()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RIDLResource$get_ridl_dataset()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
 a RIDLDataset, the dataset containing the resource
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_format"></a>}}
+\if{latex}{\out{\hypertarget{method-get_format}{}}}
+\subsection{Method \code{get_format()}}{
+Get the file format
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RIDLResource$get_format()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+a character, the file format of the resource
 }
 }
 \if{html}{\out{<hr>}}
@@ -226,19 +239,6 @@ Check dataset required field
 \subsection{Returns}{
 a logical value, TRUE if the the resource is not missing
 a required field and throws an error otherwise
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_format"></a>}}
-\if{latex}{\out{\hypertarget{method-get_format}{}}}
-\subsection{Method \code{get_format()}}{
-Get the file format
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RIDLResource$get_format()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-a character, the file format of the resource
 }
 }
 \if{html}{\out{<hr>}}

@@ -95,12 +95,13 @@ as.list.RIDLContainer <- function(x, ...) {
 #' @param include_datasets logical, include datasets if TRUE
 #' @param ... extra parameters for `organization_show` CKAN API endpoint
 #'
-#' @rdname pull_container
+#' @rdname pull_ridl_container
 #'
 #' @return A RIDLContainer
 #' @export
-pull_container  <-  function(identifier = NULL,
-                              include_datasets = TRUE, configuration = NULL, ...) {
+pull_ridl_container  <-  function(identifier = NULL,
+                                  include_datasets = TRUE,
+                                  configuration = NULL, ...) {
   if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
     set_ridl_config(configuration = configuration)
   configuration <- get_ridl_config()
@@ -125,13 +126,13 @@ browse.RIDLContainer <- function(x, ...)
 #' @param sort character how to sort the results. Default is "name asc"
 #' @param configuration RIDLConfig, a configuration
 #'
-#' @rdname list_containers
+#' @rdname list_ridl_container
 #'
 #' @return A list of containers on RIDL
 #' @export
-list_containers.default  <-  function(sort = c("title asc", "name",
-                                        "package_count", "title"),
-                                    configuration = NULL) {
+list_ridl_container.default  <-  function(sort = c("title asc", "name",
+                                                   "package_count", "title"),
+                                          configuration = NULL) {
   if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
     set_ridl_config(configuration = configuration)
   configuration <- get_ridl_config()
@@ -147,10 +148,12 @@ list_containers.default  <-  function(sort = c("title asc", "name",
 
 #' List RIDL datasets
 #'
+#' List RIDL datasets
+#'
 #' @param container RIDLContainer, the container containing the datasets
 #' @param configuration a RIDLConfig, the configuration object
 #'
-#' @rdname list_datasets
+#' @rdname list_ridl_dataset
 #'
 #' @return A vector of datasets names
 #'
@@ -158,10 +161,10 @@ list_containers.default  <-  function(sort = c("title asc", "name",
 #' \dontrun{
 #' # Setting the config to use RIDL default server
 #'  set_ridl_config()
-#'  list_datasets()
+#'  list_ridl_dataset()
 #' }
 #'
 #' @export
-list_datasets.RIDLContainer <- function(container = NULL, configuration = NULL) {
+list_ridl_dataset.RIDLContainer <- function(container = NULL, configuration = NULL) {
   container$list_datasets()
 }

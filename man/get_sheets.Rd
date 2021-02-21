@@ -13,7 +13,7 @@ get_sheets(resource, format, download_folder, quiet)
 \method{get_sheets}{default}(resource, format, download_folder, quiet)
 }
 \arguments{
-\item{resource}{Resource, a RIDL resource}
+\item{resource}{RIDLResource, a RIDL resource}
 
 \item{format}{character, specify file format in case the automatic reader doesn't work as expected}
 

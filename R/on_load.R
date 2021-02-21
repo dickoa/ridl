@@ -9,19 +9,19 @@ ridl_cache <- NULL # nocov start
   x$cache_path_set("ridl")
   ridl_cache <<- x
   .ridl_cm <<- cachem::cache_mem()
-  search_datasets <<- memoise::memoise(search_datasets,
-                                       cache = .ridl_cm)
-  search_resources <<- memoise::memoise(search_resources,
-                                       cache = .ridl_cm)
-  pull_dataset <<- memoise::memoise(pull_dataset,
-                                       cache = .ridl_cm)
-  pull_resource <<- memoise::memoise(pull_resource,
-                                       cache = .ridl_cm)
-  pull_container <<- memoise::memoise(pull_container,
-                                       cache = .ridl_cm)
-  list_datasets.default <<- memoise::memoise(list_datasets.default,
-                                             cache = .ridl_cm)
-  list_containers.default <<- memoise::memoise(list_containers.default,
-                                               cache = .ridl_cm)
+  search_ridl_dataset <<- memoise::memoise(search_ridl_dataset,
+                                           cache = .ridl_cm)
+  search_ridl_resource <<- memoise::memoise(search_ridl_resource,
+                                            cache = .ridl_cm)
+  pull_ridl_dataset <<- memoise::memoise(pull_ridl_dataset,
+                                         cache = .ridl_cm)
+  pull_ridl_resource <<- memoise::memoise(pull_ridl_resource,
+                                          cache = .ridl_cm)
+  pull_ridl_container <<- memoise::memoise(pull_ridl_container,
+                                           cache = .ridl_cm)
+  list_ridl_dataset.default <<- memoise::memoise(list_ridl_dataset.default,
+                                                 cache = .ridl_cm)
+  list_ridl_container.default <<- memoise::memoise(list_ridl_container.default,
+                                                   cache = .ridl_cm)
   set_ridl_config()
 } # nocov end

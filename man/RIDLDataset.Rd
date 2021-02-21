@@ -28,17 +28,17 @@ creating, and updating datasets and associated resources.
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{RIDLDataset$new()}}
-\item \href{#method-get_nth_resource}{\code{RIDLDataset$get_nth_resource()}}
-\item \href{#method-list_resources}{\code{RIDLDataset$list_resources()}}
-\item \href{#method-n_resources}{\code{RIDLDataset$n_resources()}}
-\item \href{#method-delete_nth_resource}{\code{RIDLDataset$delete_nth_resource()}}
-\item \href{#method-delete_resources}{\code{RIDLDataset$delete_resources()}}
-\item \href{#method-add_resource}{\code{RIDLDataset$add_resource()}}
-\item \href{#method-set_container}{\code{RIDLDataset$set_container()}}
+\item \href{#method-get_ridl_resource}{\code{RIDLDataset$get_ridl_resource()}}
+\item \href{#method-list_ridl_resource}{\code{RIDLDataset$list_ridl_resource()}}
+\item \href{#method-n_ridl_resource}{\code{RIDLDataset$n_ridl_resource()}}
+\item \href{#method-delete_ridl_resource}{\code{RIDLDataset$delete_ridl_resource()}}
+\item \href{#method-delete_all_ridl_resource}{\code{RIDLDataset$delete_all_ridl_resource()}}
+\item \href{#method-add_ridl_resource}{\code{RIDLDataset$add_ridl_resource()}}
+\item \href{#method-set_ridl_container}{\code{RIDLDataset$set_ridl_container()}}
 \item \href{#method-browse}{\code{RIDLDataset$browse()}}
-\item \href{#method-get_configuration}{\code{RIDLDataset$get_configuration()}}
+\item \href{#method-get_ridl_config}{\code{RIDLDataset$get_ridl_config()}}
 \item \href{#method-get_date_range}{\code{RIDLDataset$get_date_range()}}
-\item \href{#method-get_container}{\code{RIDLDataset$get_container()}}
+\item \href{#method-get_ridl_container}{\code{RIDLDataset$get_ridl_container()}}
 \item \href{#method-as_list}{\code{RIDLDataset$as_list()}}
 \item \href{#method-print}{\code{RIDLDataset$print()}}
 \item \href{#method-clone}{\code{RIDLDataset$clone()}}
@@ -47,6 +47,7 @@ creating, and updating datasets and associated resources.
 \if{html}{
 \out{<details open ><summary>Inherited methods</summary>}
 \itemize{
+\item \out{<span class="pkg-link" data-pkg="ridl" data-topic="RIDLObject" data-id="get_configuration">}\href{../../ridl/html/RIDLObject.html#method-get_configuration}{\code{ridl::RIDLObject$get_configuration()}}\out{</span>}
 }
 \out{</details>}
 }
@@ -73,12 +74,12 @@ A Dataset object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_nth_resource"></a>}}
-\if{latex}{\out{\hypertarget{method-get_nth_resource}{}}}
-\subsection{Method \code{get_nth_resource()}}{
+\if{html}{\out{<a id="method-get_ridl_resource"></a>}}
+\if{latex}{\out{\hypertarget{method-get_ridl_resource}{}}}
+\subsection{Method \code{get_ridl_resource()}}{
 Get the nth resource of the dataset
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RIDLDataset$get_nth_resource(n)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RIDLDataset$get_ridl_resource(n)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -93,12 +94,12 @@ a Resource object, the selected resource
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-list_resources"></a>}}
-\if{latex}{\out{\hypertarget{method-list_resources}{}}}
-\subsection{Method \code{list_resources()}}{
+\if{html}{\out{<a id="method-list_ridl_resource"></a>}}
+\if{latex}{\out{\hypertarget{method-list_ridl_resource}{}}}
+\subsection{Method \code{list_ridl_resource()}}{
 Get all resources of the dataset
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RIDLDataset$list_resources(pattern = NULL, format = NULL)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RIDLDataset$list_ridl_resource(pattern = NULL, format = NULL)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -115,12 +116,12 @@ a list of Resource objects, all resources available in the dataset
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-n_resources"></a>}}
-\if{latex}{\out{\hypertarget{method-n_resources}{}}}
-\subsection{Method \code{n_resources()}}{
+\if{html}{\out{<a id="method-n_ridl_resource"></a>}}
+\if{latex}{\out{\hypertarget{method-n_ridl_resource}{}}}
+\subsection{Method \code{n_ridl_resource()}}{
 Get number of dataset resources
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RIDLDataset$n_resources()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RIDLDataset$n_ridl_resource()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
@@ -128,12 +129,12 @@ The number of RIDLResource objects
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-delete_nth_resource"></a>}}
-\if{latex}{\out{\hypertarget{method-delete_nth_resource}{}}}
-\subsection{Method \code{delete_nth_resource()}}{
+\if{html}{\out{<a id="method-delete_ridl_resource"></a>}}
+\if{latex}{\out{\hypertarget{method-delete_ridl_resource}{}}}
+\subsection{Method \code{delete_ridl_resource()}}{
 Delete a resource by its index
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RIDLDataset$delete_nth_resource(index = 1L)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RIDLDataset$delete_ridl_resource(index = 1L)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -145,22 +146,22 @@ Delete a resource by its index
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-delete_resources"></a>}}
-\if{latex}{\out{\hypertarget{method-delete_resources}{}}}
-\subsection{Method \code{delete_resources()}}{
+\if{html}{\out{<a id="method-delete_all_ridl_resource"></a>}}
+\if{latex}{\out{\hypertarget{method-delete_all_ridl_resource}{}}}
+\subsection{Method \code{delete_all_ridl_resource()}}{
 Delete all resources from a dataset
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RIDLDataset$delete_resources()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RIDLDataset$delete_all_ridl_resource()}\if{html}{\out{</div>}}
 }
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-add_resource"></a>}}
-\if{latex}{\out{\hypertarget{method-add_resource}{}}}
-\subsection{Method \code{add_resource()}}{
-
+\if{html}{\out{<a id="method-add_ridl_resource"></a>}}
+\if{latex}{\out{\hypertarget{method-add_ridl_resource}{}}}
+\subsection{Method \code{add_ridl_resource()}}{
+Add a resource to a dataset
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RIDLDataset$add_resource(resource, ignore_dataset_id = FALSE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RIDLDataset$add_ridl_resource(resource, ignore_dataset_id = FALSE)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -168,20 +169,18 @@ Delete all resources from a dataset
 \describe{
 \item{\code{resource}}{RIDLResource, the resource}
 
-\item{\code{ignore_dataset_id}}{logical, ignore the dataset id
-
-Add a resource to a dataset}
+\item{\code{ignore_dataset_id}}{logical, ignore the dataset id}
 }
 \if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_container"></a>}}
-\if{latex}{\out{\hypertarget{method-set_container}{}}}
-\subsection{Method \code{set_container()}}{
+\if{html}{\out{<a id="method-set_ridl_container"></a>}}
+\if{latex}{\out{\hypertarget{method-set_ridl_container}{}}}
+\subsection{Method \code{set_ridl_container()}}{
 Add a container to a dataset
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RIDLDataset$set_container(container_name)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RIDLDataset$set_ridl_container(container_name)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -203,12 +202,12 @@ Browse the dataset page on RIDL
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_configuration"></a>}}
-\if{latex}{\out{\hypertarget{method-get_configuration}{}}}
-\subsection{Method \code{get_configuration()}}{
+\if{html}{\out{<a id="method-get_ridl_config"></a>}}
+\if{latex}{\out{\hypertarget{method-get_ridl_config}{}}}
+\subsection{Method \code{get_ridl_config()}}{
 Get the current configuration in use
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RIDLDataset$get_configuration()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RIDLDataset$get_ridl_config()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
@@ -229,12 +228,12 @@ a date, the dataset date.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_container"></a>}}
-\if{latex}{\out{\hypertarget{method-get_container}{}}}
-\subsection{Method \code{get_container()}}{
+\if{html}{\out{<a id="method-get_ridl_container"></a>}}
+\if{latex}{\out{\hypertarget{method-get_ridl_container}{}}}
+\subsection{Method \code{get_ridl_container()}}{
 Get the dataset organization
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RIDLDataset$get_container()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RIDLDataset$get_ridl_container()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{

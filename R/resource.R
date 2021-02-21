@@ -111,10 +111,10 @@ RIDLResource <- R6::R6Class(
     #' @param ... other parameters
 
     #' @return A \code{tibble}
-    read_resource = function(sheet = NULL, format = NULL,
-                             download_folder = NULL,
-                             force_download = FALSE,
-                             quiet_download = TRUE, ...) {
+    read = function(sheet = NULL, format = NULL,
+                    download_folder = NULL,
+                    force_download = FALSE,
+                    quiet_download = TRUE, ...) {
 
       if (!is.null(private$download_folder_) & is.null(download_folder))
         folder <- self$download_folder()
@@ -127,7 +127,7 @@ RIDLResource <- R6::R6Class(
         format <- self$get_format()
 
       hxl <- any(grepl("hxl",
-                       tag_names(self$get_dataset()),
+                       tag_names(self$get_ridl_dataset()),
                        ignore.case = TRUE))
 
       switch(format,
@@ -177,13 +177,20 @@ y
     #' Get the resource dataset.
     #'
     #' @return a RIDLDataset, the dataset containing the resource
-    get_dataset = function() {
+    get_ridl_dataset = function() {
       dataset_id <- self$data$package_id
       if (is.null(dataset_id)) {
         stop("Resource has no dataset id!", call. = FALSE)
       } else {
-        pull_dataset(dataset_id)
+        pull_ridl_dataset(dataset_id)
       }
+    },
+
+    #' @description
+    #' Get the file format
+    #' @return a character, the file format of the resource
+    get_format = function() {
+      tolower(self$data$format)
     },
 
     #' @description
@@ -208,13 +215,6 @@ y
       if (!all(n1 %in% n2))
         stop(sprintf("Field %s is missing in the Resource object!\n",
                      setdiff(n1, n2)), call. = FALSE)
-    },
-
-    #' @description
-    #' Get the file format
-    #' @return a character, the file format of the resource
-    get_format = function() {
-      tolower(self$data$format)
     },
 
     #' @description
@@ -264,7 +264,7 @@ as_tibble.RIDLResource <- function(x, ...) {
 
 #' @export
 #' @aliases RIDLResource
-as_tibble.ridl_resources_list <- function(x) {
+as_tibble.ridl_resource_list <- function(x) {
   l <- lapply(x, as_tibble)
   Reduce(rbind, l)
 }
@@ -289,15 +289,20 @@ as.list.RIDLResource <- function(x, ...) {
 #' @return character, the download folder path
 #' @export
 #'
+#' @rdname download
+#'
 #' @examples
 #' \dontrun{
 #' #Setting the config to use RIDL default server
-#'  res <- read_resource("98aa1742-b5d3-40c3-94c6-01e31ded6e84")
-#'  download_resource(res, folder = "/tmp")
+#'  res <- pull_ridl_resource("98aa1742-b5d3-40c3-94c6-01e31ded6e84")
+#'  download(res, folder = "/tmp")
 #' }
-download_resource <- function(resource, folder = NULL,
-                              filename = NULL, quiet = FALSE, force = FALSE, ...) {
-  assert_resource(resource)
+download.RIDLResource <- function(resource,
+                                  folder = NULL,
+                                  filename = NULL,
+                                  quiet = FALSE,
+                                  force = FALSE, ...) {
+
   resource$download(folder = folder, filename = filename,
                     quiet = quiet, force = force, ...)
 }
@@ -306,7 +311,7 @@ download_resource <- function(resource, folder = NULL,
 #'
 #' Get the names of the sheets of XLS(X) resources
 #'
-#' @param resource Resource, a RIDL resource
+#' @param resource RIDLResource, a RIDL resource
 #' @param format character, specify file format in case the automatic reader doesn't work as expected
 #' @param download_folder character, path of the directory where you will store the data
 #' @param quiet logical, no progress bar from download (default = FALSE)
@@ -349,8 +354,8 @@ get_format.RIDLResource <- function(resource) {
 #' @return a RIDLDataset, the dataset containing the resource
 #'
 #' @export
- get_dataset.RIDLResource <- function(resource) {
-  resource$get_dataset()
+ get_ridl_dataset.RIDLResource <- function(resource) {
+  resource$get_ridl_dataset()
 }
 
 #' Read a RIDL Resource
@@ -366,19 +371,24 @@ get_format.RIDLResource <- function(resource) {
 #' @param force_download logical, force download if TRUE
 #' @param quiet_download logical, silent download
 #' @param ... extra parameters
+#'
+#' @rdname read
+#'
 #' @return A \code{tibble}
 #'
 #' @export
-read_resource <- function(resource, sheet = NULL,
-                          format = NULL, download_folder = NULL,
-                          force_download = FALSE, quiet_download = TRUE, ...) {
-  assert_resource(resource)
-  resource$read_resource(sheet = sheet,
-                         format = format,
-                         download_folder = download_folder,
-                         force_download = force_download,
-                         quiet_download = quiet_download,
-                         ...)
+read.RIDLResource <- function(resource,
+                              sheet = NULL,
+                              format = NULL,
+                              download_folder = NULL,
+                              force_download = FALSE,
+                              quiet_download = TRUE, ...) {
+  resource$read(sheet = sheet,
+                format = format,
+                download_folder = download_folder,
+                force_download = force_download,
+                quiet_download = quiet_download,
+                ...)
 }
 
 #' Search for RIDL resources
@@ -390,20 +400,19 @@ read_resource <- function(resource, sheet = NULL,
 #' @param configuration RIDLConfig, a configuration
 #' @param ... extra params
 #'
-#' @rdname search_resources
+#' @rdname search_ridl_resource
 #' @details Search and find datasets on RIDL
-#'
 #'
 #' @return A list of RIDLDataset
 #'
 #' @examples
 #' \dontrun{
 #'  # Setting the config to use RIDL default server
-#'  search_resources("format:xlsx")
+#'  search_ridl_resource("format:xlsx")
 #' }
 #'
 #' @export
-search_resources  <-  function(query = "*:*", configuration = NULL, ...) {
+search_ridl_resource <- function(query = "*:*", configuration = NULL, ...) {
   if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
     set_ridl_config(configuration = configuration)
   configuration <- get_ridl_config()
@@ -411,14 +420,14 @@ search_resources  <-  function(query = "*:*", configuration = NULL, ...) {
   list_of_rs <- lapply(res$results, function(x)
     RIDLResource$new(initial_data = x,
                  configuration = configuration))
-  class(list_of_rs) <- "ridl_resources_list"
+  class(list_of_rs) <- "ridl_resource_list"
   list_of_rs
 }
 
 #' @importFrom tibble as_tibble
 #' @aliases RIDLResource
 #' @export
-as_tibble.ridl_resources_list <- function(x, ...) {
+as_tibble.ridl_resource_list <- function(x, ...) {
   l <- lapply(x, as_tibble)
   Reduce(rbind, l)
 }
@@ -430,7 +439,7 @@ as_tibble.ridl_resources_list <- function(x, ...) {
 #' @param identifier character, a RIDLResource id
 #' @param configuration RIDLConfig, the configuration used
 #'
-#' @rdname pull_resource
+#' @rdname pull_ridl_resource
 #'
 #' @return RIDLResource
 #' @export
@@ -439,10 +448,10 @@ as_tibble.ridl_resources_list <- function(x, ...) {
 #' \dontrun{
 #'  # Setting the config to use RIDL default server
 #'  set_ridl_config()
-#'  res <- pull_resource("98aa1742-b5d3-40c3-94c6-01e31ded6e84")
+#'  res <- pull_ridl_resource("98aa1742-b5d3-40c3-94c6-01e31ded6e84")
 #'  res
 #' }
-pull_resource <- function(identifier, configuration = NULL) {
+pull_ridl_resource <- function(identifier, configuration = NULL) {
   if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
     set_ridl_config(configuration = configuration)
   configuration <- get_ridl_config()
