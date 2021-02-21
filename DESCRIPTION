@@ -21,6 +21,7 @@ Imports:
     readxl,
     haven,
     memoise,
+    cachem,
     hoardr,
     tibble,
 Suggests:

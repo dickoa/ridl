@@ -12,13 +12,13 @@ pull_container(
 )
 }
 \arguments{
-\item{identifier}{character resource uuid}
+\item{identifier}{character, the container name or id}
 
-\item{include_datasets}{Logical, include datasets if TRUE}
+\item{include_datasets}{logical, include datasets if TRUE}
 
-\item{configuration}{a RIDL configuration object}
+\item{configuration}{RIDLConfig, a configuration object}
 
-\item{...}{Extra parameters}
+\item{...}{extra parameters for \code{organization_show} CKAN API endpoint}
 }
 \value{
 A RIDLContainer

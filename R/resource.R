@@ -381,25 +381,10 @@ read_resource <- function(resource, sheet = NULL,
                          ...)
 }
 
-#' @rdname search_resources
-#' @noRd
-.search_resources  <-  function(query = "*:*", configuration = NULL, ...) {
-  if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
-    set_ridl_config(configuration = configuration)
-  configuration <- get_ridl_config()
-  res <- configuration$call_action("resource_search", list(query = query, ...))
-  list_of_rs <- lapply(res$results, function(x)
-    RIDLResource$new(initial_data = x,
-                 configuration = configuration))
-  class(list_of_rs) <- "ridl_resources_list"
-  list_of_rs
-}
-
-#' Search for resources
+#' Search for RIDL resources
 #'
-#' Search for resources
+#' Search for RIDL resources
 #'
-#' @importFrom memoise memoise
 #'
 #' @param query character, a query
 #' @param configuration RIDLConfig, a configuration
@@ -416,40 +401,38 @@ read_resource <- function(resource, sheet = NULL,
 #'  # Setting the config to use RIDL default server
 #'  search_resources("format:xlsx")
 #' }
+#'
 #' @export
-search_resources <- memoise(.search_resources)
+search_resources  <-  function(query = "*:*", configuration = NULL, ...) {
+  if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
+    set_ridl_config(configuration = configuration)
+  configuration <- get_ridl_config()
+  res <- configuration$call_action("resource_search", list(query = query, ...))
+  list_of_rs <- lapply(res$results, function(x)
+    RIDLResource$new(initial_data = x,
+                 configuration = configuration))
+  class(list_of_rs) <- "ridl_resources_list"
+  list_of_rs
+}
 
-#' @export
 #' @importFrom tibble as_tibble
-#' @aliases Resource
+#' @aliases RIDLResource
+#' @export
 as_tibble.ridl_resources_list <- function(x, ...) {
   l <- lapply(x, as_tibble)
   Reduce(rbind, l)
 }
 
-#' @noRd
-.pull_resource <- function(identifier, configuration = NULL) {
-  if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
-    set_ridl_config(configuration = configuration)
-  configuration <- get_ridl_config()
-  res <- configuration$call_action("resource_show",
-                                   list(id = identifier))
-  RIDLResource$new(initial_data = res,
-                   configuration = configuration)
-}
-
-#' Pull a RIDL Resource
+#' Pull a RIDL resource
 #'
-#' Pull a RIDL Resource
-#'
-#' @importFrom memoise memoise
+#' Pull a RIDL resource
 #'
 #' @param identifier character, a RIDLResource id
 #' @param configuration RIDLConfig, the configuration used
 #'
 #' @rdname pull_resource
 #'
-#' @return Resource
+#' @return RIDLResource
 #' @export
 #'
 #' @examples
@@ -459,7 +442,15 @@ as_tibble.ridl_resources_list <- function(x, ...) {
 #'  res <- pull_resource("98aa1742-b5d3-40c3-94c6-01e31ded6e84")
 #'  res
 #' }
-pull_resource <- memoise(.pull_resource)
+pull_resource <- function(identifier, configuration = NULL) {
+  if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
+    set_ridl_config(configuration = configuration)
+  configuration <- get_ridl_config()
+  res <- configuration$call_action("resource_show",
+                                   list(id = identifier))
+  RIDLResource$new(initial_data = res,
+                   configuration = configuration)
+}
 
 #' Create a RIDL resource from list
 #'

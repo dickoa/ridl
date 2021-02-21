@@ -2,7 +2,7 @@
 % Please edit documentation in R/resource.R
 \name{search_resources}
 \alias{search_resources}
-\title{Search for resources}
+\title{Search for RIDL resources}
 \usage{
 search_resources(query = "*:*", configuration = NULL, ...)
 }
@@ -17,7 +17,7 @@ search_resources(query = "*:*", configuration = NULL, ...)
 A list of RIDLDataset
 }
 \description{
-Search for resources
+Search for RIDL resources
 }
 \details{
 Search and find datasets on RIDL
@@ -27,4 +27,5 @@ Search and find datasets on RIDL
  # Setting the config to use RIDL default server
  search_resources("format:xlsx")
 }
+
 }

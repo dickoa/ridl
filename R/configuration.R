@@ -37,7 +37,7 @@ RIDLConfig <- R6::R6Class(
       if (is.null(ridl_key)) {
         ridl_key_env <- Sys.getenv("RIDL_API_KEY")
         if (ridl_key_env == "")
-          stop("You need to properly set the `RIDL_API_KEY` variable or use the `ridl_key parameter.`",
+          warning("You need to properly set the `RIDL_API_KEY` variable or use the `ridl_key parameter.` in the `set_ridl_config` function!",
                call. = FALSE)
           ridl_key <- ridl_key_env
       }
@@ -206,6 +206,7 @@ set_ridl_config <- function(ridl_key = NULL,
     .ridl_env$configuration <- RIDLConfig$new(ridl_key = ridl_key,
                                                  user_agent = user_agent)
   }
+  .ridl_cm$reset()
 }
 
 #' @rdname ridl_config

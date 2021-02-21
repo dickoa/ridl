@@ -293,11 +293,39 @@ delete_resources.RIDLDataset <- function(dataset) {
   dataset
 }
 
+#' Search for datasets on RIDL
+#'
+#' Search for datasets on RIDL
+#'
+#' @param query character Query terms, use solr format
+#' and default to "*:*" (match everything)
+#' @param visibility character, all, public or restricted
+#' @param filter_query character Filter Query results
+#' @param rows integer; Number of matching records to return. Defaults to 10.
+#' @param start integer; the offset in the complete result for where
+#' the set of returned datasets should begin.
+#' @param page_size integer; Size of page to return. Defaults to 1000.
+#' @param configuration Configuration object.
+#' @param ... Extra parameters for `package_search` endpoints
+#'
+#' @details Search and find datasets on RIDL
+#'
+#'
+#' @return A list of RIDL datasets
+#'
+#' @examples
+#' \dontrun{
+#'  # Setting the config to use RIDL default server
+#'  search_datasets("displaced nigeria", rows = 3L)
+#' }
+#'
 #' @importFrom jsonlite fromJSON
 #' @importFrom crul Paginator
+#'
 #' @rdname search_datasets
-#' @noRd
-.search_datasets  <-  function(query = "*:*",
+#'
+#' @export
+search_datasets  <-  function(query = "*:*",
                                visibility = c("all", "public", "restricted"),
                                filter_query = "",
                                rows = 10L,
@@ -334,50 +362,6 @@ delete_resources.RIDLDataset <- function(dataset) {
   list_of_ds
 }
 
-#' Search for datasets on RIDL
-#'
-#' Search for datasets on RIDL
-#'
-#' @param query character Query terms, use solr format
-#' and default to "*:*" (match everything)
-#' @param visibility character, all, public or restricted
-#' @param filter_query character Filter Query results
-#' @param rows integer; Number of matching records to return. Defaults to 10.
-#' @param start integer; the offset in the complete result for where
-#' the set of returned datasets should begin.
-#' @param page_size integer; Size of page to return. Defaults to 1000.
-#' @param configuration Configuration object.
-#' @param ... Extra parameters for `package_search` endpoints
-#'
-#' @details Search and find datasets on RIDL
-#'
-#'
-#' @return A list of RIDL datasets
-#'
-#' @examples
-#' \dontrun{
-#'  # Setting the config to use RIDL default server
-#'  search_datasets("displaced nigeria", rows = 3L)
-#' }
-#'
-#' @rdname search_datasets
-#'
-#' @importFrom memoise memoise
-#' @export
-search_datasets <- memoise(.search_datasets)
-
-
-#' @noRd
-.pull_dataset <-  function(identifier, configuration = NULL) {
-  if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
-    set_ridl_config(configuration = configuration)
-  configuration <- get_ridl_config()
-  res <- configuration$call_action("package_show",
-                                   list(id = identifier))
-  RIDLDataset$new(initial_data = res,
-                  configuration = configuration)
-}
-
 #' Pull a RIDL dataset
 #'
 #' Read a RIDL dataset from its name or id
@@ -388,7 +372,6 @@ search_datasets <- memoise(.search_datasets)
 #' @rdname pull_dataset
 #' @return Dataset the dataset
 #'
-#' @importFrom memoise memoise
 #' @export
 #' @examples
 #' \dontrun{
@@ -396,21 +379,25 @@ search_datasets <- memoise(.search_datasets)
 #'  res <- pull_dataset("unhcr-mrt-2017-sea-1-1")
 #'  res
 #' }
-pull_dataset <- memoise(.pull_dataset)
+pull_dataset <-  function(identifier, configuration = NULL) {
+  if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
+    set_ridl_config(configuration = configuration)
+  configuration <- get_ridl_config()
+  res <- configuration$call_action("package_show",
+                                   list(id = identifier))
+  RIDLDataset$new(initial_data = res,
+                  configuration = configuration)
+}
 
-#' @noRd
-.list_datasets  <-  function(container = NULL, configuration = NULL) {
+#' @rdname list_datasets
+#' @export
+list_datasets.default  <-  function(container = NULL, configuration = NULL) {
   if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
     set_ridl_config(configuration = configuration)
   configuration <- get_ridl_config()
   res <- configuration$call_action("package_list")
   unlist(res)
 }
-
-#' @rdname list_datasets
-#' @export
-list_datasets.default <- memoise(.list_datasets)
-
 
 #' @rdname browse
 #' @export

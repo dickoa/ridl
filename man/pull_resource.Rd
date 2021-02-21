@@ -2,7 +2,7 @@
 % Please edit documentation in R/resource.R
 \name{pull_resource}
 \alias{pull_resource}
-\title{Pull a RIDL Resource}
+\title{Pull a RIDL resource}
 \usage{
 pull_resource(identifier, configuration = NULL)
 }
@@ -12,10 +12,10 @@ pull_resource(identifier, configuration = NULL)
 \item{configuration}{RIDLConfig, the configuration used}
 }
 \value{
-Resource
+RIDLResource
 }
 \description{
-Pull a RIDL Resource
+Pull a RIDL resource
 }
 \examples{
 \dontrun{

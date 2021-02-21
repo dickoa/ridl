@@ -86,8 +86,20 @@ as.list.RIDLContainer <- function(x, ...) {
   x$as_list()
 }
 
-#' @noRd
-.pull_container  <-  function(identifier = NULL,
+#' Pull a RIDL container
+#'
+#' Pull a RIDL container
+#'
+#' @param identifier character, the container name or id
+#' @param configuration RIDLConfig, a configuration object
+#' @param include_datasets logical, include datasets if TRUE
+#' @param ... extra parameters for `organization_show` CKAN API endpoint
+#'
+#' @rdname pull_container
+#'
+#' @return A RIDLContainer
+#' @export
+pull_container  <-  function(identifier = NULL,
                               include_datasets = TRUE, configuration = NULL, ...) {
   if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
     set_ridl_config(configuration = configuration)
@@ -101,27 +113,23 @@ as.list.RIDLContainer <- function(x, ...) {
                     configuration = configuration)
 }
 
-#' Pull a RIDL container
-#'
-#' Pull a RIDL container
-#'
-#' @param identifier character resource uuid
-#' @param configuration a RIDL configuration object
-#' @param include_datasets Logical, include datasets if TRUE
-#' @param ... Extra parameters
-#' @rdname pull_container
-#'
-#' @return A RIDLContainer
-#' @export
-pull_container <- memoise::memoise(.pull_container)
-
 #' @rdname browse
 #' @export
 browse.RIDLContainer <- function(x, ...)
   x$browse()
 
-#' @noRd
-.list_containers  <-  function(sort = c("title asc", "name",
+#' List RIDL containers
+#'
+#' List RIDL containers
+#'
+#' @param sort character how to sort the results. Default is "name asc"
+#' @param configuration RIDLConfig, a configuration
+#'
+#' @rdname list_containers
+#'
+#' @return A list of containers on RIDL
+#' @export
+list_containers.default  <-  function(sort = c("title asc", "name",
                                         "package_count", "title"),
                                     configuration = NULL) {
   if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
@@ -137,27 +145,10 @@ browse.RIDLContainer <- function(x, ...)
   unlist(res)
 }
 
-#' List RIDL containers
-#'
-#' List RIDL containers
-#'
-#' @param sort character how to sort the results. Default is "name asc"
-#' @param configuration RIDLConfig, a configuration
-#'
-#' @importFrom memoise memoise
-#'
-#' @rdname list_containers
-#'
-#' @return A list of containers on RIDL
-#' @export
-list_containers.default <- memoise::memoise(.list_containers)
-
 #' List RIDL datasets
 #'
 #' @param container RIDLContainer, the container containing the datasets
 #' @param configuration a RIDLConfig, the configuration object
-#'
-#' @importFrom memoise memoise
 #'
 #' @rdname list_datasets
 #'

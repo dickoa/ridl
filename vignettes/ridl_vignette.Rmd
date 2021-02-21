@@ -1,8 +1,13 @@
 ---
-title: "R client to UNHCR Raw Internal Data Library"
-output: rmarkdown::html_vignette
+title: "Introduction to ridl"
+subtitle: "An R client to UNHCR Raw Internal Data Library"
+author: "Daniel Possenriede, Jesse Sadler, Maëlle Salmon"
+date: "2021-02-25"
+output:
+  rmarkdown::html_vignette:
+    df_print: kable
 vignette: >
-  %\VignetteIndexEntry{Tidy data}
+  %\VignetteIndexEntry{"Introduction to ridl}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
