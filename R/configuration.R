@@ -206,7 +206,7 @@ set_ridl_config <- function(ridl_key = NULL,
     .ridl_env$configuration <- RIDLConfig$new(ridl_key = ridl_key,
                                                  user_agent = user_agent)
   }
-  .ridl_cm$reset()
+  ridl_memoise_clear()
 }
 
 #' @rdname ridl_config
@@ -238,4 +238,5 @@ get_ridl_config <- function() {
 delete_ridl_config <- function() {
   configuration <- get_ridl_config()
   configuration$delete()
+  ridl_memoise_clear()
 }

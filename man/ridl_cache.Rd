@@ -20,7 +20,7 @@ ridl_cache_delete(file)
 ridl_cache_clear()
 }
 \arguments{
-\item{path}{Character directory to set}
+\item{path}{character, directory to set}
 
 \item{file}{Character, the file to delete}
 }

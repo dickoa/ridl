@@ -43,8 +43,30 @@ RIDLObject <- R6::R6Class(
     #' Get the current configuration in use
     #'
     #' @return A configuration object, the configuration in use
-    get_configuration = function() {
+    get_config = function() {
       private$configuration
+    },
+
+    #' @description
+    #' Get dataset fields
+    #'
+    #' @return list of fields for a dataset
+    get_fields = function() {
+    },
+
+    #' @description
+    #' Get dataset required fields
+    #'
+    #' @return list of required fields for a dataset
+    get_required_fields = function() {
+    },
+
+    #' @description
+    #' Check dataset required field
+    #'
+    #' @return a logical value, TRUE if the the dataset
+    #' is not missing a required field and throws an error otherwise
+    check_required_fields = function() {
     },
 
     #' @description

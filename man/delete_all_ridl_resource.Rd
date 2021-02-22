@@ -4,7 +4,7 @@
 \alias{delete_all_ridl_resource.RIDLDataset}
 \alias{delete_all_ridl_resource}
 \alias{delete_all_ridl_resource.default}
-\title{Delete all resource from dataset}
+\title{Delete all resources from dataset}
 \usage{
 \method{delete_all_ridl_resource}{RIDLDataset}(dataset)
 
@@ -19,5 +19,5 @@ delete_all_ridl_resource(dataset)
 a RIDLDataset without resources
 }
 \description{
-Delete all resource from dataset
+Delete all resources from dataset
 }

@@ -320,6 +320,33 @@ pull_ridl_container("niger-protection") %>%
 ## [5] "enrolement-pdi-maradi-maradi-niger-2020"
 ```
 
+## Create a dataset
+
+It’s possible to create a `RIDLDataset` object we can manipulate and
+upload the RIDL platform.
+
+``` r
+data <- list(name = "test-dataset-pen",
+             title = "Test Dataset PEN",
+             notes = "Some description",
+             owner_org = "africa",
+             data_collector = "unhcr",
+             keywords = c(6, 7), ## check ridl_dataset_keywords()
+             unit_of_measurement = "kg",
+             data_collection_technique = "f2f",
+             archived = "False",
+             visibility = "restricted",
+             external_access_level = "data_enclave")
+
+ridl_dataset(data)
+## <RIDL Dataset>
+##   Title: Test Dataset PEN
+##   Name: test-dataset-pen
+##   Visibility: restricted
+##   Container: Africa
+##   Resources (up to 5):
+```
+
 ## Meta
 
 -   Please [report any issues or

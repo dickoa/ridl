@@ -174,12 +174,70 @@ RIDLDataset <- R6::R6Class(
     },
 
     #' @description
-    #' Get the dataset organization
+    #' Get the dataset container name
     #'
-    #' @return an Container object, the container where the data is
+    #' @return a RIDLContainer, the container where the dataset is shared
     get_ridl_container = function() {
-      id <- self$data$organization$id
+      id <- self$data$owner_org
       pull_ridl_container(id)
+    },
+
+    #' @description
+    #' Get the dataset container title
+    #'
+    #' Get the title of the dataset for pretty printing
+    #'
+    #' @return a character, the title
+    get_ridl_container_title = function() {
+      if ("id" %in% names(self$data)) {
+        res <- self$data$organization$title
+      } else {
+        res <-  self$get_ridl_container()$data$title
+      }
+      res
+    },
+
+    #' @description
+    #' Get dataset fields
+    #'
+    #' @return list of fields for a dataset
+    get_fields = function() {
+      vapply(.ridl_schema$dataset_fields,
+                   function(x) x$field_name, character(1))
+    },
+
+    #' @description
+    #' Get dataset required fields
+    #'
+    #' @return list of required fields for a dataset
+    get_required_fields = function() {
+      nm <- self$get_fields()
+      bool <- lapply(.ridl_schema$dataset_fields,
+                     function(x) x$required)
+      bool <- vapply(bool, function(x) !is.null(x), logical(1))
+      nm[bool]
+    },
+
+    #' @description
+    #' Check dataset required field
+    #'
+    #' @return a logical value, TRUE if the the dataset
+    #' is not missing a required field and throws an error otherwise
+    check_required_fields = function() {
+      data_fields <- names(self$data)
+      all_fields <- self$get_fields()
+      required_fields <- self$get_required_fields()
+      extra_fields <- setdiff(data_fields, all_fields)
+      missing_required_fields <- setdiff(required_fields, data_fields)
+      if (length(extra_fields) > 0)
+        stop(sprintf("Field %s is not recognized or used to create a `RIDLDataset`\n",
+                     extra_fields),
+             call. = FALSE)
+      if (length(missing_required_fields) > 0)
+        stop(sprintf("Field %s is missing from the RIDLDataset object!\n",
+                     missing_required_fields),
+             call. = FALSE)
+      invisible(self)
     },
 
     #' @description
@@ -197,7 +255,7 @@ RIDLDataset <- R6::R6Class(
         cat("  Title: ", self$data$title, "\n", sep = "")
         cat("  Name: ", self$data$name, "\n", sep = "")
         cat("  Visibility: ", self$data$visibility, "\n", sep = "")
-        cat("  Container: ", self$data$organization$title, "\n", sep = "")
+        cat("  Container: ", self$get_ridl_container_title(), "\n", sep = "")
         cat("  Resources (up to 5): ",
             sift_res(self$data$resources), "\n", sep = "")
       invisible(self)
@@ -278,9 +336,9 @@ delete_ridl_resource.RIDLDataset <- function(dataset, n) {
   dataset
 }
 
-#' Delete all resource from dataset
+#' Delete all resources from dataset
 #'
-#' Delete all resource from dataset
+#' Delete all resources from dataset
 #'
 #' @param dataset A RIDLDataset, the dataset with resources remove
 #'

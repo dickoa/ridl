@@ -194,14 +194,6 @@ y
     },
 
     #' @description
-    #' Get dataset required fields
-    #'
-    #' @return list of required fields for a resource
-    get_required_fields = function() {
-      private$configuration$data$ridl_config$resource$required_fields
-    },
-
-    #' @description
     #' Check dataset required field
     #' @param check_dataset_id logical whether to check or not dataset id
     #' @return a logical value, TRUE if the the resource is not missing
@@ -215,6 +207,44 @@ y
       if (!all(n1 %in% n2))
         stop(sprintf("Field %s is missing in the Resource object!\n",
                      setdiff(n1, n2)), call. = FALSE)
+    },
+
+    #' @description
+    #' Get resource fields
+    #'
+    #' @return list of fields for a resource
+    get_fields = function() {
+      vapply(.ridl_schema$resource_fields,
+                   function(x) x$field_name, character(1))
+    },
+
+    #' @description
+    #' Get resource required fields
+    #'
+    #' @return list of required fields for a resource
+    get_required_fields = function() {
+      nm <- self$get_fields()
+      b <- lapply(.ridl_schema$resource_fields,
+                  function(x) x$required)
+      b <- vapply(b, function(x) !is.null(x), logical(1))
+      nm[b]
+    },
+
+    #' @description
+    #' Check resource required field
+    #'
+    #' @return a logical value, TRUE if the the resource
+    #' is not missing a required field and throws an error otherwise
+    check_required_fields = function() {
+      n2 <- names(self$data)
+      n1 <- self$get_required_fields()
+      if (!all(n1 %in% n2)) {
+        stop(sprintf("Field %s is missing in the RIDLResource object!\n",
+                     setdiff(n1, n2)),
+             call. = FALSE)
+      } else {
+        TRUE
+      }
     },
 
     #' @description
@@ -238,7 +268,7 @@ y
     #' @description
     #' Print a Resource object
     print = function() {
-      cat(paste0("<RIDL Resource> ", self$data$id), "\n")
+      cat(paste0("<RIDL Resource> ", self$data[["id"]]), "\n")
       cat("  Name: ", self$data$name, "\n", sep = "")
       cat("  Description: ", self$data$description, "\n", sep = "")
       cat("  Type: ", self$data$file_type, "\n", sep = "")

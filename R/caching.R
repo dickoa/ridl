@@ -32,13 +32,13 @@ NULL
 #'
 #' @rdname ridl_cache
 #'
-#' @param path Character directory to set
+#' @param path character, directory to set
 #'
 #' @return the cache directory
 #' @export
 ridl_cache_set_dir <- function(path) {
-  assert_cache(ridl_cache)
-  ridl_cache$cache_path_set(path)
+  assert_cache(.ridl_cache)
+  .ridl_cache$cache_path_set(path)
 }
 
 #' Print the cache directory
@@ -48,8 +48,8 @@ ridl_cache_set_dir <- function(path) {
 #' @return the cache directory
 #' @export
 ridl_cache_get_dir <- function() {
-  assert_cache(ridl_cache)
-  ridl_cache$cache_path_get()
+  assert_cache(.ridl_cache)
+  .ridl_cache$cache_path_get()
 }
 
 #' List of files available in the cache directory
@@ -59,8 +59,8 @@ ridl_cache_get_dir <- function() {
 #' @return list of files in the cache
 #' @export
 ridl_cache_list <- function() {
-  assert_cache(ridl_cache)
-  list.files(ridl_cache$cache_path_get())
+  assert_cache(.ridl_cache)
+  list.files(.ridl_cache$cache_path_get())
 }
 
 #' Delete a given file from cache
@@ -71,8 +71,8 @@ ridl_cache_list <- function() {
 #'
 #' @export
 ridl_cache_delete <- function(file) {
-  assert_cache(ridl_cache)
-  ridl_cache$delete(file)
+  assert_cache(.ridl_cache)
+  .ridl_cache$delete(file)
 }
 
 #' Clear cache directory
@@ -81,6 +81,18 @@ ridl_cache_delete <- function(file) {
 #'
 #' @export
 ridl_cache_clear <- function() {
-  assert_cache(ridl_cache)
-  ridl_cache$delete_all()
+  assert_cache(.ridl_cache)
+  .ridl_cache$delete_all()
+}
+
+#' Clear memory cache used to memoise ridl functions
+#'
+#' Clear memory cache used to memoise ridl functions
+#'
+#' @rdname ridl_memoise_clear
+#'
+#' @export
+ridl_memoise_clear <- function() {
+  assert_memoise_cache(.ridl_cm)
+  .ridl_cm$reset()
 }

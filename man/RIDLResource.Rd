@@ -32,8 +32,10 @@ and updating resources
 \item \href{#method-get_sheets}{\code{RIDLResource$get_sheets()}}
 \item \href{#method-get_ridl_dataset}{\code{RIDLResource$get_ridl_dataset()}}
 \item \href{#method-get_format}{\code{RIDLResource$get_format()}}
-\item \href{#method-get_required_fields}{\code{RIDLResource$get_required_fields()}}
 \item \href{#method-check_required_field}{\code{RIDLResource$check_required_field()}}
+\item \href{#method-get_fields}{\code{RIDLResource$get_fields()}}
+\item \href{#method-get_required_fields}{\code{RIDLResource$get_required_fields()}}
+\item \href{#method-check_required_fields}{\code{RIDLResource$check_required_fields()}}
 \item \href{#method-as_list}{\code{RIDLResource$as_list()}}
 \item \href{#method-browse}{\code{RIDLResource$browse()}}
 \item \href{#method-print}{\code{RIDLResource$print()}}
@@ -43,7 +45,7 @@ and updating resources
 \if{html}{
 \out{<details open ><summary>Inherited methods</summary>}
 \itemize{
-\item \out{<span class="pkg-link" data-pkg="ridl" data-topic="RIDLObject" data-id="get_configuration">}\href{../../ridl/html/RIDLObject.html#method-get_configuration}{\code{ridl::RIDLObject$get_configuration()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="ridl" data-topic="RIDLObject" data-id="get_config">}\href{../../ridl/html/RIDLObject.html#method-get_config}{\code{ridl::RIDLObject$get_config()}}\out{</span>}
 }
 \out{</details>}
 }
@@ -208,19 +210,6 @@ a character, the file format of the resource
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_required_fields"></a>}}
-\if{latex}{\out{\hypertarget{method-get_required_fields}{}}}
-\subsection{Method \code{get_required_fields()}}{
-Get dataset required fields
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RIDLResource$get_required_fields()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-list of required fields for a resource
-}
-}
-\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-check_required_field"></a>}}
 \if{latex}{\out{\hypertarget{method-check_required_field}{}}}
 \subsection{Method \code{check_required_field()}}{
@@ -239,6 +228,46 @@ Check dataset required field
 \subsection{Returns}{
 a logical value, TRUE if the the resource is not missing
 a required field and throws an error otherwise
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_fields"></a>}}
+\if{latex}{\out{\hypertarget{method-get_fields}{}}}
+\subsection{Method \code{get_fields()}}{
+Get resource fields
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RIDLResource$get_fields()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+list of fields for a resource
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_required_fields"></a>}}
+\if{latex}{\out{\hypertarget{method-get_required_fields}{}}}
+\subsection{Method \code{get_required_fields()}}{
+Get resource required fields
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RIDLResource$get_required_fields()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+list of required fields for a resource
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-check_required_fields"></a>}}
+\if{latex}{\out{\hypertarget{method-check_required_fields}{}}}
+\subsection{Method \code{check_required_fields()}}{
+Check resource required field
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RIDLResource$check_required_fields()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+a logical value, TRUE if the the resource
+is not missing a required field and throws an error otherwise
 }
 }
 \if{html}{\out{<hr>}}

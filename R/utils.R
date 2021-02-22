@@ -43,13 +43,91 @@ assert_datasets_list <- function(x) {
 }
 
 #' @noRd
+#' @importFrom stats setNames
+dataset_fields_choices_val <- function() {
+  bool <- vapply(.ridl_schema$dataset_fields,
+                 function(x) "choices" %in% names(x),
+                 logical(1))
+  param_with_choices <- .ridl_schema$dataset_fields[bool]
+  val <- lapply(param_with_choices,
+                function(x)
+                  vapply(x$choices,
+                         function(cc) cc$value, character(1)))
+  par <- vapply(param_with_choices,
+                function(x) x$field_name, character(1))
+  setNames(val, par)
+}
+
+#' A dictionnary with the labels and values for dataset keywords
+#'
+#' A dictionnary with the labels and values for dataset keywords
+#'
+#' @return a data.frame with the keywords labels and values
+#' @export
+ridl_dataset_keywords <- function() {
+  bool <- vapply(.ridl_schema$dataset_fields,
+                 function(x) x$field_name == "keywords",
+                 logical(1))
+  keywords <- .ridl_schema$dataset_fields[bool]
+  value <- unlist(lapply(keywords,
+                         function(x)
+                           vapply(x$choices,
+                                  function(cc) cc$value, character(1))))
+  label <- unlist(lapply(keywords,
+                         function(x)
+                           vapply(x$choices,
+                                  function(cc) cc$label, character(1))))
+  data.frame(label = label, value = value)
+}
+
+#' @noRd
 assert_valid_dataset_data <- function(x) {
-  TRUE
+  RIDLDataset$new(x)$check_required_fields()
+  choices_val <- dataset_fields_choices_val()
+  nm <- intersect(names(choices_val), names(x))
+  for (n in nm) {
+    choices_nm <- choices_val[[n]]
+    if (any(!x[[n]] %in% choices_nm)) {
+      stop(paste("Field", n, "has",
+                 length(choices_nm),
+                 "value(s):",
+                 paste(choices_nm, collapse = ", ")),
+           call. = FALSE)
+    }
+  }
+}
+
+#' @noRd
+#' @importFrom stats setNames
+resource_fields_choices_val <- function() {
+  bool <- vapply(.ridl_schema$resource_fields,
+                 function(x) "choices" %in% names(x),
+                 logical(1))
+  param_with_choices <- .ridl_schema$resource_fields[bool]
+  val <- lapply(param_with_choices,
+                function(x)
+                  vapply(x$choices,
+                         function(cc) cc$value, character(1)))
+  par <- vapply(param_with_choices,
+                function(x) x$field_name, character(1))
+  setNames(val, par)
 }
 
 #' @noRd
 assert_valid_resource_data <- function(x) {
-  TRUE
+  RIDLResource$new(x)$check_required_fields()
+  choices_val <- resource_fields_choices_val()
+  nm <- intersect(names(choices_val), names(x))
+  for (n in nm) {
+    choices_nm <- choices_val[[n]]
+    if (any(!x[[n]] %in% choices_nm)) {
+      stop(paste("Field", n, "has",
+                 length(choices_nm),
+                 "value(s):",
+                 paste(choices_nm, collapse = ", ")),
+           call. = FALSE)
+    }
+  }
 }
 
 #' @noRd
@@ -85,6 +163,11 @@ assert_container_name <- function(x) {
 assert_cache <- function(x)
   if (!inherits(x, "HoardClient"))
     stop("Not a `hoardr` cache object", call. = FALSE)
+
+#' @noRd
+assert_memoise_cache <- function(x)
+  if (!inherits(x, "cache_mem"))
+    stop("Not a `cachem` cache object", call. = FALSE)
 
 #' @noRd
 parse_response <- function(res) {

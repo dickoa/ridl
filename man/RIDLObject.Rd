@@ -25,7 +25,10 @@ creating, and updating RIDL objects.
 \item \href{#method-new}{\code{RIDLObject$new()}}
 \item \href{#method-as_list}{\code{RIDLObject$as_list()}}
 \item \href{#method-browse}{\code{RIDLObject$browse()}}
-\item \href{#method-get_configuration}{\code{RIDLObject$get_configuration()}}
+\item \href{#method-get_config}{\code{RIDLObject$get_config()}}
+\item \href{#method-get_fields}{\code{RIDLObject$get_fields()}}
+\item \href{#method-get_required_fields}{\code{RIDLObject$get_required_fields()}}
+\item \href{#method-check_required_fields}{\code{RIDLObject$check_required_fields()}}
 \item \href{#method-print}{\code{RIDLObject$print()}}
 \item \href{#method-clone}{\code{RIDLObject$clone()}}
 }
@@ -76,16 +79,56 @@ Browse RIDL
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_configuration"></a>}}
-\if{latex}{\out{\hypertarget{method-get_configuration}{}}}
-\subsection{Method \code{get_configuration()}}{
+\if{html}{\out{<a id="method-get_config"></a>}}
+\if{latex}{\out{\hypertarget{method-get_config}{}}}
+\subsection{Method \code{get_config()}}{
 Get the current configuration in use
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RIDLObject$get_configuration()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RIDLObject$get_config()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
 A configuration object, the configuration in use
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_fields"></a>}}
+\if{latex}{\out{\hypertarget{method-get_fields}{}}}
+\subsection{Method \code{get_fields()}}{
+Get dataset fields
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RIDLObject$get_fields()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+list of fields for a dataset
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_required_fields"></a>}}
+\if{latex}{\out{\hypertarget{method-get_required_fields}{}}}
+\subsection{Method \code{get_required_fields()}}{
+Get dataset required fields
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RIDLObject$get_required_fields()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+list of required fields for a dataset
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-check_required_fields"></a>}}
+\if{latex}{\out{\hypertarget{method-check_required_fields}{}}}
+\subsection{Method \code{check_required_fields()}}{
+Check dataset required field
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RIDLObject$check_required_fields()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+a logical value, TRUE if the the dataset
+is not missing a required field and throws an error otherwise
 }
 }
 \if{html}{\out{<hr>}}

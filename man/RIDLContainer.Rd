@@ -36,7 +36,10 @@ and updating resources
 \if{html}{
 \out{<details open ><summary>Inherited methods</summary>}
 \itemize{
-\item \out{<span class="pkg-link" data-pkg="ridl" data-topic="RIDLObject" data-id="get_configuration">}\href{../../ridl/html/RIDLObject.html#method-get_configuration}{\code{ridl::RIDLObject$get_configuration()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="ridl" data-topic="RIDLObject" data-id="check_required_fields">}\href{../../ridl/html/RIDLObject.html#method-check_required_fields}{\code{ridl::RIDLObject$check_required_fields()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="ridl" data-topic="RIDLObject" data-id="get_config">}\href{../../ridl/html/RIDLObject.html#method-get_config}{\code{ridl::RIDLObject$get_config()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="ridl" data-topic="RIDLObject" data-id="get_fields">}\href{../../ridl/html/RIDLObject.html#method-get_fields}{\code{ridl::RIDLObject$get_fields()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="ridl" data-topic="RIDLObject" data-id="get_required_fields">}\href{../../ridl/html/RIDLObject.html#method-get_required_fields}{\code{ridl::RIDLObject$get_required_fields()}}\out{</span>}
 }
 \out{</details>}
 }

@@ -39,6 +39,10 @@ creating, and updating datasets and associated resources.
 \item \href{#method-get_ridl_config}{\code{RIDLDataset$get_ridl_config()}}
 \item \href{#method-get_date_range}{\code{RIDLDataset$get_date_range()}}
 \item \href{#method-get_ridl_container}{\code{RIDLDataset$get_ridl_container()}}
+\item \href{#method-get_ridl_container_title}{\code{RIDLDataset$get_ridl_container_title()}}
+\item \href{#method-get_fields}{\code{RIDLDataset$get_fields()}}
+\item \href{#method-get_required_fields}{\code{RIDLDataset$get_required_fields()}}
+\item \href{#method-check_required_fields}{\code{RIDLDataset$check_required_fields()}}
 \item \href{#method-as_list}{\code{RIDLDataset$as_list()}}
 \item \href{#method-print}{\code{RIDLDataset$print()}}
 \item \href{#method-clone}{\code{RIDLDataset$clone()}}
@@ -47,7 +51,7 @@ creating, and updating datasets and associated resources.
 \if{html}{
 \out{<details open ><summary>Inherited methods</summary>}
 \itemize{
-\item \out{<span class="pkg-link" data-pkg="ridl" data-topic="RIDLObject" data-id="get_configuration">}\href{../../ridl/html/RIDLObject.html#method-get_configuration}{\code{ridl::RIDLObject$get_configuration()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="ridl" data-topic="RIDLObject" data-id="get_config">}\href{../../ridl/html/RIDLObject.html#method-get_config}{\code{ridl::RIDLObject$get_config()}}\out{</span>}
 }
 \out{</details>}
 }
@@ -231,13 +235,68 @@ a date, the dataset date.
 \if{html}{\out{<a id="method-get_ridl_container"></a>}}
 \if{latex}{\out{\hypertarget{method-get_ridl_container}{}}}
 \subsection{Method \code{get_ridl_container()}}{
-Get the dataset organization
+Get the dataset container name
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{RIDLDataset$get_ridl_container()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
-an Container object, the container where the data is
+a RIDLContainer, the container where the dataset is shared
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_ridl_container_title"></a>}}
+\if{latex}{\out{\hypertarget{method-get_ridl_container_title}{}}}
+\subsection{Method \code{get_ridl_container_title()}}{
+Get the dataset container title
+
+Get the title of the dataset for pretty printing
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RIDLDataset$get_ridl_container_title()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+a character, the title
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_fields"></a>}}
+\if{latex}{\out{\hypertarget{method-get_fields}{}}}
+\subsection{Method \code{get_fields()}}{
+Get dataset fields
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RIDLDataset$get_fields()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+list of fields for a dataset
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_required_fields"></a>}}
+\if{latex}{\out{\hypertarget{method-get_required_fields}{}}}
+\subsection{Method \code{get_required_fields()}}{
+Get dataset required fields
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RIDLDataset$get_required_fields()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+list of required fields for a dataset
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-check_required_fields"></a>}}
+\if{latex}{\out{\hypertarget{method-check_required_fields}{}}}
+\subsection{Method \code{check_required_fields()}}{
+Check dataset required field
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RIDLDataset$check_required_fields()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+a logical value, TRUE if the the dataset
+is not missing a required field and throws an error otherwise
 }
 }
 \if{html}{\out{<hr>}}
