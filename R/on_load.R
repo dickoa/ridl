@@ -1,4 +1,5 @@
-ridl_cache <- NULL # nocov start
+.ridl_cache <- NULL # nocov start
+.ridl_cm <- NULL
 
 #' @noRd
 #' @importFrom hoardr hoard
@@ -24,8 +25,13 @@ ridl_cache <- NULL # nocov start
                                                  cache = .ridl_cm)
   list_ridl_container.default <<- memoise::memoise(list_ridl_container.default,
                                                    cache = .ridl_cm)
-  ridl_schema_url <- "https://raw.githubusercontent.com/okfn/ckanext-unhcr/master/ckanext/unhcr/schemas/dataset.json"
-  .ridl_schema <<- jsonlite::fromJSON(ridl_schema_url,
-                                      simplifyVector = FALSE)
+  ridl_dataset_schema_url <- "https://raw.githubusercontent.com/okfn/ckanext-unhcr/master/ckanext/unhcr/schemas/dataset.json"
+  .ridl_dataset_schema <<- jsonlite::fromJSON(ridl_dataset_schema_url,
+                                              simplifyVector = FALSE)
+
+  ridl_container_schema_url <- "https://raw.githubusercontent.com/okfn/ckanext-unhcr/master/ckanext/unhcr/schemas/data_container.json"
+  .ridl_container_schema <<- jsonlite::fromJSON(ridl_container_schema_url,
+                                                simplifyVector = FALSE)
+
   set_ridl_config()
 } # nocov end

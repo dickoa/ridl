@@ -28,6 +28,8 @@ and updating resources
 \item \href{#method-new}{\code{RIDLContainer$new()}}
 \item \href{#method-list_datasets}{\code{RIDLContainer$list_datasets()}}
 \item \href{#method-browse}{\code{RIDLContainer$browse()}}
+\item \href{#method-get_required_fields}{\code{RIDLContainer$get_required_fields()}}
+\item \href{#method-check_required_fields}{\code{RIDLContainer$check_required_fields()}}
 \item \href{#method-as_list}{\code{RIDLContainer$as_list()}}
 \item \href{#method-print}{\code{RIDLContainer$print()}}
 \item \href{#method-clone}{\code{RIDLContainer$clone()}}
@@ -36,10 +38,8 @@ and updating resources
 \if{html}{
 \out{<details open ><summary>Inherited methods</summary>}
 \itemize{
-\item \out{<span class="pkg-link" data-pkg="ridl" data-topic="RIDLObject" data-id="check_required_fields">}\href{../../ridl/html/RIDLObject.html#method-check_required_fields}{\code{ridl::RIDLObject$check_required_fields()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="ridl" data-topic="RIDLObject" data-id="get_config">}\href{../../ridl/html/RIDLObject.html#method-get_config}{\code{ridl::RIDLObject$get_config()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="ridl" data-topic="RIDLObject" data-id="get_fields">}\href{../../ridl/html/RIDLObject.html#method-get_fields}{\code{ridl::RIDLObject$get_fields()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="ridl" data-topic="RIDLObject" data-id="get_required_fields">}\href{../../ridl/html/RIDLObject.html#method-get_required_fields}{\code{ridl::RIDLObject$get_required_fields()}}\out{</span>}
 }
 \out{</details>}
 }
@@ -87,6 +87,33 @@ Browse the Container page on RIDL
 \if{html}{\out{<div class="r">}}\preformatted{RIDLContainer$browse()}\if{html}{\out{</div>}}
 }
 
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_required_fields"></a>}}
+\if{latex}{\out{\hypertarget{method-get_required_fields}{}}}
+\subsection{Method \code{get_required_fields()}}{
+Get container required fields
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RIDLContainer$get_required_fields()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+list of required fields for a container
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-check_required_fields"></a>}}
+\if{latex}{\out{\hypertarget{method-check_required_fields}{}}}
+\subsection{Method \code{check_required_fields()}}{
+Check container required field
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RIDLContainer$check_required_fields()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+a logical value, TRUE if the the container
+is not missing a required field and throws an error otherwise
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-as_list"></a>}}

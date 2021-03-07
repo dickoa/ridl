@@ -13,6 +13,14 @@ drop_nulls <- function(x) {
 }
 
 #' @noRd
+as_bool <- function(x) {
+  if (!is.logical(x))
+    stop("Works only with logical vector!",
+         call. = FALSE)
+ if (isTRUE(x)) "true" else "false"
+}
+
+#' @noRd
 check_config_params <- function(ridl_key = NULL, user_agent = NULL) {
 
   if (!is.null(user_agent) && !is.character(user_agent))
@@ -45,10 +53,10 @@ assert_datasets_list <- function(x) {
 #' @noRd
 #' @importFrom stats setNames
 dataset_fields_choices_val <- function() {
-  bool <- vapply(.ridl_schema$dataset_fields,
+  bool <- vapply(.ridl_dataset_schema$dataset_fields,
                  function(x) "choices" %in% names(x),
                  logical(1))
-  param_with_choices <- .ridl_schema$dataset_fields[bool]
+  param_with_choices <- .ridl_dataset_schema$dataset_fields[bool]
   val <- lapply(param_with_choices,
                 function(x)
                   vapply(x$choices,
@@ -65,10 +73,10 @@ dataset_fields_choices_val <- function() {
 #' @return a data.frame with the keywords labels and values
 #' @export
 ridl_dataset_keywords <- function() {
-  bool <- vapply(.ridl_schema$dataset_fields,
+  bool <- vapply(.ridl_dataset_schema$dataset_fields,
                  function(x) x$field_name == "keywords",
                  logical(1))
-  keywords <- .ridl_schema$dataset_fields[bool]
+  keywords <- .ridl_dataset_schema$dataset_fields[bool]
   value <- unlist(lapply(keywords,
                          function(x)
                            vapply(x$choices,
@@ -100,10 +108,10 @@ assert_valid_dataset_data <- function(x) {
 #' @noRd
 #' @importFrom stats setNames
 resource_fields_choices_val <- function() {
-  bool <- vapply(.ridl_schema$resource_fields,
+  bool <- vapply(.ridl_dataset_schema$resource_fields,
                  function(x) "choices" %in% names(x),
                  logical(1))
-  param_with_choices <- .ridl_schema$resource_fields[bool]
+  param_with_choices <- .ridl_dataset_schema$resource_fields[bool]
   val <- lapply(param_with_choices,
                 function(x)
                   vapply(x$choices,
@@ -142,6 +150,83 @@ assert_resources_list <- function(x) {
   if (!inherits(x, "ridl_resources_list"))
     stop("Not a list of RIDL Resources!", call. = FALSE)
   invisible(x)
+}
+
+#' @noRd
+assert_valid_container_data <- function(x) {
+  RIDLContainer$new(x)$check_required_fields()
+  choices_val <- container_fields_choices_val()
+  nm <- intersect(names(choices_val), names(x))
+  for (n in nm) {
+    choices_nm <- choices_val[[n]]
+    if (any(!x[[n]] %in% choices_nm)) {
+      stop(paste("Field", n, "has",
+                 length(choices_nm),
+                 "value(s):",
+                 paste(choices_nm, collapse = ", ")),
+           call. = FALSE)
+    }
+  }
+}
+
+#' @noRd
+#' @importFrom stats setNames
+container_fields_choices_val <- function() {
+  bool <- vapply(.ridl_container_schema$container_fields,
+                 function(x) "choices" %in% names(x),
+                 logical(1))
+  param_with_choices <- .ridl_container_schema$container_fields[bool]
+  val <- lapply(param_with_choices,
+                function(x)
+                  vapply(x$choices,
+                         function(cc) cc$value, character(1)))
+  par <- vapply(param_with_choices,
+                function(x) x$field_name, character(1))
+  setNames(val, par)
+}
+
+#' A dictionnary with the labels and values for container sectoral areas
+#'
+#' A dictionnary with the labels and values for container sectoral areas
+#'
+#' @return a data.frame with the keywords labels and values
+#' @export
+ridl_container_sector <- function() {
+  bool <- vapply(.ridl_container_schema$fields,
+                 function(x) x$field_name == "sectoral_area",
+                 logical(1))
+  sector <- .ridl_container_schema$fields[bool]
+  value <- unlist(lapply(sector,
+                         function(x)
+                           vapply(x$choices,
+                                  function(cc) cc$value, character(1))))
+  label <- unlist(lapply(sector,
+                         function(x)
+                           vapply(x$choices,
+                                  function(cc) cc$label, character(1))))
+  data.frame(label = label, value = value)
+}
+
+#' A dictionnary with the labels and values for container country
+#'
+#' A dictionnary with the labels and values for container country
+#'
+#' @return a data.frame with the keywords labels and values
+#' @export
+ridl_container_country <- function() {
+  bool <- vapply(.ridl_container_schema$fields,
+                 function(x) x$field_name == "country",
+                 logical(1))
+  country <- .ridl_container_schema$fields[bool]
+  value <- unlist(lapply(country,
+                         function(x)
+                           vapply(x$choices,
+                                  function(cc) cc$value, character(1))))
+  label <- unlist(lapply(country,
+                         function(x)
+                           vapply(x$choices,
+                                  function(cc) cc$label, character(1))))
+  data.frame(label = label, value = value)
 }
 
 #' @noRd

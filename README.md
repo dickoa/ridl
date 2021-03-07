@@ -18,24 +18,24 @@ MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.or
 `ridl` is an R client for the [UNHCR Raw Internal Data Library (RIDL)
 platform](https://ridl.unhcr.org).
 
-## Introduction
+### Introduction
 
 The [UNHCR RIDL platform](https://ridl.unhcr.org) is UNHCR internal
 platform to easily store, find and analyze raw data.
 
-### RIDL concepts
+#### RIDL concepts
 
 In order to easily use the `ridl` package, it’s important to understand
 some key concepts of this platform. RIDL documentation is available
 [here](https://im.unhcr.org/ridl) for more details.
 
-#### `Container`
+##### `Container`
 
 A `container` is a placeholder where we can share data on `RIDL`. A
 `container` is represented in the `ridl` package as a `RIDLContainer`
 object and can hold zero or multiple `datasets`.
 
-#### `Dataset`
+##### `Dataset`
 
 A `dataset` is a placeholder where we can share data files
 (`resources`). In a dataset page there’s some metadata that give you
@@ -44,14 +44,14 @@ them. A data file e.g an Excel file is called a `resource` and many of
 them can be shared in `dataset` page. In the `ridl` package, a
 `RIDLDataset` object is used to represent a `dataset`.
 
-#### `Resource`
+##### `Resource`
 
 A `resource` is a file shared in `dataset` page, it includes `microdata`
 and supporting documents like reports or survey forms. A `RIDLResource`
 class is used to implement all the logic needed to manipulate RIDL
 `resource`.
 
-## Installation
+### Installation
 
 This package is not on yet on CRAN and to install it, you will need the
 [`remotes`](https://github.com/r-lib/remotes) package. You can get
@@ -62,7 +62,7 @@ This package is not on yet on CRAN and to install it, you will need the
 remotes::install_gitlab("dickoa/ridl")
 ```
 
-## ridl: A quick tutorial
+### ridl: A quick tutorial
 
 ``` r
 library("ridl")
@@ -232,7 +232,7 @@ For Excel files (`xlsx` and `xls`), you can also use `get_sheets` to
 list available sheets and use the `sheet` paramater in `read` to specify
 the sheet you want to read (default is to read the first sheet).
 
-### Reading dataset directly
+#### Reading dataset directly
 
 We can also use `pull_ridl_dataset` to directly read and access a
 dataset object.
@@ -293,7 +293,7 @@ pull_ridl_resource("68e39d44-88ae-49f9-b492-3635341c92be") %>%
 # … with 1,304 more rows
 ```
 
-## Some other handy functions
+### Some other handy functions
 
 ``` r
 ct <- list_ridl_container(sort = "package_count")
@@ -320,10 +320,10 @@ pull_ridl_container("niger-protection") %>%
 ## [5] "enrolement-pdi-maradi-maradi-niger-2020"
 ```
 
-## Create a dataset
+### Create a dataset
 
 It’s possible to create a `RIDLDataset` object we can manipulate and
-upload the RIDL platform.
+upload to the RIDL platform.
 
 ``` r
 data <- list(name = "test-dataset-pen",

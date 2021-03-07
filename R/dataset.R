@@ -202,7 +202,7 @@ RIDLDataset <- R6::R6Class(
     #'
     #' @return list of fields for a dataset
     get_fields = function() {
-      vapply(.ridl_schema$dataset_fields,
+      vapply(.ridl_dataset_schema$dataset_fields,
                    function(x) x$field_name, character(1))
     },
 
@@ -212,7 +212,7 @@ RIDLDataset <- R6::R6Class(
     #' @return list of required fields for a dataset
     get_required_fields = function() {
       nm <- self$get_fields()
-      bool <- lapply(.ridl_schema$dataset_fields,
+      bool <- lapply(.ridl_dataset_schema$dataset_fields,
                      function(x) x$required)
       bool <- vapply(bool, function(x) !is.null(x), logical(1))
       nm[bool]

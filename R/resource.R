@@ -214,7 +214,7 @@ y
     #'
     #' @return list of fields for a resource
     get_fields = function() {
-      vapply(.ridl_schema$resource_fields,
+      vapply(.ridl_dataset_schema$resource_fields,
                    function(x) x$field_name, character(1))
     },
 
@@ -224,7 +224,7 @@ y
     #' @return list of required fields for a resource
     get_required_fields = function() {
       nm <- self$get_fields()
-      b <- lapply(.ridl_schema$resource_fields,
+      b <- lapply(.ridl_dataset_schema$resource_fields,
                   function(x) x$required)
       b <- vapply(b, function(x) !is.null(x), logical(1))
       nm[b]

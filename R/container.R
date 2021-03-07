@@ -50,6 +50,40 @@ RIDLContainer <- R6::R6Class(
     },
 
     #' @description
+    #' Get container required fields
+    #'
+    #' @return list of required fields for a container
+    get_required_fields = function() {
+      nm <- self$get_fields()
+      bool <- lapply(.ridl_container_schema$container_fields,
+                     function(x) x$required)
+      bool <- vapply(bool, function(x) !is.null(x), logical(1))
+      nm[bool]
+    },
+
+    #' @description
+    #' Check container required field
+    #'
+    #' @return a logical value, TRUE if the the container
+    #' is not missing a required field and throws an error otherwise
+    check_required_fields = function() {
+      data_fields <- names(self$data)
+      all_fields <- self$get_fields()
+      required_fields <- self$get_required_fields()
+      extra_fields <- setdiff(data_fields, all_fields)
+      missing_required_fields <- setdiff(required_fields, data_fields)
+      if (length(extra_fields) > 0)
+        stop(sprintf("Field %s is not recognized or used to create a `RIDLContainer`\n",
+                     extra_fields),
+             call. = FALSE)
+      if (length(missing_required_fields) > 0)
+        stop(sprintf("Field %s is missing from the RIDLContainer object!\n",
+                     missing_required_fields),
+             call. = FALSE)
+      invisible(self)
+    },
+
+    #' @description
     #' Get dataset field into list
     #'
     #' @return a list with container field element
@@ -167,4 +201,30 @@ list_ridl_container.default  <-  function(sort = c("title asc", "name",
 #' @export
 list_ridl_dataset.RIDLContainer <- function(container = NULL, configuration = NULL) {
   container$list_datasets()
+}
+
+#' Create a RIDL container from list
+#'
+#' Create a RIDL container from list with required fields
+#'
+#' @param data List, list of data
+#' @param configuration RIDLConfig, RIDL configuration used
+#'
+#' @return RIDLContainer the container
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#'
+#'  dsdata <- list(name = "hum-container",
+#'                 title = "Humanitarian container")
+#'  res <- ridl_container(dsdata)
+#'  res
+#' }
+ridl_container <- function(data, configuration = NULL) {
+  if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
+    set_ridl_config(configuration = configuration)
+  configuration <- get_ridl_config()
+  assert_valid_container_data(data)
+  RIDLContainer$new(data, configuration)
 }
