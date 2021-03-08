@@ -113,6 +113,7 @@ Now that we are connected to RIDL, we can search for dataset using
 `ridl_dataset_search`.
 
 ``` r
+ridl_config_setup(site = "prod")
 ridl_dataset_search("mali", visibility = "public", rows = 2) ## search internally public dataset in RIDL, limit the results to two rows
 ## [[1]]
 ## <RIDL Dataset> 6f37029d-0ec2-4322-88ed-6447b2eebf3a
