@@ -37,20 +37,31 @@ RIDLConfig <- R6::R6Class(
                           key = key,
                           user_agent = user_agent)
 
-      site_url <- "https://ridl.unhcr.org/"
+      if (site == "prod") {
+        site_url <- "https://ridl.unhcr.org/"
+        key_env_var <- "RIDL_API_KEY"
 
-      if (site == "test")
+        if (is.null(key)) {
+          key_env <- Sys.getenv("RIDL_API_KEY")
+          if (key_env == "")
+            warning("You need to properly set the `RIDL_API_KEY` variable or use the `key parameter` in the `ridl_config_setup` function!",
+                    call. = FALSE)
+          key <- key_env
+          Sys.setenv("RIDL_API_KEY" = key)
+        }
+      } else {
         site_url <- "https://ridl-uat.unhcr.org/"
+        key_env_var <- "RIDL_UAT_API_KEY"
 
-      if (is.null(key)) {
-        key_env <- Sys.getenv("RIDL_API_KEY")
-        if (key_env == "")
-          warning("You need to properly set the `RIDL_API_KEY` variable or use the `ridl_key parameter.` in the `set_ridl_config` function!",
-                  call. = FALSE)
-        key <- key_env
+        if (is.null(key)) {
+          key_env <- Sys.getenv("RIDL_UAT_API_KEY")
+          if (key_env == "")
+            warning("You are using the test server, you need to properly set the `RIDL_UAT_API_KEY` variable or use the `key parameter` in the `ridl_config_setup` function!",
+                    call. = FALSE)
+          key <- key_env
+          Sys.setenv("RIDL_UAT_API_KEY" = key)
+        }
       }
-
-      Sys.setenv("RIDL_API_KEY" = key)
 
       self$data$key <- key
       self$data$site_url <- site_url

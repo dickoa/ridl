@@ -96,6 +96,14 @@ ridl_config_get()
 ##   RIDL API key: xxxxxxxxxxxxxxxxxx
 ```
 
+If you plan to use RIDL testing environment
+(<https://ridl-uat.unhcr.org>), you’ll need to also setup the
+`RIDL_UAT_API_KEY` variable.
+
+``` bash
+RIDL_UAT_API_KEY=xxxxxxxxxxxxxxxxxx
+```
+
 You can also configure directly the `ridl` package using the
 `ridl_config_setup` function and check the config using
 `ridl_config_get` but it’s not persistent if you close your session.

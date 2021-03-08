@@ -212,7 +212,7 @@ ridl_container_get.default <- function(dataset) {
 #' @rdname ridl_resource_n
 #' @export
 ridl_resource_n <- function(dataset)
-  UseMethod("n_ridl_resource")
+  UseMethod("ridl_resource_n")
 
 #' @rdname ridl_resource_n
 #' @export
