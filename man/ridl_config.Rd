@@ -2,18 +2,33 @@
 % Please edit documentation in R/configuration.R
 \name{ridl_config}
 \alias{ridl_config}
-\alias{set_ridl_config}
-\alias{get_ridl_config}
+\alias{ridl_config_set}
+\alias{ridl_config_setup}
+\alias{ridl_config_get}
 \title{Create a RIDL configuration object}
 \usage{
-ridl_config(ridl_key = NULL, user_agent = NULL)
+ridl_config(site = "prod", key = NULL, user_agent = NULL)
 
-set_ridl_config(ridl_key = NULL, user_agent = NULL, configuration = NULL)
+ridl_config_set(
+  site = "prod",
+  key = NULL,
+  user_agent = NULL,
+  configuration = NULL
+)
 
-get_ridl_config()
+ridl_config_setup(
+  site = "prod",
+  key = NULL,
+  user_agent = NULL,
+  configuration = NULL
+)
+
+ridl_config_get()
 }
 \arguments{
-\item{ridl_key}{character, the CKAN API key, it is required to push data into RIDL}
+\item{site}{character, the RIDL instance, prod (production server), test (testing server)}
+
+\item{key}{character, the CKAN API key, it is required to push data into RIDL}
 
 \item{user_agent}{a character, A user agent string}
 
@@ -35,10 +50,10 @@ Setting up a configuration will help you access from a RIDL server
 \examples{
 \dontrun{
 # Setting the config to use RIDL default server
-set_ridl_config(ridl_key = "xxxxxxxxxx")
+ridl_config_set(ridl_key = "xxxxxxxxxx")
 
-# You can check your configuration using \code{get_ridl_config}
-config <- get_ridl_config()
+# You can check your configuration using \code{ridl_config_get}
+config <- ridl_config_get()
 config
 }
 }

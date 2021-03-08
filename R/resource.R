@@ -24,7 +24,7 @@ RIDLResource <- R6::R6Class(
     #' @return A RIDLResource object
     initialize = function(initial_data = NULL, configuration = NULL) {
       if (is.null(configuration) | !inherits(configuration, "RIDLConfig")) {
-        private$configuration <- get_ridl_config()
+        private$configuration <- ridl_config_get()
       } else {
         private$configuration <- configuration
       }
@@ -57,7 +57,6 @@ RIDLResource <- R6::R6Class(
     download = function(folder = NULL, filename = NULL,
                         quiet = TRUE, force = FALSE) {
 
-
       if (is.null(folder)) {
         folder <- ridl_cache_get_dir()
         if (!dir.exists(folder))
@@ -69,14 +68,14 @@ RIDLResource <- R6::R6Class(
         filename <- basename(filename)
       }
 
+      con <- ridl_config_get()
+      cli <- con$remoteclient()
+
       url <- self$data$url
 
-      url <- gsub("https://ridl.unhcr.org",
+      url <- gsub(con$data$site_url,
                   "",
                   url)
-
-      con <- get_ridl_config()
-      cli <- con$remoteclient()
 
       file_path <- file.path(folder,
                              filename)
@@ -177,12 +176,12 @@ y
     #' Get the resource dataset.
     #'
     #' @return a RIDLDataset, the dataset containing the resource
-    get_ridl_dataset = function() {
+    ridl_dataset_get = function() {
       dataset_id <- self$data$package_id
       if (is.null(dataset_id)) {
         stop("Resource has no dataset id!", call. = FALSE)
       } else {
-        pull_ridl_dataset(dataset_id)
+        ridl_dataset_show(dataset_id)
       }
     },
 
@@ -258,7 +257,7 @@ y
     #' @description
     #' Browse the resource page on RIDL
     browse = function() {
-      url <- private$configuration$get_ridl_site_url()
+      url <- private$configuration$get_site_url()
       dataset_id <- self$data$package_id
       resource_id <- self$data$id
       browseURL(url = paste0(url, "/dataset/",
@@ -379,13 +378,13 @@ get_format.RIDLResource <- function(resource) {
 #'
 #' @param resource RIDLResource, a RIDL resource
 #'
-#' @rdname get_dataset
+#' @rdname ridl_dataset_get
 #'
 #' @return a RIDLDataset, the dataset containing the resource
 #'
 #' @export
- get_ridl_dataset.RIDLResource <- function(resource) {
-  resource$get_ridl_dataset()
+ ridl_dataset_get.RIDLResource <- function(resource) {
+  resource$ridl_dataset_get()
 }
 
 #' Read a RIDL Resource
@@ -430,7 +429,7 @@ read.RIDLResource <- function(resource,
 #' @param configuration RIDLConfig, a configuration
 #' @param ... extra params
 #'
-#' @rdname search_ridl_resource
+#' @rdname ridl_resource_search
 #' @details Search and find datasets on RIDL
 #'
 #' @return A list of RIDLDataset
@@ -442,11 +441,12 @@ read.RIDLResource <- function(resource,
 #' }
 #'
 #' @export
-search_ridl_resource <- function(query = "*:*", configuration = NULL, ...) {
+ridl_resource_search <- function(query = "*:*", configuration = NULL, ...) {
   if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
-    set_ridl_config(configuration = configuration)
-  configuration <- get_ridl_config()
-  res <- configuration$call_action("resource_search", list(query = query, ...))
+    ridl_config_set(configuration = configuration)
+  configuration <- ridl_config_get()
+  res <- configuration$call_action("resource_search",
+                                   list(query = query, ...))
   list_of_rs <- lapply(res$results, function(x)
     RIDLResource$new(initial_data = x,
                  configuration = configuration))
@@ -469,7 +469,7 @@ as_tibble.ridl_resource_list <- function(x, ...) {
 #' @param identifier character, a RIDLResource id
 #' @param configuration RIDLConfig, the configuration used
 #'
-#' @rdname pull_ridl_resource
+#' @rdname ridl_resource_show
 #'
 #' @return RIDLResource
 #' @export
@@ -477,14 +477,14 @@ as_tibble.ridl_resource_list <- function(x, ...) {
 #' @examples
 #' \dontrun{
 #'  # Setting the config to use RIDL default server
-#'  set_ridl_config()
-#'  res <- pull_ridl_resource("98aa1742-b5d3-40c3-94c6-01e31ded6e84")
+#'  ridl_config_set()
+#'  res <- ridl_resource_show("98aa1742-b5d3-40c3-94c6-01e31ded6e84")
 #'  res
 #' }
-pull_ridl_resource <- function(identifier, configuration = NULL) {
+ridl_resource_show <- function(identifier, configuration = NULL) {
   if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
-    set_ridl_config(configuration = configuration)
-  configuration <- get_ridl_config()
+    ridl_config_set(configuration = configuration)
+  configuration <- ridl_config_get()
   res <- configuration$call_action("resource_show",
                                    list(id = identifier))
   RIDLResource$new(initial_data = res,
@@ -511,8 +511,8 @@ pull_ridl_resource <- function(identifier, configuration = NULL) {
 #' }
 ridl_resource <- function(initial_data, configuration = NULL) {
   if (!is.null(configuration) &  inherits(configuration, "RIDLConfig"))
-    set_ridl_config(configuration = configuration)
-  configuration <- get_ridl_config()
+    ridl_config_set(configuration = configuration)
+  configuration <- ridl_config_get()
   assert_valid_resource_data(initial_data)
   RIDLResource$new(initial_data)
 }

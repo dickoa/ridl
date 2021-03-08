@@ -30,7 +30,7 @@ and updating resources
 \item \href{#method-download_folder}{\code{RIDLResource$download_folder()}}
 \item \href{#method-read}{\code{RIDLResource$read()}}
 \item \href{#method-get_sheets}{\code{RIDLResource$get_sheets()}}
-\item \href{#method-get_ridl_dataset}{\code{RIDLResource$get_ridl_dataset()}}
+\item \href{#method-ridl_dataset_get}{\code{RIDLResource$ridl_dataset_get()}}
 \item \href{#method-get_format}{\code{RIDLResource$get_format()}}
 \item \href{#method-check_required_field}{\code{RIDLResource$check_required_field()}}
 \item \href{#method-get_fields}{\code{RIDLResource$get_fields()}}
@@ -184,12 +184,12 @@ the names of the sheets of XLS(X) resources
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_ridl_dataset"></a>}}
-\if{latex}{\out{\hypertarget{method-get_ridl_dataset}{}}}
-\subsection{Method \code{get_ridl_dataset()}}{
+\if{html}{\out{<a id="method-ridl_dataset_get"></a>}}
+\if{latex}{\out{\hypertarget{method-ridl_dataset_get}{}}}
+\subsection{Method \code{ridl_dataset_get()}}{
 Get the resource dataset.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RIDLResource$get_ridl_dataset()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RIDLResource$ridl_dataset_get()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{

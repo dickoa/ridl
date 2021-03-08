@@ -22,7 +22,7 @@ RIDLContainer <- R6::R6Class(
     #' @return A Container object
     initialize = function(initial_data = NULL, configuration = NULL) {
       if (is.null(configuration) | !inherits(configuration, "RIDLConfig")) {
-        private$configuration <- get_ridl_config()
+        private$configuration <- ridl_config_get()
       } else {
         private$configuration <- configuration
       }
@@ -45,7 +45,7 @@ RIDLContainer <- R6::R6Class(
     #' @description
     #' Browse the Container page on RIDL
     browse = function() {
-      url <- private$configuration$get_ridl_site_url()
+      url <- private$configuration$get_site_url()
       browseURL(url = paste0(url, "/organization/", self$data$name))
     },
 
@@ -129,16 +129,16 @@ as.list.RIDLContainer <- function(x, ...) {
 #' @param include_datasets logical, include datasets if TRUE
 #' @param ... extra parameters for `organization_show` CKAN API endpoint
 #'
-#' @rdname pull_ridl_container
+#' @rdname ridl_container_show
 #'
 #' @return A RIDLContainer
 #' @export
-pull_ridl_container  <-  function(identifier = NULL,
+ridl_container_show <- function(identifier = NULL,
                                   include_datasets = TRUE,
                                   configuration = NULL, ...) {
   if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
-    set_ridl_config(configuration = configuration)
-  configuration <- get_ridl_config()
+    ridl_config_set(configuration = configuration)
+  configuration <- ridl_config_get()
   res <- configuration$call_action("organization_show",
                                    list(id = identifier,
                                         type = "data-container",
@@ -160,16 +160,16 @@ browse.RIDLContainer <- function(x, ...)
 #' @param sort character how to sort the results. Default is "name asc"
 #' @param configuration RIDLConfig, a configuration
 #'
-#' @rdname list_ridl_container
+#' @rdname ridl_container_list
 #'
 #' @return A list of containers on RIDL
 #' @export
-list_ridl_container.default  <-  function(sort = c("title asc", "name",
-                                                   "package_count", "title"),
-                                          configuration = NULL) {
+ridl_container_list.default <- function(sort = c("title asc", "name",
+                                                 "package_count", "title"),
+                                        configuration = NULL) {
   if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
-    set_ridl_config(configuration = configuration)
-  configuration <- get_ridl_config()
+    ridl_config_set(configuration = configuration)
+  configuration <- ridl_config_get()
   sort <- match.arg(sort)
   data <- drop_nulls(list(sort = sort,
                           all_fields = FALSE,
@@ -187,19 +187,20 @@ list_ridl_container.default  <-  function(sort = c("title asc", "name",
 #' @param container RIDLContainer, the container containing the datasets
 #' @param configuration a RIDLConfig, the configuration object
 #'
-#' @rdname list_ridl_dataset
+#' @rdname ridl_dataset_list
 #'
 #' @return A vector of datasets names
 #'
 #' @examples
 #' \dontrun{
 #' # Setting the config to use RIDL default server
-#'  set_ridl_config()
+#'  ridl_config_set()
 #'  list_ridl_dataset()
 #' }
 #'
 #' @export
-list_ridl_dataset.RIDLContainer <- function(container = NULL, configuration = NULL) {
+ridl_dataset_list.RIDLContainer <- function(container = NULL,
+                                            configuration = NULL) {
   container$list_datasets()
 }
 
@@ -223,8 +224,8 @@ list_ridl_dataset.RIDLContainer <- function(container = NULL, configuration = NU
 #' }
 ridl_container <- function(data, configuration = NULL) {
   if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
-    set_ridl_config(configuration = configuration)
-  configuration <- get_ridl_config()
+    ridl_config_set(configuration = configuration)
+  configuration <- ridl_config_get()
   assert_valid_container_data(data)
   RIDLContainer$new(data, configuration)
 }

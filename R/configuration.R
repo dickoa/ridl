@@ -25,31 +25,41 @@ RIDLConfig <- R6::R6Class(
     #'
     #' @importFrom crul HttpClient
     #'
-    #' @param ridl_key character, the RIDL API key
+    #' @param site character, the RIDL instance, prod (production server), test (testing server)
+    #' @param key character, the RIDL API key
     #' @param user_agent a character value, User agent
     #' @return A new Configuration object.
-    initialize = function(ridl_key = NULL, user_agent = NULL) {
-      check_config_params(ridl_key = ridl_key,
+    initialize = function(site = "prod",
+                          key = NULL,
+                          user_agent = NULL) {
+
+      check_config_params(site = site,
+                          key = key,
                           user_agent = user_agent)
 
-      ridl_site <- "https://ridl.unhcr.org"
+      site_url <- "https://ridl.unhcr.org/"
 
-      if (is.null(ridl_key)) {
-        ridl_key_env <- Sys.getenv("RIDL_API_KEY")
-        if (ridl_key_env == "")
+      if (site == "test")
+        site_url <- "https://ridl-uat.unhcr.org/"
+
+      if (is.null(key)) {
+        key_env <- Sys.getenv("RIDL_API_KEY")
+        if (key_env == "")
           warning("You need to properly set the `RIDL_API_KEY` variable or use the `ridl_key parameter.` in the `set_ridl_config` function!",
-               call. = FALSE)
-          ridl_key <- ridl_key_env
+                  call. = FALSE)
+        key <- key_env
       }
 
-      Sys.setenv("RIDL_API_KEY" = ridl_key)
-      self$data$ridl_key <- ridl_key
-      headers <- list(`X-CKAN-API-Key` = ridl_key)
+      Sys.setenv("RIDL_API_KEY" = key)
+
+      self$data$key <- key
+      self$data$site_url <- site_url
+      headers <- list(`X-CKAN-API-Key` = key)
 
       if (is.null(user_agent))
         user_agent <- get_user_agent()
 
-      self$data$remoteclient <- HttpClient$new(url = ridl_site,
+      self$data$remoteclient <- HttpClient$new(url = site_url,
                                                headers = headers,
                                                opts = list(http_version = 2L,
                                                            useragent = user_agent))
@@ -63,26 +73,26 @@ RIDLConfig <- R6::R6Class(
     #' @description
     #' Specify a RIDL API key
     #'
-    #' @param ridl_key a character with key
-    set_ridl_key = function(ridl_key) {
+    #' @param key a character with key
+    set_key = function(key) {
       if (!is_valid_uuid(key))
         stop("key not valid!", call. = FALSE)
-      self$data$ridl_key <- ridl_key
+      self$data$key <- key
     },
 
     #' @description
     #' Specify a RIDL API key
     #'
     #' @return a character, the RIDL API key
-    get_ridl_key = function() {
-      self$data$ridl_key
+    get_key = function() {
+      self$data$key
     },
 
     #' @description
     #' Get the RIDL server URL in use
     #' @return the server URL
-    get_ridl_url = function() {
-      "https://ridl.unhcr.org"
+    get_site_url = function() {
+      self$data$site_url
     },
 
     #' @description
@@ -117,17 +127,18 @@ RIDLConfig <- R6::R6Class(
 
     #' @description
     #' Setup Configuration object
-    #'
+    #' @param site character, the RIDL instance, prod (production server), test (testing server)
+    #' @param key a character value, the API key
     #' @param configuration a character
-    #' @param ridl_key a character value, the API key
-    setup = function(ridl_key = NULL, configuration = NULL) {
+    setup = function(site = "prod", key = NULL, configuration = NULL) {
       if (!is.null(configuration)) {
         if (!inherits(configuration, "RIDLConfig,"))
           stop("Not a 'RIDLConfig' object!", call. = FALSE)
         private$shared$configuration <- configuration
       } else {
-        private$shared$configuration <- RIDLConfig$new(ridl_key = ridl_key,
-                                                          ridl_config = ridl_config)
+        private$shared$configuration <- RIDLConfig$new(site = site,
+                                                       key = key,
+                                                       configuration = configuration)
       }
     },
 
@@ -149,8 +160,8 @@ RIDLConfig <- R6::R6Class(
     #' Print Configuration object
     print = function() {
       cat("<RIDL Configuration> ", sep = "\n")
-      cat(paste0("  RIDL site: ", self$get_ridl_url()), sep = "\n")
-      cat(paste0("  RIDL API key: ", self$get_ridl_key()), sep = "\n")
+      cat(paste0("  RIDL site: ", self$get_site_url()), sep = "\n")
+      cat(paste0("  RIDL API key: ", self$get_key()), sep = "\n")
       invisible(self)
     }
   )
@@ -159,16 +170,20 @@ RIDLConfig <- R6::R6Class(
 #' Create a RIDL configuration object
 #'
 #' Create and RIDL configuration object
-#' @param ridl_key Character for the CKAN API key, it is required to push data into RIDL
+#'
+#' @param site character, the RIDL instance, prod (production server), test (testing server)
+#' @param key Character for the CKAN API key, it is required to push data into RIDL
 #' @param user_agent a character value, a user agent string
 #'
 #' @rdname ridl_config
 #'
 #' @return A RIDLConfig object
 #' @export
-ridl_config <- function(ridl_key = NULL,
+ridl_config <- function(site = "prod",
+                        key = NULL,
                         user_agent = NULL) {
-  RIDLConfig$new(ridl_key = ridl_key,
+  RIDLConfig$new(site = site,
+                 key = key,
                  user_agent = user_agent)
 }
 
@@ -176,7 +191,8 @@ ridl_config <- function(ridl_key = NULL,
 #'
 #' Sets the configuration settings for using RIDL.
 #'
-#' @param ridl_key character, the CKAN API key, it is required to push data into RIDL
+#' @param site character, the RIDL instance, prod (production server), test (testing server)
+#' @param key character, the CKAN API key, it is required to push data into RIDL
 #' @param user_agent a character, A user agent string
 #' @param configuration Configuration object.
 #'
@@ -184,34 +200,41 @@ ridl_config <- function(ridl_key = NULL,
 #'
 #' @details Setting up a configuration will help you access from a RIDL server
 #'
-#'
 #' @return Invisibly returns the ridl config object
 #' @export
 #'
 #' @examples
 #' \dontrun{
 #' # Setting the config to use RIDL default server
-#' set_ridl_config(ridl_key = "xxxxxxxxxx")
+#' ridl_config_set(ridl_key = "xxxxxxxxxx")
 #'
-#' # You can check your configuration using \code{get_ridl_config}
-#' config <- get_ridl_config()
+#' # You can check your configuration using \code{ridl_config_get}
+#' config <- ridl_config_get()
 #' config
 #' }
-set_ridl_config <- function(ridl_key = NULL,
+ridl_config_set <- function(site = "prod",
+                            key = NULL,
                             user_agent = NULL,
                             configuration = NULL) {
   if (!is.null(configuration) & inherits(configuration, "RIDLConfig")) {
     .ridl_env$configuration <- configuration
   } else {
-    .ridl_env$configuration <- RIDLConfig$new(ridl_key = ridl_key,
-                                                 user_agent = user_agent)
+    .ridl_env$configuration <- RIDLConfig$new(site = site,
+                                              key = key,
+                                              user_agent = user_agent)
   }
   ridl_memoise_clear()
 }
 
+
+#' @rdname ridl_config
+#'
+#' @export
+ridl_config_setup <- ridl_config_set
+
 #' @rdname ridl_config
 #' @export
-get_ridl_config <- function() {
+ridl_config_get <- function() {
   configuration <- .ridl_env$configuration
   assert_configuration(configuration)
   configuration$read()
@@ -229,14 +252,14 @@ get_ridl_config <- function() {
 #' @examples
 #' \dontrun{
 #' # Setting the config to use RIDL default server
-#' set_ridl_config()
-#' get_ridl_config()
+#' ridl_config_set()
+#' ridl_config_get()
 #'
-#' delete_ridl_config()
-#' get_ridl_config()
+#' ridl_config_delete()
+#' ridl_config_get()
 #' }
-delete_ridl_config <- function() {
-  configuration <- get_ridl_config()
+ridl_config_delete <- function() {
+  configuration <- ridl_config_get()
   configuration$delete()
   ridl_memoise_clear()
 }

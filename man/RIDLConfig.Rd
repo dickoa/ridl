@@ -30,9 +30,9 @@ get_rhd_config()
 \itemize{
 \item \href{#method-new}{\code{RIDLConfig$new()}}
 \item \href{#method-get_credentials}{\code{RIDLConfig$get_credentials()}}
-\item \href{#method-set_ridl_key}{\code{RIDLConfig$set_ridl_key()}}
-\item \href{#method-get_ridl_key}{\code{RIDLConfig$get_ridl_key()}}
-\item \href{#method-get_ridl_url}{\code{RIDLConfig$get_ridl_url()}}
+\item \href{#method-set_key}{\code{RIDLConfig$set_key()}}
+\item \href{#method-get_key}{\code{RIDLConfig$get_key()}}
+\item \href{#method-get_site_url}{\code{RIDLConfig$get_site_url()}}
 \item \href{#method-remoteclient}{\code{RIDLConfig$remoteclient()}}
 \item \href{#method-call_action}{\code{RIDLConfig$call_action()}}
 \item \href{#method-read}{\code{RIDLConfig$read()}}
@@ -49,13 +49,15 @@ get_rhd_config()
 \subsection{Method \code{new()}}{
 Create a new Configuration object.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RIDLConfig$new(ridl_key = NULL, user_agent = NULL)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RIDLConfig$new(site = "prod", key = NULL, user_agent = NULL)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{ridl_key}}{character, the RIDL API key}
+\item{\code{site}}{character, the RIDL instance, prod (production server), test (testing server)}
+
+\item{\code{key}}{character, the RIDL API key}
 
 \item{\code{user_agent}}{a character value, User agent}
 }
@@ -76,29 +78,29 @@ Configuration credentials when using a RIDL API key
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_ridl_key"></a>}}
-\if{latex}{\out{\hypertarget{method-set_ridl_key}{}}}
-\subsection{Method \code{set_ridl_key()}}{
+\if{html}{\out{<a id="method-set_key"></a>}}
+\if{latex}{\out{\hypertarget{method-set_key}{}}}
+\subsection{Method \code{set_key()}}{
 Specify a RIDL API key
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RIDLConfig$set_ridl_key(ridl_key)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RIDLConfig$set_key(key)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{ridl_key}}{a character with key}
+\item{\code{key}}{a character with key}
 }
 \if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_ridl_key"></a>}}
-\if{latex}{\out{\hypertarget{method-get_ridl_key}{}}}
-\subsection{Method \code{get_ridl_key()}}{
+\if{html}{\out{<a id="method-get_key"></a>}}
+\if{latex}{\out{\hypertarget{method-get_key}{}}}
+\subsection{Method \code{get_key()}}{
 Specify a RIDL API key
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RIDLConfig$get_ridl_key()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RIDLConfig$get_key()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
@@ -106,12 +108,12 @@ a character, the RIDL API key
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_ridl_url"></a>}}
-\if{latex}{\out{\hypertarget{method-get_ridl_url}{}}}
-\subsection{Method \code{get_ridl_url()}}{
+\if{html}{\out{<a id="method-get_site_url"></a>}}
+\if{latex}{\out{\hypertarget{method-get_site_url}{}}}
+\subsection{Method \code{get_site_url()}}{
 Get the RIDL server URL in use
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RIDLConfig$get_ridl_url()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RIDLConfig$get_site_url()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
@@ -174,13 +176,15 @@ Configuration object
 \subsection{Method \code{setup()}}{
 Setup Configuration object
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RIDLConfig$setup(ridl_key = NULL, configuration = NULL)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RIDLConfig$setup(site = "prod", key = NULL, configuration = NULL)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{ridl_key}}{a character value, the API key}
+\item{\code{site}}{character, the RIDL instance, prod (production server), test (testing server)}
+
+\item{\code{key}}{a character value, the API key}
 
 \item{\code{configuration}}{a character}
 }

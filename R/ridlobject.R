@@ -18,7 +18,7 @@ RIDLObject <- R6::R6Class(
     #' @return A RIDLObject object
     initialize = function(initial_data = NULL, configuration = NULL) {
       if (is.null(configuration) | !inherits(configuration, "Configuration")) {
-        private$configuration <- get_ridl_config()
+        private$configuration <- ridl_config_get()
       } else {
         private$configuration <- configuration
       }
@@ -35,7 +35,7 @@ RIDLObject <- R6::R6Class(
     #' @description
     #' Browse RIDL
     browse = function() {
-      url <- private$configuration$get_ridl_site_url()
+      url <- private$configuration$get_site_url()
       browseURL(url = url)
     },
 
@@ -79,27 +79,15 @@ RIDLObject <- R6::R6Class(
   )
 )
 
-#' @rdname tag_names
+#' @rdname ridl_dataset_list
 #' @export
-tag_names <- function(dataset)
-  UseMethod("tag_names")
+ridl_dataset_list <- function(container, configuration)
+  UseMethod("ridl_dataset_list")
 
-#' @rdname tag_names
+#' @rdname ridl_container_list
 #' @export
-tag_names.default <- function(dataset) {
-  stop("Only available for a RIDLDataset object",
-       call. = TRUE)
-}
-
-#' @rdname list_ridl_dataset
-#' @export
-list_ridl_dataset <- function(container, configuration)
-  UseMethod("list_ridl_dataset")
-
-#' @rdname list_ridl_container
-#' @export
-list_ridl_container <- function(sort, configuration)
-  UseMethod("list_ridl_container")
+ridl_container_list <- function(sort, configuration)
+  UseMethod("ridl_container_list")
 
 #' @rdname get_format
 #' @export
@@ -125,110 +113,110 @@ get_sheets.default <- function(resource, format, download_folder, quiet) {
        call. = TRUE)
 }
 
-#' @rdname get_dataset
+#' @rdname ridl_dataset_get
 #' @export
-get_ridl_dataset <- function(resource)
-  UseMethod("get_ridl_dataset")
+ridl_dataset_get <- function(resource)
+  UseMethod("ridl_dataset_get")
 
-#' @rdname get_dataset
+#' @rdname ridl_dataset_get
 #' @export
-get_ridl_dataset.default <- function(resource) {
+ridl_dataset_get.default <- function(resource) {
   stop("Only available for a RIDLResource object",
        call. = TRUE)
 }
 
-#' @rdname get_ridl_resource
+#' @rdname ridl_resource_get
 #' @export
-get_ridl_resource <- function(dataset, n)
-  UseMethod("get_ridl_resource")
+ridl_resource_get <- function(dataset, n)
+  UseMethod("ridl_resource_get")
 
-#' @rdname get_ridl_resource
+#' @rdname ridl_resource_get
 #' @export
-get_ridl_resource.default <- function(dataset, n) {
+ridl_resource_get.default <- function(dataset, n) {
   stop("Only available for a RIDLDataset object",
        call. = TRUE)
 }
 
-#' @rdname list_ridl_resource
+#' @rdname ridl_resource_list
 #' @export
-list_ridl_resource <- function(dataset, pattern, format)
-  UseMethod("list_ridl_resource")
+ridl_resource_list <- function(dataset, pattern, format)
+  UseMethod("ridl_resource_list")
 
-#' @rdname list_ridl_resource
+#' @rdname ridl_resource_list
 #' @export
-list_ridl_resource.default <- function(dataset, pattern, format) {
+ridl_resource_list.default <- function(dataset, pattern, format) {
     stop("Only available for a RIDLDataset object",
          call. = TRUE)
 }
 
-#' @rdname delete_ridl_resource
+#' @rdname ridl_resource_delete
 #' @export
-delete_ridl_resource <- function(dataset, n)
-  UseMethod("delete_ridl_resource")
+ridl_resource_delete <- function(dataset, n)
+  UseMethod("ridl_resource_delete")
 
-#' @rdname delete_ridl_resource
+#' @rdname ridl_resource_delete
 #' @export
-delete_ridl_resource.default <- function(dataset, n) {
+ridl_resource_delete.default <- function(dataset, n) {
   stop("Only available for a RIDLDataset object",
        call. = TRUE)
 }
 
-#' @rdname delete_all_ridl_resource
+#' @rdname ridl_resource_delete_all
 #' @export
-delete_all_ridl_resource <- function(dataset)
-  UseMethod("delete_all_ridl_resource")
+ridl_resource_delete_all <- function(dataset)
+  UseMethod("ridl_resource_delete_all")
 
-#' @rdname delete_all_ridl_resource
+#' @rdname ridl_resource_delete_all
 #' @export
-delete_all_ridl_resource.default <- function(dataset) {
+ridl_resource_delete_all.default <- function(dataset) {
   stop("Only available for a RIDLDataset object",
        call. = TRUE)
 }
 
-#' @rdname add_ridl_resource
+#' @rdname ridl_resource_add
 #' @export
-add_ridl_resource <- function(dataset, resource, ignore_dataset_id, configuration)
-  UseMethod("add_ridl_resource")
+ridl_resource_add <- function(dataset, resource, ignore_dataset_id, configuration)
+  UseMethod("ridl_resource_add")
 
-#' @rdname add_ridl_resource
+#' @rdname ridl_resource_add
 #' @export
-add_ridl_resource.default <- function(dataset, resource, ignore_dataset_id, configuration) {
+ridl_resource_add.default <- function(dataset, resource, ignore_dataset_id, configuration) {
   stop("It's only working with RIDLDataset",
        call. = FALSE)
 }
 
-#' @rdname set_ridl_container
+#' @rdname ridl_container_set
 #' @export
-set_ridl_container <- function(dataset, container_name, configuration)
-  UseMethod("set_ridl_container")
+ridl_container_set <- function(dataset, container_name, configuration)
+  UseMethod("ridl_container_set")
 
-#' @rdname set_ridl_container
+#' @rdname ridl_container_set
 #' @export
-set_ridl_container.default <- function(dataset, container_name, configuration) {
+ridl_container_set.default <- function(dataset, container_name, configuration) {
   stop("It's only working with RIDLDataset",
        call. = FALSE)
 }
 
-#' @rdname get_ridl_container
+#' @rdname ridl_container_get
 #' @export
-get_ridl_container <- function(dataset)
-  UseMethod("get_ridl_container")
+ridl_container_get <- function(dataset)
+  UseMethod("ridl_container_get")
 
-#' @rdname get_ridl_container
+#' @rdname ridl_container_get
 #' @export
-get_ridl_container.default <- function(dataset) {
+ridl_container_get.default <- function(dataset) {
   stop("Only available for a RIDLDataset object",
        call. = TRUE)
 }
 
-#' @rdname n_ridl_resource
+#' @rdname ridl_resource_n
 #' @export
-n_ridl_resource <- function(dataset)
+ridl_resource_n <- function(dataset)
   UseMethod("n_ridl_resource")
 
-#' @rdname n_ridl_resource
+#' @rdname ridl_resource_n
 #' @export
-n_ridl_resource.default <- function(dataset) {
+ridl_resource_n.default <- function(dataset) {
   stop("It only works with RIDLDataset object",
        call. = TRUE)
 }

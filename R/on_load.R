@@ -7,31 +7,31 @@
 #' @importFrom cachem cache_mem
 #' @importFrom jsonlite fromJSON
 .onLoad <- function(libname, pkgname) {
-  x <- hoardr::hoard()
+  x <- hoard()
   x$cache_path_set("ridl")
   .ridl_cache <<- x
-  .ridl_cm <<- cachem::cache_mem()
-  search_ridl_dataset <<- memoise::memoise(search_ridl_dataset,
-                                           cache = .ridl_cm)
-  search_ridl_resource <<- memoise::memoise(search_ridl_resource,
-                                            cache = .ridl_cm)
-  pull_ridl_dataset <<- memoise::memoise(pull_ridl_dataset,
+  .ridl_cm <<- cache_mem()
+  ridl_dataset_search <<- memoise(ridl_dataset_search,
+                                    cache = .ridl_cm)
+  ridl_resource_search <<- memoise(ridl_resource_search,
+                                   cache = .ridl_cm)
+  ridl_dataset_show <<- memoise(ridl_dataset_show,
                                          cache = .ridl_cm)
-  pull_ridl_resource <<- memoise::memoise(pull_ridl_resource,
+  ridl_resource_show <<- memoise(ridl_resource_show,
                                           cache = .ridl_cm)
-  pull_ridl_container <<- memoise::memoise(pull_ridl_container,
+  ridl_container_show <<- memoise(ridl_container_show,
                                            cache = .ridl_cm)
-  list_ridl_dataset.default <<- memoise::memoise(list_ridl_dataset.default,
+  ridl_dataset_list.default <<- memoise(ridl_dataset_list.default,
                                                  cache = .ridl_cm)
-  list_ridl_container.default <<- memoise::memoise(list_ridl_container.default,
+  ridl_container_list.default <<- memoise(ridl_container_list.default,
                                                    cache = .ridl_cm)
   ridl_dataset_schema_url <- "https://raw.githubusercontent.com/okfn/ckanext-unhcr/master/ckanext/unhcr/schemas/dataset.json"
-  .ridl_dataset_schema <<- jsonlite::fromJSON(ridl_dataset_schema_url,
+  .ridl_dataset_schema <<- fromJSON(ridl_dataset_schema_url,
                                               simplifyVector = FALSE)
 
   ridl_container_schema_url <- "https://raw.githubusercontent.com/okfn/ckanext-unhcr/master/ckanext/unhcr/schemas/data_container.json"
-  .ridl_container_schema <<- jsonlite::fromJSON(ridl_container_schema_url,
+  .ridl_container_schema <<- fromJSON(ridl_container_schema_url,
                                                 simplifyVector = FALSE)
 
-  set_ridl_config()
+  ridl_config_set()
 } # nocov end

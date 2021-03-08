@@ -9,7 +9,8 @@ is_null_recursive <- function(x)
 #' @noRd
 drop_nulls <- function(x) {
   x <- Filter(Negate(is_null_recursive), x)
-  lapply(x, function(x) if (is.list(x)) drop_nulls(x) else x)
+  lapply(x, function(x)
+    if (is.list(x)) drop_nulls(x) else x)
 }
 
 #' @noRd
@@ -21,13 +22,15 @@ as_bool <- function(x) {
 }
 
 #' @noRd
-check_config_params <- function(ridl_key = NULL, user_agent = NULL) {
+check_config_params <- function(site = c("prod", "test"),
+                                key = NULL,
+                                user_agent = NULL) {
 
   if (!is.null(user_agent) && !is.character(user_agent))
     stop("user_agent should be a character",
          call. = FALSE)
 
-  if (!is.null(ridl_key) && !is_valid_uuid(ridl_key))
+  if (!is.null(key) && !is_valid_uuid(key))
     stop("RIDL API key not valid!",
          call. = FALSE)
 }
@@ -238,7 +241,7 @@ assert_container <- function(x) {
 
 #' @noRd
 assert_container_name <- function(x) {
-  l <- list_ridl_container()
+  l <- ridl_container_list()
   if (!x %in% l)
     stop("Not a valid RIDL container name", call. = FALSE)
   invisible(x)
@@ -276,12 +279,12 @@ check_packages <- function(x) {
 }
 
 #' @noRd
-`[.datasets_list` <- function(x, i, ...) {
+`[.ridl_datasets_list` <- function(x, i, ...) {
   structure(NextMethod("["), class = class(x))
 }
 
 #' @noRd
-`[.resources_list` <- function(x, i, ...) {
+`[.ridl_resources_list` <- function(x, i, ...) {
   structure(NextMethod("["), class = class(x))
 }
 

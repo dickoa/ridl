@@ -90,29 +90,30 @@ session.
 
 ``` r
 library("ridl")
-get_ridl_config()
+ridl_config_get()
 ## <RIDL Configuration>
 ##   RIDL site url: https://ridl.unhcr.org
 ##   RIDL API key: xxxxxxxxxxxxxxxxxx
 ```
 
 You can also configure directly the `ridl` package using the
-`set_ridl_config` function and check the config using `get_ridl_config`
-but it’s not persistent if you close your session.
+`ridl_config_setup` function and check the config using
+`ridl_config_get` but it’s not persistent if you close your session.
 
 ``` r
-set_ridl_config(ridl_key = "xxxxxxxxxxxxxxxxxx")
-get_ridl_config()
+ridl_config_setup(site = "test",
+                  key = "xxxxxxxxxxxxxxxxxx")
+ridl_config_get()
 ## <RIDL Configuration>
-##   RIDL site url: https://ridl.unhcr.org
+##   RIDL site: https://ridl-uat.unhcr.org/
 ##   RIDL API key: xxxxxxxxxxxxxxxxxx
 ```
 
 Now that we are connected to RIDL, we can search for dataset using
-`search_datasets`.
+`ridl_dataset_search`.
 
 ``` r
-search_ridl_dataset("mali", visibility = "public", rows = 2) ## search internally public dataset in RIDL, limit the results to two rows
+ridl_dataset_search("mali", visibility = "public", rows = 2) ## search internally public dataset in RIDL, limit the results to two rows
 ## [[1]]
 ## <RIDL Dataset> 6f37029d-0ec2-4322-88ed-6447b2eebf3a
 ##   Title: Socio-economic assessment of Malian refugees in Burkina Faso 2016
@@ -136,13 +137,13 @@ We can select a particular `dataset` from the list (a
 elements from list (e.g `[[`). In this example, we can use either
 `purrr::pluck` or `dplyr::nth` since they both play well with the pipe
 operator `%>%`. Once the dataset selected, it’s possible to list all its
-`resource` objects using `list_ridl_resource`.
+`resource` objects using `ridl_resource_list`.
 
 ``` r
 library(tidyverse)
-search_ridl_dataset("mali", visibility = "public", rows = 2) %>%
+ridl_dataset_search("mali", visibility = "public", rows = 2) %>%
   nth(1) %>%
-  list_ridl_resource(format = "stata")
+  ridl_resource_list(format = "stata")
 ## <RIDL Resource> 026f9547-d7b2-4ec3-bbaa-5096837b1f01
 ##   Name: UNHCR_BFA_2016_SEA_household_v1_1
 ##   Description: BFA SEA household level data
@@ -168,9 +169,9 @@ using `purrr::pluck` or `dplyr::nth` to select the one you want to
 
 ``` r
 library(tidyverse)
-search_ridl_dataset("mali", visibility = "public", rows = 2) %>%
+ridl_dataset_search("mali", visibility = "public", rows = 2) %>%
   nth(1) %>%
-  list_ridl_resource(format = "stata") %>%
+  ridl_resource_list(format = "stata") %>%
   nth(1) %>%
   read()
 ## + # A tibble: 1,690 x 459
@@ -234,13 +235,13 @@ the sheet you want to read (default is to read the first sheet).
 
 #### Reading dataset directly
 
-We can also use `pull_ridl_dataset` to directly read and access a
+We can also use `ridl_dataset_show` to directly read and access a
 dataset object.
 
 ``` r
 dataset_name <- "official-cross-border-figures-of-venezuelan-individuals"
-pull_ridl_dataset(dataset_name) %>%
-  list_ridl_resource() %>%
+ridl_dataset_show(dataset_name) %>%
+  ridl_resource_list() %>%
   nth(1) %>%
   read()
 ## + Reading sheet:  VEN_Official Borders Figures
@@ -264,8 +265,8 @@ If you know the id of a `RIDL Resource` object you can also use directly
 `pull_resource` to access directly the desired resource.
 
 ``` r
-pull_ridl_dataset(dataset_name) %>%
-  list_ridl_resource() %>%
+ridl_dataset_show(dataset_name) %>%
+  ridl_resource_show() %>%
   nth(1)
 ## + <RIDL Resource> 68e39d44-88ae-49f9-b492-3635341c92be
 ##   Name: VEN_OfficialFiguresBorders
@@ -274,7 +275,7 @@ pull_ridl_dataset(dataset_name) %>%
 ##   Size: 39998
 ##   Format: XLSX
 
-pull_ridl_resource("68e39d44-88ae-49f9-b492-3635341c92be") %>%
+ridl_resource_show("68e39d44-88ae-49f9-b492-3635341c92be") %>%
   read()
 ## + Reading sheet:  VEN_Official Borders Figures
 ## # A tibble: 1,314 x 5
@@ -296,7 +297,7 @@ pull_ridl_resource("68e39d44-88ae-49f9-b492-3635341c92be") %>%
 ### Some other handy functions
 
 ``` r
-ct <- list_ridl_container(sort = "package_count")
+ct <- ridl_container_list(sort = "package_count")
 head(ct)
 ## [1] "ethiopia-sens"    "data-deposit"     "kenya-sens"
 ## [4] "afghanistan"      "bangladesh-sens"  "south-sudan-sens"
@@ -304,15 +305,15 @@ head(ct)
 grep("niger-", ct, ignore.case = TRUE, value = TRUE)
 ## [1] "niger-protection" "niger-sens"
 
-pull_ridl_container("niger-protection")
+ridl_container_show("niger-protection")
 ## <RIDL Container> d341942e-547e-404b-bcdf-c72b2cd85530
 ##   Name: niger-protection
 ##   Display name: Niger: Protection
 ##   No. Datasets: 5
 ##   No. Members: 3
 
-pull_ridl_container("niger-protection") %>%
-  list_ridl_dataset()
+ridl_container_show("niger-protection") %>%
+  ridl_dataset_list()
 ## [1] "enrolement-pdi-tillaberi-tillaberi-niger-2020"
 ## [2] "identify-asylum-seekers-in-migration-flow-agadez-niger-2018-2019-2020"
 ## [3] "monitoring-the-migration-flow-1-agadez-niger-2019-2020"

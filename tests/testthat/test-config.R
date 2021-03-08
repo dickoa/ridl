@@ -6,5 +6,5 @@ test_that("create_ridl_config must returns a Configuration object", {
 
 test_that("API key must be valid i.e uuid", {
   skip_on_cran()
-  expect_error(set_ridl_config(ridl_key = "abcdefd"))
+  expect_error(ridl_config_set(key = "abcdefd"))
 })
