@@ -125,9 +125,7 @@ RIDLResource <- R6::R6Class(
       if (is.null(format))
         format <- self$get_format()
 
-      hxl <- any(grepl("hxl",
-                       tag_names(self$get_ridl_dataset()),
-                       ignore.case = TRUE))
+      hxl <- tolower(self$data$`hxl-ated`) != "true"
 
       switch(format,
              csv = read_ridl_delim(file_path, hxl = hxl, ...),

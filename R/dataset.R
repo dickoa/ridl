@@ -483,30 +483,6 @@ ridl_container_get.RIDLDataset <- function(dataset) {
   dataset$ridl_container_get()
 }
 
-#' Get the dataset tag names
-#'
-#' Get the dataset tags name
-#'
-#' @param dataset Dataset
-#'
-#' @rdname tag_names
-#'
-#' @return Character Tags of the dataset
-#' @export
-#'
-#' @examples
-#' \dontrun{
-#'  # Setting the config to use RIDL
-#'  res <- search_dataset(rows = 3L)
-#'  get_tags_names(res[[1]])
-#' }
-#' @export
-tag_names.RIDLDataset <- function(dataset) {
-  vapply(dataset$data$tags,
-         function(tag) tag$name,
-         character(1))
-}
-
 #' Get the number of resources in the dataset
 #'
 #' Get the number of resources in the dataset
