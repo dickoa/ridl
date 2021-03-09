@@ -521,3 +521,29 @@ ridl_resource <- function(initial_data, configuration = NULL) {
 #' @export
 browse.RIDLResource <- function(x, ...)
   x$browse()
+
+#' @noRd
+ridl_resource_create <-  function(resource, configuration = NULL) {
+  if (!is.null(configuration) &  inherits(configuration, "RIDLConfig"))
+    ridl_config_set(configuration = configuration)
+  configuration <- ridl_config_get()
+  assert_resource(resource)
+  data <- resource$data
+  res <- configuration$call_action("resource_create",
+                                   body = data,
+                                   verb = "post")
+  res
+}
+
+#' @noRd
+ridl_resource_update <-  function(resource, configuration = NULL) {
+  if (!is.null(configuration) &  inherits(configuration, "RIDLConfig"))
+    ridl_config_set(configuration = configuration)
+  configuration <- ridl_config_get()
+  assert_resource(resource)
+  data <- resource$data
+  res <- configuration$call_action("resource_update",
+                                   body = data,
+                                   verb = "post")
+  res
+}

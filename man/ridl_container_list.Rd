@@ -7,13 +7,16 @@
 \usage{
 \method{ridl_container_list}{default}(
   sort = c("title asc", "name", "package_count", "title"),
+  user_container = FALSE,
   configuration = NULL
 )
 
-ridl_container_list(sort, configuration)
+ridl_container_list(sort, user_container, configuration)
 }
 \arguments{
 \item{sort}{character how to sort the results. Default is "name asc"}
+
+\item{user_container}{logical, list container for user, default to FALSE}
 
 \item{configuration}{RIDLConfig, a configuration}
 }

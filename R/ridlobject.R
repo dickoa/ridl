@@ -86,7 +86,7 @@ ridl_dataset_list <- function(container, configuration)
 
 #' @rdname ridl_container_list
 #' @export
-ridl_container_list <- function(sort, configuration)
+ridl_container_list <- function(sort, user_container, configuration)
   UseMethod("ridl_container_list")
 
 #' @rdname get_format

@@ -3,9 +3,14 @@ Title: A Client for the UNHCR RIDL Platform API
 Description: Client for the UNHCR RIDL Platform API
     <https://ridl.unhcr.org>. Allows to search and download ridl datasets into R.
 Version: 0.1.0.9000
-Authors@R: person("Ahmadou", "Dicko",
-		  email = "mail@ahmadoudicko.com",
-		  role = c("aut", "cre"))
+Authors@R: c(person(given = "Ahmadou",
+                    family = "Dicko",
+		    email = "mail@ahmadoudicko.com",
+		    role = c("aut", "cre")),
+             person(given = "Federico",
+	            family = "Sanson",
+                    email = "sanson@unhcr.org",
+		    role = "ctb"))
 License: MIT + file LICENSE
 LazyData: TRUE
 URL: https://gitlab.com/dickoa/ridl

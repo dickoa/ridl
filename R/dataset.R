@@ -22,7 +22,7 @@ RIDLDataset <- R6::R6Class(
     #' @return A Dataset object
     initialize = function(initial_data = NULL, configuration = NULL) {
       if (is.null(configuration) | !inherits(configuration, "RIDLConfig")) {
-        private$configuration <- get_ridl_config()
+        private$configuration <- ridl_config_get()
       } else {
         private$configuration <- configuration
       }
@@ -192,7 +192,7 @@ RIDLDataset <- R6::R6Class(
       if ("id" %in% names(self$data)) {
         res <- self$data$organization$title
       } else {
-        res <-  self$get_ridl_container()$data$title
+        res <-  self$ridl_container_get()$data$title
       }
       res
     },
@@ -215,7 +215,7 @@ RIDLDataset <- R6::R6Class(
       bool <- lapply(.ridl_dataset_schema$dataset_fields,
                      function(x) x$required)
       bool <- vapply(bool, function(x) !is.null(x), logical(1))
-      nm[bool]
+      union("owner_org", nm[bool])
     },
 
     #' @description
@@ -613,6 +613,19 @@ ridl_dataset_create <-  function(dataset, configuration = NULL) {
   assert_dataset(dataset)
   data <- dataset$data
   res <- configuration$call_action("package_create",
+                                   body = data,
+                                   verb = "post")
+  res
+}
+
+#' @noRd
+ridl_dataset_update <-  function(dataset, configuration = NULL) {
+  if (!is.null(configuration) &  inherits(configuration, "RIDLConfig"))
+    ridl_config_set(configuration = configuration)
+  configuration <- ridl_config_get()
+  assert_dataset(dataset)
+  data <- dataset$data
+  res <- configuration$call_action("package_update",
                                    body = data,
                                    verb = "post")
   res

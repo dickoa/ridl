@@ -50,12 +50,21 @@ RIDLContainer <- R6::R6Class(
     },
 
     #' @description
+    #' Get container fields
+    #'
+    #' @return list of fields for a dataset
+    get_fields = function() {
+      vapply(.ridl_container_schema$fields,
+                   function(x) x$field_name, character(1))
+    },
+
+    #' @description
     #' Get container required fields
     #'
     #' @return list of required fields for a container
     get_required_fields = function() {
       nm <- self$get_fields()
-      bool <- lapply(.ridl_container_schema$container_fields,
+      bool <- lapply(.ridl_container_schema$fields,
                      function(x) x$required)
       bool <- vapply(bool, function(x) !is.null(x), logical(1))
       nm[bool]
@@ -158,6 +167,7 @@ browse.RIDLContainer <- function(x, ...)
 #' List RIDL containers
 #'
 #' @param sort character how to sort the results. Default is "name asc"
+#' @param user_container logical, list container for user, default to FALSE
 #' @param configuration RIDLConfig, a configuration
 #'
 #' @rdname ridl_container_list
@@ -166,18 +176,31 @@ browse.RIDLContainer <- function(x, ...)
 #' @export
 ridl_container_list.default <- function(sort = c("title asc", "name",
                                                  "package_count", "title"),
+                                        user_container = FALSE,
                                         configuration = NULL) {
   if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
     ridl_config_set(configuration = configuration)
   configuration <- ridl_config_get()
-  sort <- match.arg(sort)
-  data <- drop_nulls(list(sort = sort,
-                          all_fields = FALSE,
-                          include_dataset_count = FALSE,
-                          type = "data-container"))
-  res <- configuration$call_action("organization_list",
-                                   data)
-  unlist(res)
+
+  if (!user_container) {
+    sort <- match.arg(sort)
+    data <- drop_nulls(list(sort = sort,
+                            all_fields = FALSE,
+                            include_dataset_count = FALSE,
+                            type = "data-container"))
+    res <- configuration$call_action("organization_list",
+                                     data)
+    res <- unlist(res)
+  } else {
+    data <- drop_nulls(list(permission = "read",
+                            include_dataset_count = FALSE,
+                            type = "data-container"))
+    res <- configuration$call_action("organization_list_for_user",
+                                     data)
+    res <- vapply(res, function(r) r$name,
+                  character(1))
+  }
+  res
 }
 
 #' List RIDL datasets
@@ -228,4 +251,30 @@ ridl_container <- function(data, configuration = NULL) {
   configuration <- ridl_config_get()
   assert_valid_container_data(data)
   RIDLContainer$new(data, configuration)
+}
+
+#' @noRd
+ridl_container_create <-  function(container, configuration = NULL) {
+  if (!is.null(configuration) &  inherits(configuration, "RIDLConfig"))
+    ridl_config_set(configuration = configuration)
+  configuration <- ridl_config_get()
+  assert_container(container)
+  data <- container$data
+  res <- configuration$call_action("organization_create",
+                                   body = data,
+                                   verb = "post")
+  res
+}
+
+#' @noRd
+ridl_container_update <-  function(container, configuration = NULL) {
+  if (!is.null(configuration) &  inherits(configuration, "RIDLConfig"))
+    ridl_config_set(configuration = configuration)
+  configuration <- ridl_config_get()
+  assert_container(container)
+  data <- container$data
+  res <- configuration$call_action("organization_update",
+                                   body = data,
+                                   verb = "post")
+  res
 }

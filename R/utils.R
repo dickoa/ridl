@@ -88,7 +88,8 @@ ridl_dataset_keywords <- function() {
                          function(x)
                            vapply(x$choices,
                                   function(cc) cc$label, character(1))))
-  data.frame(label = label, value = value)
+  data.frame(label = label,
+             value = value)
 }
 
 #' @noRd
@@ -97,8 +98,8 @@ assert_valid_dataset_data <- function(x) {
   choices_val <- dataset_fields_choices_val()
   nm <- intersect(names(choices_val), names(x))
   for (n in nm) {
-    choices_nm <- choices_val[[n]]
-    if (any(!x[[n]] %in% choices_nm)) {
+    choices_nm <- tolower(choices_val[[n]])
+    if (any(!tolower(x[[n]]) %in% choices_nm)) {
       stop(paste("Field", n, "has",
                  length(choices_nm),
                  "value(s):",
@@ -130,8 +131,8 @@ assert_valid_resource_data <- function(x) {
   choices_val <- resource_fields_choices_val()
   nm <- intersect(names(choices_val), names(x))
   for (n in nm) {
-    choices_nm <- choices_val[[n]]
-    if (any(!x[[n]] %in% choices_nm)) {
+    choices_nm <- tolower(choices_val[[n]])
+    if (any(!tolower(x[[n]]) %in% choices_nm)) {
       stop(paste("Field", n, "has",
                  length(choices_nm),
                  "value(s):",
@@ -161,8 +162,8 @@ assert_valid_container_data <- function(x) {
   choices_val <- container_fields_choices_val()
   nm <- intersect(names(choices_val), names(x))
   for (n in nm) {
-    choices_nm <- choices_val[[n]]
-    if (any(!x[[n]] %in% choices_nm)) {
+    choices_nm <- tolower(choices_val[[n]])
+    if (any(!tolower(x[[n]]) %in% choices_nm)) {
       stop(paste("Field", n, "has",
                  length(choices_nm),
                  "value(s):",
@@ -175,10 +176,10 @@ assert_valid_container_data <- function(x) {
 #' @noRd
 #' @importFrom stats setNames
 container_fields_choices_val <- function() {
-  bool <- vapply(.ridl_container_schema$container_fields,
+  bool <- vapply(.ridl_container_schema$fields,
                  function(x) "choices" %in% names(x),
                  logical(1))
-  param_with_choices <- .ridl_container_schema$container_fields[bool]
+  param_with_choices <- .ridl_container_schema$fields[bool]
   val <- lapply(param_with_choices,
                 function(x)
                   vapply(x$choices,

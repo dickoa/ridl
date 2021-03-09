@@ -25,13 +25,21 @@
                                                  cache = .ridl_cm)
   ridl_container_list.default <<- memoise(ridl_container_list.default,
                                                    cache = .ridl_cm)
-  ridl_dataset_schema_url <- "https://raw.githubusercontent.com/okfn/ckanext-unhcr/master/ckanext/unhcr/schemas/dataset.json"
-  .ridl_dataset_schema <<- fromJSON(ridl_dataset_schema_url,
-                                              simplifyVector = FALSE)
+  ## ridl_dataset_schema_url <- "https://raw.githubusercontent.com/okfn/ckanext-unhcr/master/ckanext/unhcr/schemas/dataset.json"
+  ## .ridl_dataset_schema <<- fromJSON(ridl_dataset_schema_url,
+  ##                                             simplifyVector = FALSE)
 
-  ridl_container_schema_url <- "https://raw.githubusercontent.com/okfn/ckanext-unhcr/master/ckanext/unhcr/schemas/data_container.json"
-  .ridl_container_schema <<- fromJSON(ridl_container_schema_url,
-                                                simplifyVector = FALSE)
+  ## ridl_container_schema_url <- "https://raw.githubusercontent.com/okfn/ckanext-unhcr/master/ckanext/unhcr/schemas/data_container.json"
+  ## .ridl_container_schema <<- fromJSON(ridl_container_schema_url,
+  ##                                               simplifyVector = FALSE)
+  ridl_dataset_schema_file <- system.file("schemas/dataset.json",
+                                          package = "ridl")
+  .ridl_dataset_schema <<- fromJSON(ridl_dataset_schema_file,
+                                    simplifyVector = FALSE)
+  ridl_container_schema_file <- system.file("schemas/data_container.json",
+                                            package = "ridl")
+  .ridl_container_schema <<- fromJSON(ridl_container_schema_file,
+                                      simplifyVector = FALSE)
 
   ridl_config_set()
 } # nocov end
