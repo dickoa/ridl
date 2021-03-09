@@ -271,11 +271,11 @@ ridl_dataset_show(dataset_name) %>%
 ```
 
 If you know the id of a `RIDL Resource` object you can also use directly
-`pull_resource` to access directly the desired resource.
+`ridl_resource_show` to access directly the desired resource.
 
 ``` r
 ridl_dataset_show(dataset_name) %>%
-  ridl_resource_show() %>%
+  ridl_resource_list() %>%
   nth(1)
 ## + <RIDL Resource> 68e39d44-88ae-49f9-b492-3635341c92be
 ##   Name: VEN_OfficialFiguresBorders
