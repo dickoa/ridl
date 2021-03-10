@@ -201,6 +201,11 @@ validate_resource_data <- function(x) {
            call. = FALSE)
     }
   }
+
+  if (x$file_type == "microdata" && x$type != "data")
+    stop("If you use 'type=data' you should also add file_type='microdata'",
+         call. = FALSE)
+
   x$`hxl-ated` <- as_pylog(x$`hxl-ated`)
   x
 }

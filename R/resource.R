@@ -534,22 +534,28 @@ browse.RIDLResource <- function(x, ...)
 #'
 #' @return RIDLResource, the resource
 #' @export
-ridl_resource_create <-  function(resource,
-                                  dataset_id,
-                                  file_path,
-                                  progress = FALSE,
-                                  quiet = TRUE,
-                                  configuration = NULL) {
+ridl_resource_create <- function(resource,
+                                 dataset_id,
+                                 file_path,
+                                 progress = FALSE,
+                                 quiet = TRUE,
+                                 configuration = NULL) {
+
+  if (!quiet) {
+    message("Creating resource metadata")
+    progress <- TRUE
+  } else {
+    progress <- FALSE
+  }
+
+  ridl_config_set(progress = progress,
+                  progress_type = "up")
+
   if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
-
-    if (!quiet) {
-      message("Creating resource metadata")
-      progress = FALSE
-    }
-
     ridl_config_set(progress = progress,
                     progress_type = "up",
                     configuration = configuration)
+
   configuration <- ridl_config_get()
   assert_resource(resource)
   data <- resource$data
@@ -588,16 +594,22 @@ ridl_resource_update <-  function(resource,
                                   progress = FALSE,
                                   quiet = TRUE,
                                   configuration = NULL) {
-  if (!is.null(configuration) &  inherits(configuration, "RIDLConfig"))
 
-    if (!quiet) {
-      message("Updating resource metadata")
-      progress = FALSE
-    }
+  if (!quiet) {
+    message("Creating resource metadata")
+    progress <- TRUE
+  } else {
+    progress <- FALSE
+  }
 
+  ridl_config_set(progress = progress,
+                  progress_type = "up")
+
+  if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
     ridl_config_set(progress = progress,
                     progress_type = "up",
                     configuration = configuration)
+
   configuration <- ridl_config_get()
   assert_resource(resource)
   data <- resource$data
@@ -654,5 +666,7 @@ ridl_resource_upload_file <- function(resource_id,
                                       verb = "post",
                                       encode = "multipart")
 
-  finish$commited
+  if (isFALSE(finish$completed))
+    stop("Something went wrong, check your inputs or admin rights",
+          call. = FALSE)
 }
