@@ -249,7 +249,7 @@ ridl_container <- function(data, configuration = NULL) {
   if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
     ridl_config_set(configuration = configuration)
   configuration <- ridl_config_get()
-  assert_valid_container_data(data)
+  data <- validate_container_data(data)
   RIDLContainer$new(data, configuration)
 }
 

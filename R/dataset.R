@@ -255,7 +255,6 @@ RIDLDataset <- R6::R6Class(
         cat("  Title: ", self$data$title, "\n", sep = "")
         cat("  Name: ", self$data$name, "\n", sep = "")
         cat("  Visibility: ", self$data$visibility, "\n", sep = "")
-        cat("  Container: ", self$ridl_container_get_title(), "\n", sep = "")
         cat("  Resources (up to 5): ",
             sift_res(self$data$resources), "\n", sep = "")
       invisible(self)
@@ -357,13 +356,14 @@ ridl_resource_delete_all.RIDLDataset <- function(dataset) {
 #'
 #' @param query character Query terms, use solr format
 #' and default to "*:*" (match everything)
-#' @param visibility character, all, public or restricted
-#' @param filter_query character Filter Query results
-#' @param rows integer; Number of matching records to return. Defaults to 10.
-#' @param start integer; the offset in the complete result for where
+#' @param visibility character, either all, public or restricted
+#' @param filter_query character, filter query results
+#' @param rows integer, number of matching records to return. Defaults to 10.
+#' @param start integer, the offset in the complete result for where
 #' the set of returned datasets should begin.
-#' @param page_size integer; Size of page to return. Defaults to 1000.
-#' @param configuration Configuration object.
+#' @param page_size integer, Size of page to return. Defaults to 1000.
+#' @param progress logical, progress bar. Default to FALSE
+#' @param configuration RIDLConfig object.
 #' @param ... Extra parameters for `package_search` endpoints
 #'
 #' @details Search and find datasets on RIDL
@@ -389,9 +389,12 @@ ridl_dataset_search <- function(query = "*:*",
                                 rows = 10L,
                                 start = 0L,
                                 page_size = 1000L,
-                                configuration = NULL, ...) {
+                                configuration = NULL,
+                                progress = FALSE,
+                                ...) {
   if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
-    ridl_config_set(configuration = configuration)
+    ridl_config_set(progress = progress,
+                    configuration = configuration)
   configuration <- ridl_config_get()
   visibility <- match.arg(visibility)
   if (visibility == "public")
@@ -535,7 +538,7 @@ ridl_resource_add.RIDLDataset <- function(dataset, resource, ignore_dataset_id =
 #' @param dataset RIDLDataset, the dataset
 #' @param container_name charater, A valid RIDL container name, you can use
 #' \code{ridl_container_list()} to have the list of all containers
-#' @param configuration  RIDLConfig, the RIDL configuration
+#' @param configuration RIDLConfig, the RIDL configuration
 #'
 #' @rdname ridl_container_set
 #'
@@ -577,32 +580,57 @@ ridl_dataset <- function(data, configuration = NULL) {
   if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
     ridl_config_set(configuration = configuration)
   configuration <- ridl_config_get()
-  assert_valid_dataset_data(data)
+  data <- validate_dataset_data(data)
   RIDLDataset$new(data, configuration)
 }
 
-#' @noRd
-ridl_dataset_create <-  function(dataset, configuration = NULL) {
+#' Create a dataset on RIDL
+#'
+#' Create a dataset on RIDL
+#'
+#' @param dataset RIDLDataset, the dataset to upload
+#' @param progress logical, progress bar. Default to FALSE
+#' @param configuration RIDLConfig, the RIDL configuration
+#'
+#' @export
+ridl_dataset_create <-  function(dataset, progress = TRUE,
+                                 configuration = NULL) {
   if (!is.null(configuration) &  inherits(configuration, "RIDLConfig"))
-    ridl_config_set(configuration = configuration)
+    ridl_config_set(progress = TRUE,
+                    progress_type = "up",
+                    configuration = configuration)
   configuration <- ridl_config_get()
   assert_dataset(dataset)
   data <- dataset$data
   res <- configuration$call_action("package_create",
                                    body = data,
-                                   verb = "post")
+                                   verb = "post",
+                                   encode = "json")
   res
 }
 
-#' @noRd
-ridl_dataset_update <-  function(dataset, configuration = NULL) {
+
+#' Update a dataset on RIDL
+#'
+#' Update a dataset on RIDL
+#'
+#' @param dataset RIDLDataset, the dataset to upload
+#' @param progress logical, progress bar. Default to FALSE
+#' @param configuration RIDLConfig, the RIDL configuration
+#'
+#' @export
+ridl_dataset_update <-  function(dataset, progress = FALSE,
+                                 configuration = NULL) {
   if (!is.null(configuration) &  inherits(configuration, "RIDLConfig"))
-    ridl_config_set(configuration = configuration)
+    ridl_config_set(progress = TRUE,
+                    progress_type = "up",
+                    configuration = configuration)
   configuration <- ridl_config_get()
   assert_dataset(dataset)
   data <- dataset$data
   res <- configuration$call_action("package_update",
                                    body = data,
-                                   verb = "post")
+                                   verb = "post",
+                                   encode = "json")
   res
 }

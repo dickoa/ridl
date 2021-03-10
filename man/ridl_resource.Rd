@@ -4,12 +4,12 @@
 \alias{ridl_resource}
 \title{Create a RIDL resource from list}
 \usage{
-ridl_resource(initial_data, configuration = NULL)
+ridl_resource(data, configuration = NULL)
 }
 \arguments{
-\item{initial_data}{list, list of data}
+\item{data}{list, list of data}
 
-\item{configuration}{RIDLConfig, a configuration}
+\item{configuration}{RIDLConfig, the configuration}
 }
 \value{
 Resource the resource

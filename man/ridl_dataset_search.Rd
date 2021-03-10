@@ -12,6 +12,7 @@ ridl_dataset_search(
   start = 0L,
   page_size = 1000L,
   configuration = NULL,
+  progress = FALSE,
   ...
 )
 }
@@ -19,18 +20,20 @@ ridl_dataset_search(
 \item{query}{character Query terms, use solr format
 and default to "\emph{:}" (match everything)}
 
-\item{visibility}{character, all, public or restricted}
+\item{visibility}{character, either all, public or restricted}
 
-\item{filter_query}{character Filter Query results}
+\item{filter_query}{character, filter query results}
 
-\item{rows}{integer; Number of matching records to return. Defaults to 10.}
+\item{rows}{integer, number of matching records to return. Defaults to 10.}
 
-\item{start}{integer; the offset in the complete result for where
+\item{start}{integer, the offset in the complete result for where
 the set of returned datasets should begin.}
 
-\item{page_size}{integer; Size of page to return. Defaults to 1000.}
+\item{page_size}{integer, Size of page to return. Defaults to 1000.}
 
-\item{configuration}{Configuration object.}
+\item{configuration}{RIDLConfig object.}
+
+\item{progress}{logical, progress bar. Default to FALSE}
 
 \item{...}{Extra parameters for \code{package_search} endpoints}
 }

@@ -14,11 +14,12 @@ drop_nulls <- function(x) {
 }
 
 #' @noRd
-as_bool <- function(x) {
-  if (!is.logical(x))
-    stop("Works only with logical vector!",
-         call. = FALSE)
- if (isTRUE(x)) "true" else "false"
+as_pylog <- function(x) {
+  stopifnot(is.logical(x))
+  if (x)
+    'True'
+  else
+    'False'
 }
 
 #' @noRd
@@ -44,6 +45,64 @@ assert_configuration <- function(configuration)
 assert_dataset <- function(x) {
   if (!inherits(x, "RIDLDataset"))
     stop("Not an RIDL dataset!", call. = FALSE)
+}
+
+#' @noRd
+bytes <- function (x, digits = 3, ...) {
+    power <- min(floor(log(abs(x), 1000)), 4)
+    if (power < 1) {
+        unit <- "B"
+    }
+    else {
+        unit <- c("kB", "MB", "GB", "TB")[[power]]
+        x <- x/(1000^power)
+    }
+    formatted <- format(signif(x, digits = digits),
+                        big.mark = ",",
+        scientific = FALSE)
+    paste0(formatted, " ", unit)
+}
+
+#' @noRd
+progress_bar <- function (type, con) {
+    bar <- NULL
+    show_progress <- function(down, up) {
+        if (type == "down") {
+            total <- down[[1]]
+            now <- down[[2]]
+        }
+        else {
+            total <- up[[1]]
+            now <- up[[2]]
+        }
+        if (total == 0 && now == 0) {
+            bar <<- NULL
+        }
+        else if (total == 0) {
+            cat("\rDownloading: ", bytes(now, digits = 2), "     ",
+                sep = "", file = con)
+            utils::flush.console()
+        }
+        else {
+            if (is.null(bar)) {
+                bar <<- utils::txtProgressBar(max = total, style = 3,
+                  file = con)
+            }
+            utils::setTxtProgressBar(bar, now)
+            if (now == total)
+                close(bar)
+        }
+        TRUE
+    }
+    show_progress
+}
+
+#' @noRd
+crul_progress <- function(type = c("down", "up"), con = stdout()) {
+  l <- list(options = list(noprogress = FALSE,
+                      progressfunction = progress_bar(type, con)))
+  class(l) <- "request"
+  l
 }
 
 #' @noRd
@@ -93,7 +152,7 @@ ridl_dataset_keywords <- function() {
 }
 
 #' @noRd
-assert_valid_dataset_data <- function(x) {
+validate_dataset_data <- function(x) {
   RIDLDataset$new(x)$check_required_fields()
   choices_val <- dataset_fields_choices_val()
   nm <- intersect(names(choices_val), names(x))
@@ -107,6 +166,8 @@ assert_valid_dataset_data <- function(x) {
            call. = FALSE)
     }
   }
+  x$archived <- as_pylog(x$archived)
+  x
 }
 
 #' @noRd
@@ -126,7 +187,7 @@ resource_fields_choices_val <- function() {
 }
 
 #' @noRd
-assert_valid_resource_data <- function(x) {
+validate_resource_data <- function(x) {
   RIDLResource$new(x)$check_required_fields()
   choices_val <- resource_fields_choices_val()
   nm <- intersect(names(choices_val), names(x))
@@ -140,6 +201,8 @@ assert_valid_resource_data <- function(x) {
            call. = FALSE)
     }
   }
+  x$`hxl-ated` <- as_pylog(x$`hxl-ated`)
+  x
 }
 
 #' @noRd
@@ -157,7 +220,7 @@ assert_resources_list <- function(x) {
 }
 
 #' @noRd
-assert_valid_container_data <- function(x) {
+validate_container_data <- function(x) {
   RIDLContainer$new(x)$check_required_fields()
   choices_val <- container_fields_choices_val()
   nm <- intersect(names(choices_val), names(x))
@@ -171,6 +234,7 @@ assert_valid_container_data <- function(x) {
            call. = FALSE)
     }
   }
+  x
 }
 
 #' @noRd

@@ -28,10 +28,15 @@ RIDLConfig <- R6::R6Class(
     #' @param site character, the RIDL instance, prod (production server), test (testing server)
     #' @param key character, the RIDL API key
     #' @param user_agent a character value, User agent
+    #' @param progress logical, default to FALSE
+    #' @param progress_type character, download (down) or upload (up)
+    #'
     #' @return A new Configuration object.
     initialize = function(site = "prod",
                           key = NULL,
-                          user_agent = NULL) {
+                          user_agent = NULL,
+                          progress = FALSE,
+                          progress_type = "down") {
 
       check_config_params(site = site,
                           key = key,
@@ -70,10 +75,15 @@ RIDLConfig <- R6::R6Class(
       if (is.null(user_agent))
         user_agent <- get_user_agent()
 
+      prog <- NULL
+      if (progress)
+        prog <- crul_progress(type = progress_type)
+
       self$data$remoteclient <- HttpClient$new(url = site_url,
                                                headers = headers,
                                                opts = list(http_version = 2L,
-                                                           useragent = user_agent))
+                                                           useragent = user_agent),
+                                               progress = prog)
     },
 
     #' @description
@@ -108,8 +118,13 @@ RIDLConfig <- R6::R6Class(
 
     #' @description
     #' Get the remoteclient currently used
+    #'
+    #' @param verbose logical, default to FALSE
+    #'
+    #' @importFrom crul set_opts
     #' @return a crul::HttpClient
-    remoteclient = function() {
+    remoteclient = function(verbose = FALSE) {
+      set_opts(verbose = verbose)
       self$data$remoteclient
     },
 
@@ -141,7 +156,9 @@ RIDLConfig <- R6::R6Class(
     #' @param site character, the RIDL instance, prod (production server), test (testing server)
     #' @param key a character value, the API key
     #' @param configuration a character
-    setup = function(site = "prod", key = NULL, configuration = NULL) {
+    #' @param progress logical, default to FALSE
+    #' @param progress_type character, download (down) or upload (up)
+    setup = function(site = "prod", key = NULL, configuration = NULL, progress = FALSE, progress_type = "down") {
       if (!is.null(configuration)) {
         if (!inherits(configuration, "RIDLConfig,"))
           stop("Not a 'RIDLConfig' object!", call. = FALSE)
@@ -149,7 +166,9 @@ RIDLConfig <- R6::R6Class(
       } else {
         private$shared$configuration <- RIDLConfig$new(site = site,
                                                        key = key,
-                                                       configuration = configuration)
+                                                       configuration = configuration,
+                                                       progress = progress,
+                                                       progress_type = progress_type)
       }
     },
 
@@ -171,7 +190,7 @@ RIDLConfig <- R6::R6Class(
     #' Print Configuration object
     print = function() {
       cat("<RIDL Configuration> ", sep = "\n")
-      cat(paste0("  RIDL site: ", self$get_site_url()), sep = "\n")
+      cat(paste0("  RIDL site url: ", self$get_site_url()), sep = "\n")
       cat(paste0("  RIDL API key: ", self$get_key()), sep = "\n")
       invisible(self)
     }
@@ -185,6 +204,8 @@ RIDLConfig <- R6::R6Class(
 #' @param site character, the RIDL instance, prod (production server), test (testing server)
 #' @param key Character for the CKAN API key, it is required to push data into RIDL
 #' @param user_agent a character value, a user agent string
+#' @param progress logical, default to FALSE
+#' @param progress_type character, download (down) or upload (up)
 #'
 #' @rdname ridl_config
 #'
@@ -192,10 +213,14 @@ RIDLConfig <- R6::R6Class(
 #' @export
 ridl_config <- function(site = "prod",
                         key = NULL,
-                        user_agent = NULL) {
+                        user_agent = NULL,
+                        progress = FALSE,
+                        progress_type = "down") {
   RIDLConfig$new(site = site,
                  key = key,
-                 user_agent = user_agent)
+                 user_agent = user_agent,
+                 progress = progress,
+                 progress_type = progress_type)
 }
 
 #' Set your RIDL configuration
@@ -205,6 +230,8 @@ ridl_config <- function(site = "prod",
 #' @param site character, the RIDL instance, prod (production server), test (testing server)
 #' @param key character, the CKAN API key, it is required to push data into RIDL
 #' @param user_agent a character, A user agent string
+#' @param progress logical, default to FALSE
+#' @param progress_type character, download (down) or upload (up)
 #' @param configuration Configuration object.
 #'
 #' @rdname ridl_config
@@ -226,13 +253,17 @@ ridl_config <- function(site = "prod",
 ridl_config_set <- function(site = "prod",
                             key = NULL,
                             user_agent = NULL,
+                            progress = FALSE,
+                            progress_type = "down",
                             configuration = NULL) {
   if (!is.null(configuration) & inherits(configuration, "RIDLConfig")) {
     .ridl_env$configuration <- configuration
   } else {
     .ridl_env$configuration <- RIDLConfig$new(site = site,
                                               key = key,
-                                              user_agent = user_agent)
+                                              user_agent = user_agent,
+                                              progress = progress,
+                                              progress_type = progress_type)
   }
   ridl_memoise_clear()
 }
