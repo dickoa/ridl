@@ -311,10 +311,10 @@ data <- list(name = "test-dataset-pen",
              notes = "Some description",
              owner_org = "africa",
              data_collector = "unhcr",
-             keywords = c(6, 7), ## check ridl_dataset_keywords()
+             keywords = c("solution", "basic needs"), ## check ridl_dataset_keywords()
              unit_of_measurement = "kg",
              data_collection_technique = "f2f",
-             archived = "False",
+             archived = FALSE,
              visibility = "restricted",
              external_access_level = "data_enclave")
 
@@ -327,6 +327,65 @@ ridl_dataset(data)
 ##   Resources (up to 5):
 ```
 
+```{r, eval = FALSE}
+ds_data <- list(name = "test-dataset",
+                title = "Test Dataset",
+                notes = "An example dataset",
+                owner_org = "west-africa",
+                data_collector = "ACF, UNHCR",
+                keywords = list(3, 4), ## check ridl_dataset_keywords()
+                unit_of_measurement = "individual",
+                data_collection_technique = "f2f",
+                sampling_procedure = "nonprobability",
+                operational_purpose_of_data = "cartography",
+                archived = "False",
+                visibility = "restricted",
+                external_access_level = "open_access")
+
+ds <- ridl_dataset(ds_data)
+ds
+## <RIDL Dataset>
+##   Title: Test Dataset
+##   Name: test-dataset
+##   Visibility: public
+##   Resources (up to 5):
+```
+
+`ridl_resource` can also be used to create a `RIDLResource`.
+
+```{r, eval = FALSE}
+rs_data <- list(name = "Test resource",
+                type = "data",
+                format = "CSV",
+                file_type = "microdata",
+                identifiability = "anonymized_public",
+                date_range_start = "2018-01-01",
+                date_range_end = "2019-01-01",
+                process_status = "anonymized",
+                version = 1L)
+
+rs <- ridl_resource(rs_data)
+rs
+## <RIDL Resource>
+##   Name: Test resource
+##   Description:
+##   Type: microdata
+##   Size:
+##   Format: CSV
+```
+
+We can add the resource to the dataset and upload it to the RIDL platform.
+
+```{r, eval = FALSE}
+ds <- ds %>%
+  ridl_resource_add(rs)
+ds
+## <RIDL Dataset>
+##   Title: Test Dataset
+##   Name: test-dataset
+##   Visibility: restricted
+##   Resources (up to 5): Test resource
+```
 
 ## Meta
 

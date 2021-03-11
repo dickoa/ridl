@@ -124,7 +124,8 @@ RIDLDataset <- R6::R6Class(
       if (!inherits(resource, "RIDLResource"))
         stop("Not of class `RIDLResource` please use `ridl_resource` to create a resource first!", call. = FALSE)
       if ("package_id" %in% names(resource$data))
-        stop("This Resource already have a dataset id", call. = FALSE)
+        stop("This resource already have a dataset id",
+             call. = FALSE)
       if (length(self$data$resources) > 0) {
         i <- self$data$num_resources
         self$data$resources[[i + 1]] <- resource$data
@@ -446,7 +447,8 @@ ridl_dataset_show <-  function(identifier, configuration = NULL) {
   configuration <- ridl_config_get()
   res <- configuration$call_action("package_show",
                                    list(id = identifier))
-  RIDLDataset$new(initial_data = res,
+  res$raw$raise_for_status()
+  RIDLDataset$new(initial_data = res$result,
                   configuration = configuration)
 }
 
@@ -457,7 +459,8 @@ ridl_dataset_list.default <- function(container = NULL, configuration = NULL) {
     ridl_config_set(configuration = configuration)
   configuration <- ridl_config_get()
   res <- configuration$call_action("package_list")
-  unlist(res)
+  res$raw$raise_for_status()
+  unlist(res$result)
 }
 
 #' @rdname browse
@@ -589,16 +592,13 @@ ridl_dataset <- function(data, configuration = NULL) {
 #' Create a dataset on RIDL
 #'
 #' @param dataset RIDLDataset, the dataset to upload
-#' @param progress logical, progress bar. Default to FALSE
 #' @param configuration RIDLConfig, the RIDL configuration
 #'
 #' @export
-ridl_dataset_create <-  function(dataset, progress = TRUE,
-                                 configuration = NULL) {
+ridl_dataset_create <-  function(dataset, configuration = NULL) {
   if (!is.null(configuration) &  inherits(configuration, "RIDLConfig"))
-    ridl_config_set(progress = TRUE,
-                    progress_type = "up",
-                    configuration = configuration)
+    ridl_config_set(configuration = configuration)
+
   configuration <- ridl_config_get()
   assert_dataset(dataset)
   data <- dataset$data
@@ -606,25 +606,21 @@ ridl_dataset_create <-  function(dataset, progress = TRUE,
                                    body = data,
                                    verb = "post",
                                    encode = "json")
-  res
+  invisible(res)
 }
-
 
 #' Update a dataset on RIDL
 #'
 #' Update a dataset on RIDL
 #'
 #' @param dataset RIDLDataset, the dataset to upload
-#' @param progress logical, progress bar. Default to FALSE
 #' @param configuration RIDLConfig, the RIDL configuration
 #'
 #' @export
-ridl_dataset_update <-  function(dataset, progress = FALSE,
-                                 configuration = NULL) {
+ridl_dataset_update <-  function(dataset, configuration = NULL) {
   if (!is.null(configuration) &  inherits(configuration, "RIDLConfig"))
-    ridl_config_set(progress = TRUE,
-                    progress_type = "up",
-                    configuration = configuration)
+    ridl_config_set(configuration = configuration)
+
   configuration <- ridl_config_get()
   assert_dataset(dataset)
   data <- dataset$data
@@ -632,5 +628,52 @@ ridl_dataset_update <-  function(dataset, progress = FALSE,
                                    body = data,
                                    verb = "post",
                                    encode = "json")
-  res
+  invisible(res)
+}
+
+#' Patch a dataset on RIDL
+#'
+#' Patch a dataset on RIDL
+#'
+#' @param dataset RIDLDataset, the dataset to upload
+#' @param configuration RIDLConfig, the RIDL configuration
+#'
+#' @export
+ridl_dataset_update <-  function(dataset, configuration = NULL) {
+  if (!is.null(configuration) &  inherits(configuration, "RIDLConfig"))
+    ridl_config_set(configuration = configuration)
+
+  configuration <- ridl_config_get()
+  assert_dataset(dataset)
+  data <- dataset$data
+  res <- configuration$call_action("package_patch",
+                                   body = data,
+                                   verb = "post",
+                                   encode = "json")
+  invisible(res)
+}
+
+#' Copy a dataset metadata
+#'
+#' Copy a dataset metadata
+#'
+#' @param dataset RIDLDataset, the dataset to upload
+#' @param configuration RIDLConfig, the RIDL configuration
+#'
+#' @return a RIDLDataset
+#'
+#' @export
+ridl_dataset_copy_metadata <-  function(dataset, configuration = NULL) {
+  if (!is.null(configuration) &  inherits(configuration, "RIDLConfig"))
+    ridl_config_set(configuration = configuration)
+
+  configuration <- ridl_config_get()
+  assert_dataset(dataset)
+  data <- dataset$data
+  nm <- vapply(.ridl_dataset_schema$dataset_fields,
+               function(x) x$field_name, character(1))
+  data <- data[nm]
+
+  ridl_dataset(data,
+               configuration = configuration)
 }

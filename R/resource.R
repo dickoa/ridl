@@ -446,9 +446,10 @@ ridl_resource_search <- function(query = "*:*", configuration = NULL, ...) {
   configuration <- ridl_config_get()
   res <- configuration$call_action("resource_search",
                                    list(query = query, ...))
-  list_of_rs <- lapply(res$results, function(x)
+  res$raw$raise_for_status()
+  list_of_rs <- lapply(res$result$results, function(x)
     RIDLResource$new(initial_data = x,
-                 configuration = configuration))
+                     configuration = configuration))
   class(list_of_rs) <- "ridl_resource_list"
   list_of_rs
 }
@@ -486,7 +487,8 @@ ridl_resource_show <- function(identifier, configuration = NULL) {
   configuration <- ridl_config_get()
   res <- configuration$call_action("resource_show",
                                    list(id = identifier))
-  RIDLResource$new(initial_data = res,
+  res$raw$raise_for_status()
+  RIDLResource$new(initial_data = res$result,
                    configuration = configuration)
 }
 
@@ -528,51 +530,36 @@ browse.RIDLResource <- function(x, ...)
 #' @param resource RIDLResource, a resource object
 #' @param file_path character, the path to the file to upload
 #' @param dataset_id character, the id or the name of the RIDLDataset
-#' @param progress logical, progress bar. Default to FALSE
-#' @param quiet logical, quiet. Default to TRUE
 #' @param configuration RIDLConfig, the configuration
+#'
+#' @importFrom tools file_ext
+#' @importFrom crul upload
 #'
 #' @return RIDLResource, the resource
 #' @export
 ridl_resource_create <- function(resource,
                                  dataset_id,
                                  file_path,
-                                 progress = FALSE,
-                                 quiet = TRUE,
                                  configuration = NULL) {
 
-  if (!quiet) {
-    message("Creating resource metadata")
-    progress <- TRUE
-  } else {
-    progress <- FALSE
-  }
-
-  ridl_config_set(progress = progress,
-                  progress_type = "up")
-
   if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
-    ridl_config_set(progress = progress,
-                    progress_type = "up",
-                    configuration = configuration)
+    ridl_config_set(configuration = configuration)
 
   configuration <- ridl_config_get()
   assert_resource(resource)
   data <- resource$data
 
+  file_path_base <- basename(file_path)
   data$package_id <- dataset_id
-  data$url <- basename(file_path)
   data$url_type <- "upload"
+  data$upload <- upload(file_path)
+  data$format <- file_ext(file_path_base)
 
   res <- configuration$call_action("resource_create",
                                    body = data,
                                    verb = "post",
-                                   encode = "json")
-
-  ridl_resource_upload_file(resource_id = res$id,
-                            file_path = file_path,
-                            quiet = quiet,
-                            configuration = configuration)
+                                   encode = "multipart")
+  invisible(res)
 }
 
 #' Update a resource on RIDL
@@ -582,8 +569,6 @@ ridl_resource_create <- function(resource,
 #' @param resource RIDLResource, a resource object
 #' @param file_path character, the path to the file to upload
 #' @param dataset_id character, the id or the name of the RIDLDataset
-#' @param progress logical, progress bar. Default to FALSE
-#' @param quiet logical, quiet output. Default to TRUE
 #' @param configuration RIDLConfig, the configuration
 #'
 #' @return RIDLResource, the resource
@@ -591,82 +576,61 @@ ridl_resource_create <- function(resource,
 ridl_resource_update <-  function(resource,
                                   file_path,
                                   dataset_id,
-                                  progress = FALSE,
-                                  quiet = TRUE,
                                   configuration = NULL) {
 
-  if (!quiet) {
-    message("Creating resource metadata")
-    progress <- TRUE
-  } else {
-    progress <- FALSE
-  }
-
-  ridl_config_set(progress = progress,
-                  progress_type = "up")
-
   if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
-    ridl_config_set(progress = progress,
-                    progress_type = "up",
-                    configuration = configuration)
+    ridl_config_set(configuration = configuration)
 
   configuration <- ridl_config_get()
   assert_resource(resource)
   data <- resource$data
 
+  file_path_base <- basename(file_path)
+  data$package_id <- dataset_id
+  data$url_type <- "upload"
+  data$upload <- upload(file_path)
+  data$format <- file_ext(file_path_base)
 
   res <- configuration$call_action("resource_update",
                                    body = data,
-                                   verb = "post",
-                                   encode = "json")
-
-  ridl_resource_upload_file(res$id,
-                            file_path,
-                            configuration = configuration)
+                                   verb = "multipart")
+  invisible(res)
 }
 
-#' @noRd
-#' @importFrom crul upload
-ridl_resource_upload_file <- function(resource_id,
-                                      file_path,
-                                      quiet,
-                                      configuration) {
 
-  if (!quiet)
-    message("Initializing storage")
-  data_init <- list(id = resource_id,
-                    name = basename(file_path),
-                    size = file.size(file_path))
+#' Patch a resource on RIDL
+#'
+#' Patch a resource on RIDL
+#'
+#' @param resource RIDLResource, a resource object
+#' @param file_path character, the path to the file to upload
+#' @param dataset_id character, the id or the name of the RIDLDataset
+#' @param configuration RIDLConfig, the configuration
+#'
+#' @return RIDLResource, the resource
+#' @export
+ridl_resource_patch <- function(resource,
+                                file_path,
+                                dataset_id,
+                                configuration = NULL) {
 
-  init <- configuration$call_action("cloudstorage_initiate_multipart",
-                                    body = data_init,
-                                    verb = "post",
-                                    encode = "multipart")
+  if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
+    ridl_config_set(configuration = configuration)
 
-  if (!quiet)
-    message("Uploading file")
-  data_upload <- list(id = resource_id,
-                      uploadId = init$id,
-                      partNumber = 1L,
-                      upload = upload(file_path))
+  configuration <- ridl_config_get()
+  assert_resource(resource)
+  data <- resource$data
 
-  upload <- configuration$call_action("cloudstorage_upload_multipart",
-                                      body = data_upload,
-                                      verb = "post",
-                                      encode = "multipart")
+  file_path_base <- basename(file_path)
+  data$package_id <- dataset_id
+  data$url_type <- "upload"
+  data$upload <- upload(file_path)
+  data$format <- file_ext(file_path_base)
 
-  if (!quiet)
-    message("Finalizing upload")
-  data_finish <- list(id = resource_id,
-                      uploadId = init$id,
-                      save_action = "go-dataset-complete")
+  res <- configuration$call_action("resource_patch",
+                                   body = data,
+                                   verb = "post",
+                                   encode = "multipart")
 
-  finish <- configuration$call_action("cloudstorage_finish_multipart",
-                                      body = data_finish,
-                                      verb = "post",
-                                      encode = "multipart")
-
-  if (isFALSE(finish$completed))
-    stop("Something went wrong, check your inputs or admin rights",
-          call. = FALSE)
+  invisible(res)
 }

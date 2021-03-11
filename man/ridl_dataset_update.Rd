@@ -4,15 +4,17 @@
 \alias{ridl_dataset_update}
 \title{Update a dataset on RIDL}
 \usage{
-ridl_dataset_update(dataset, progress = FALSE, configuration = NULL)
+ridl_dataset_update(dataset, configuration = NULL)
+
+ridl_dataset_update(dataset, configuration = NULL)
 }
 \arguments{
 \item{dataset}{RIDLDataset, the dataset to upload}
-
-\item{progress}{logical, progress bar. Default to FALSE}
 
 \item{configuration}{RIDLConfig, the RIDL configuration}
 }
 \description{
 Update a dataset on RIDL
+
+Patch a dataset on RIDL
 }

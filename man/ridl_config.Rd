@@ -7,30 +7,22 @@
 \alias{ridl_config_get}
 \title{Create a RIDL configuration object}
 \usage{
-ridl_config(
-  site = "prod",
-  key = NULL,
-  user_agent = NULL,
-  progress = FALSE,
-  progress_type = "down"
-)
+ridl_config(site = "prod", key = NULL, user_agent = NULL, ...)
 
 ridl_config_set(
   site = "prod",
   key = NULL,
   user_agent = NULL,
-  progress = FALSE,
-  progress_type = "down",
-  configuration = NULL
+  configuration = NULL,
+  ...
 )
 
 ridl_config_setup(
   site = "prod",
   key = NULL,
   user_agent = NULL,
-  progress = FALSE,
-  progress_type = "down",
-  configuration = NULL
+  configuration = NULL,
+  ...
 )
 
 ridl_config_get()
@@ -42,11 +34,9 @@ ridl_config_get()
 
 \item{user_agent}{a character, A user agent string}
 
-\item{progress}{logical, default to FALSE}
+\item{...}{curl options to pass to crul::HttpClient}
 
-\item{progress_type}{character, download (down) or upload (up)}
-
-\item{configuration}{Configuration object.}
+\item{configuration}{RIDLConfig, the configuration}
 }
 \value{
 A RIDLConfig object

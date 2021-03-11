@@ -4,14 +4,7 @@
 \alias{ridl_resource_update}
 \title{Update a resource on RIDL}
 \usage{
-ridl_resource_update(
-  resource,
-  file_path,
-  dataset_id,
-  progress = FALSE,
-  quiet = TRUE,
-  configuration = NULL
-)
+ridl_resource_update(resource, file_path, dataset_id, configuration = NULL)
 }
 \arguments{
 \item{resource}{RIDLResource, a resource object}
@@ -19,10 +12,6 @@ ridl_resource_update(
 \item{file_path}{character, the path to the file to upload}
 
 \item{dataset_id}{character, the id or the name of the RIDLDataset}
-
-\item{progress}{logical, progress bar. Default to FALSE}
-
-\item{quiet}{logical, quiet output. Default to TRUE}
 
 \item{configuration}{RIDLConfig, the configuration}
 }

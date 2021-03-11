@@ -48,68 +48,39 @@ assert_dataset <- function(x) {
 }
 
 #' @noRd
-bytes <- function (x, digits = 3, ...) {
-    power <- min(floor(log(abs(x), 1000)), 4)
-    if (power < 1) {
-        unit <- "B"
-    }
-    else {
-        unit <- c("kB", "MB", "GB", "TB")[[power]]
-        x <- x/(1000^power)
-    }
-    formatted <- format(signif(x, digits = digits),
-                        big.mark = ",",
-        scientific = FALSE)
-    paste0(formatted, " ", unit)
-}
-
-#' @noRd
-progress_bar <- function (type, con) {
-    bar <- NULL
-    show_progress <- function(down, up) {
-        if (type == "down") {
-            total <- down[[1]]
-            now <- down[[2]]
-        }
-        else {
-            total <- up[[1]]
-            now <- up[[2]]
-        }
-        if (total == 0 && now == 0) {
-            bar <<- NULL
-        }
-        else if (total == 0) {
-            cat("\rDownloading: ", bytes(now, digits = 2), "     ",
-                sep = "", file = con)
-            utils::flush.console()
-        }
-        else {
-            if (is.null(bar)) {
-                bar <<- utils::txtProgressBar(max = total, style = 3,
-                  file = con)
-            }
-            utils::setTxtProgressBar(bar, now)
-            if (now == total)
-                close(bar)
-        }
-        TRUE
-    }
-    show_progress
-}
-
-#' @noRd
-crul_progress <- function(type = c("down", "up"), con = stdout()) {
-  l <- list(options = list(noprogress = FALSE,
-                      progressfunction = progress_bar(type, con)))
-  class(l) <- "request"
-  l
-}
-
-#' @noRd
 assert_datasets_list <- function(x) {
   if (!inherits(x, "ridl_datasets_list"))
     stop("Not a list of RIDL Datasets!", call. = FALSE)
   invisible(x)
+}
+
+#' @noRd
+#' @importFrom stats setNames
+ridl_dataset_param_lookup <- function(key, val) {
+  l <- .ridl_dataset_lookup_list[[key]]
+  x <- names(l)
+
+  lookup <- vapply(unique(val),
+                   function(pat)
+                     grep(pat,
+                          x = x,
+                          value = TRUE,
+                          ignore.case = TRUE)[1],
+                   character(1))
+
+  bool <- vapply(lookup,
+                 function(x) is.na(x),
+                 logical(1))
+
+  if (any(bool))
+    stop(paste0("No match for '",
+                paste(val[bool], collapse = ", "), "'"),
+         call. = FALSE)
+
+  res <- l[lookup]
+  if (length(val) < 2)
+    res <- l[[lookup[1]]]
+  res
 }
 
 #' @noRd
@@ -128,29 +99,6 @@ dataset_fields_choices_val <- function() {
   setNames(val, par)
 }
 
-#' A dictionnary with the labels and values for dataset keywords
-#'
-#' A dictionnary with the labels and values for dataset keywords
-#'
-#' @return a data.frame with the keywords labels and values
-#' @export
-ridl_dataset_keywords <- function() {
-  bool <- vapply(.ridl_dataset_schema$dataset_fields,
-                 function(x) x$field_name == "keywords",
-                 logical(1))
-  keywords <- .ridl_dataset_schema$dataset_fields[bool]
-  value <- unlist(lapply(keywords,
-                         function(x)
-                           vapply(x$choices,
-                                  function(cc) cc$value, character(1))))
-  label <- unlist(lapply(keywords,
-                         function(x)
-                           vapply(x$choices,
-                                  function(cc) cc$label, character(1))))
-  data.frame(label = label,
-             value = value)
-}
-
 #' @noRd
 validate_dataset_data <- function(x) {
   RIDLDataset$new(x)$check_required_fields()
@@ -166,7 +114,18 @@ validate_dataset_data <- function(x) {
            call. = FALSE)
     }
   }
-  x$archived <- as_pylog(x$archived)
+  ## nm <- names(.ridl_dataset_lookup_list)
+  ## no_nm <- setdiff(names(x), nm)
+  ## x_nm <- lapply(nm, function(n) {
+  ##   x[[n]] <- ridl_dataset_param_lookup(n,
+  ##                                       x[[n]])
+  ## })
+  ## c(x[no_nm], x_nm)
+  ## x$archived <- as_pylog(x$archived)
+  ## x$keywords <- ridl_dataset_param_lookup("keywords",
+  ##                                         x$keywords)
+  ## x$keywords <- ridl_dataset_param_lookup("data_collection_technique",
+  ##                                         x$data_collection_technique)
   x
 }
 
@@ -203,10 +162,11 @@ validate_resource_data <- function(x) {
   }
 
   if (x$file_type == "microdata" && x$type != "data")
-    stop("If you use 'type=data' you should also add file_type='microdata'",
+    stop("If you use file_type='microdata', you also need to use type='data'",
          call. = FALSE)
 
-  x$`hxl-ated` <- as_pylog(x$`hxl-ated`)
+  if ("hxl-ated" %in% names(x))
+    x$`hxl-ated` <- as_pylog(x$`hxl-ated`)
   x
 }
 

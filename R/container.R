@@ -144,7 +144,8 @@ as.list.RIDLContainer <- function(x, ...) {
 #' @export
 ridl_container_show <- function(identifier = NULL,
                                   include_datasets = TRUE,
-                                  configuration = NULL, ...) {
+                                  configuration = NULL,
+                                ...) {
   if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
     ridl_config_set(configuration = configuration)
   configuration <- ridl_config_get()
@@ -153,7 +154,8 @@ ridl_container_show <- function(identifier = NULL,
                                         type = "data-container",
                                         include_datasets = include_datasets,
                                         ...))
-  RIDLContainer$new(initial_data = res,
+  res$raw$raise_for_status()
+  RIDLContainer$new(initial_data = res$result,
                     configuration = configuration)
 }
 
@@ -188,16 +190,19 @@ ridl_container_list.default <- function(sort = c("title asc", "name",
                             all_fields = FALSE,
                             include_dataset_count = FALSE,
                             type = "data-container"))
+
+    res$raw$raise_for_status()
     res <- configuration$call_action("organization_list",
                                      data)
-    res <- unlist(res)
+    res <- unlist(res$result)
   } else {
     data <- drop_nulls(list(permission = "read",
                             include_dataset_count = FALSE,
                             type = "data-container"))
     res <- configuration$call_action("organization_list_for_user",
                                      data)
-    res <- vapply(res, function(r) r$name,
+    res$raw$raise_for_status()
+    res <- vapply(res$result, function(r) r$name,
                   character(1))
   }
   res
@@ -253,28 +258,74 @@ ridl_container <- function(data, configuration = NULL) {
   RIDLContainer$new(data, configuration)
 }
 
-#' @noRd
+#' Create a container on RIDL
+#'
+#' Create a container on RIDL
+#'
+#' @param container RIDLContainer, the container
+#' @param configuration RIDLConfig, the configuration
+#'
+#' @return A HttpResponse object
+#'
+#' @export
 ridl_container_create <-  function(container, configuration = NULL) {
+
   if (!is.null(configuration) &  inherits(configuration, "RIDLConfig"))
     ridl_config_set(configuration = configuration)
+
   configuration <- ridl_config_get()
   assert_container(container)
   data <- container$data
   res <- configuration$call_action("organization_create",
                                    body = data,
                                    verb = "post")
-  res
+  invisible(res)
 }
 
-#' @noRd
+#' Update a container on RIDL
+#'
+#' Update a container on RIDL
+#'
+#' @param container RIDLContainer, the container
+#' @param configuration RIDLConfig, the configuration
+#'
+#' @return A HttpResponse object
+#'
+#' @export
 ridl_container_update <-  function(container, configuration = NULL) {
+
   if (!is.null(configuration) &  inherits(configuration, "RIDLConfig"))
     ridl_config_set(configuration = configuration)
+
   configuration <- ridl_config_get()
   assert_container(container)
   data <- container$data
   res <- configuration$call_action("organization_update",
                                    body = data,
                                    verb = "post")
-  res
+  invisible(res)
+}
+
+#' Patch a container on RIDL
+#'
+#' Patch a container on RIDL
+#'
+#' @param container RIDLContainer, the container
+#' @param configuration RIDLConfig, the configuration
+#'
+#' @return A HttpResponse object
+#'
+#' @export
+ridl_container_patch <-  function(container, configuration = NULL) {
+
+  if (!is.null(configuration) &  inherits(configuration, "RIDLConfig"))
+    ridl_config_set(configuration = configuration)
+
+  configuration <- ridl_config_get()
+  assert_container(container)
+  data <- container$data
+  res <- configuration$call_action("organization_patch",
+                                   body = data,
+                                   verb = "post")
+  invisible(res)
 }

@@ -49,13 +49,7 @@ get_rhd_config()
 \subsection{Method \code{new()}}{
 Create a new Configuration object.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RIDLConfig$new(
-  site = "prod",
-  key = NULL,
-  user_agent = NULL,
-  progress = FALSE,
-  progress_type = "down"
-)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RIDLConfig$new(site = "prod", key = NULL, user_agent = NULL, ...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -67,9 +61,7 @@ Create a new Configuration object.
 
 \item{\code{user_agent}}{a character value, User agent}
 
-\item{\code{progress}}{logical, default to FALSE}
-
-\item{\code{progress_type}}{character, download (down) or upload (up)}
+\item{\code{...}}{curl options to pass to crul::HttpClient}
 }
 \if{html}{\out{</div>}}
 }
@@ -136,13 +128,13 @@ the server URL
 \subsection{Method \code{remoteclient()}}{
 Get the remoteclient currently used
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RIDLConfig$remoteclient(verbose = FALSE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RIDLConfig$remoteclient(...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{verbose}}{logical, default to FALSE}
+\item{\code{...}}{curl options to pass to crul::HttpClient}
 }
 \if{html}{\out{</div>}}
 }
@@ -193,13 +185,7 @@ Configuration object
 \subsection{Method \code{setup()}}{
 Setup Configuration object
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RIDLConfig$setup(
-  site = "prod",
-  key = NULL,
-  configuration = NULL,
-  progress = FALSE,
-  progress_type = "down"
-)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RIDLConfig$setup(site = "prod", key = NULL, configuration = NULL, ...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -211,9 +197,7 @@ Setup Configuration object
 
 \item{\code{configuration}}{a character}
 
-\item{\code{progress}}{logical, default to FALSE}
-
-\item{\code{progress_type}}{character, download (down) or upload (up)}
+\item{\code{...}}{curl options to pass to crul::HttpClient}
 }
 \if{html}{\out{</div>}}
 }
