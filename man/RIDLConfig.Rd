@@ -33,6 +33,7 @@ get_rhd_config()
 \item \href{#method-set_key}{\code{RIDLConfig$set_key()}}
 \item \href{#method-get_key}{\code{RIDLConfig$get_key()}}
 \item \href{#method-get_site_url}{\code{RIDLConfig$get_site_url()}}
+\item \href{#method-get_log_file}{\code{RIDLConfig$get_log_file()}}
 \item \href{#method-remoteclient}{\code{RIDLConfig$remoteclient()}}
 \item \href{#method-call_action}{\code{RIDLConfig$call_action()}}
 \item \href{#method-read}{\code{RIDLConfig$read()}}
@@ -49,7 +50,13 @@ get_rhd_config()
 \subsection{Method \code{new()}}{
 Create a new Configuration object.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RIDLConfig$new(site = "prod", key = NULL, user_agent = NULL, ...)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RIDLConfig$new(
+  site = "prod",
+  key = NULL,
+  user_agent = NULL,
+  log_file = NULL,
+  ...
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -59,7 +66,9 @@ Create a new Configuration object.
 
 \item{\code{key}}{character, the RIDL API key}
 
-\item{\code{user_agent}}{a character value, User agent}
+\item{\code{user_agent}}{character value, User agent}
+
+\item{\code{log_file}}{character, the log file}
 
 \item{\code{...}}{curl options to pass to crul::HttpClient}
 }
@@ -120,6 +129,19 @@ Get the RIDL server URL in use
 
 \subsection{Returns}{
 the server URL
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_log_file"></a>}}
+\if{latex}{\out{\hypertarget{method-get_log_file}{}}}
+\subsection{Method \code{get_log_file()}}{
+Get the log file used by RIDL
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RIDLConfig$get_log_file()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+the log file
 }
 }
 \if{html}{\out{<hr>}}

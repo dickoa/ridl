@@ -34,7 +34,7 @@ RIDLObject <- R6::R6Class(
 
     #' @description
     #' Browse RIDL
-    browse = function() {
+    browse_on_ridl = function() {
       url <- private$configuration$get_site_url()
       browseURL(url = url)
     },
@@ -137,14 +137,14 @@ ridl_resource_get.default <- function(dataset, n) {
        call. = TRUE)
 }
 
-#' @rdname ridl_resource_list
+#' @rdname ridl_resource_get_all
 #' @export
-ridl_resource_list <- function(dataset, pattern, format)
-  UseMethod("ridl_resource_list")
+ridl_resource_get_all <- function(dataset, pattern, format)
+  UseMethod("ridl_resource_get_all")
 
-#' @rdname ridl_resource_list
+#' @rdname ridl_resource_get_all
 #' @export
-ridl_resource_list.default <- function(dataset, pattern, format) {
+ridl_resource_get_all.default <- function(dataset, pattern, format) {
     stop("Only available for a RIDLDataset object",
          call. = TRUE)
 }
@@ -248,3 +248,31 @@ download.default <- function(resource, folder, filename, quiet, force, ...) {
   stop("It only works with RIDLResource object",
        call. = TRUE)
 }
+
+
+#' Browse a RIDL object
+#'
+#' Browse a RIDL object
+#'
+#' @param x an RIDL object
+#' @param ... Extra parameters
+#' @rdname ridl_browse
+#'
+#'
+#' @return Character Tags of the dataset
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' # Setting the config to use RIDL default server
+#'  ridl_config_set()
+#'  res <- ridl_dataset_search(rows = 3L)
+#'  ridl_browse(res[[1]])
+#' }
+ridl_browse <- function(x, ...)
+  UseMethod("ridl_browse", x)
+
+#' @rdname ridl_browse
+#' @export
+ridl_browse.default <- function(x, ...)
+  x$browse()

@@ -24,16 +24,19 @@ RIDLConfig <- R6::R6Class(
     #' Create a new Configuration object.
     #'
     #' @importFrom crul HttpClient
+    #' @importFrom logger appender_file log_appender log_formatter formatter_sprintf
     #'
     #' @param site character, the RIDL instance, prod (production server), test (testing server)
     #' @param key character, the RIDL API key
-    #' @param user_agent a character value, User agent
+    #' @param user_agent character value, User agent
+    #' @param log_file character, the log file
     #' @param ... curl options to pass to crul::HttpClient
     #'
     #' @return A new Configuration object.
     initialize = function(site = "prod",
                           key = NULL,
                           user_agent = NULL,
+                          log_file = NULL,
                           ...) {
 
       check_config_params(site = site,
@@ -41,30 +44,40 @@ RIDLConfig <- R6::R6Class(
                           user_agent = user_agent)
 
       if (site == "prod") {
-        site_url <- "https://ridl.unhcr.org/"
+        site_url <- "https://ridl.unhcr.org"
         key_env_var <- "RIDL_API_KEY"
 
         if (is.null(key)) {
           key_env <- Sys.getenv("RIDL_API_KEY")
-          if (key_env == "")
+          if (!nzchar(key_env))
             warning("You need to properly set the `RIDL_API_KEY` variable or use the `key parameter` in the `ridl_config_setup` function!",
                     call. = FALSE)
           key <- key_env
           Sys.setenv("RIDL_API_KEY" = key)
         }
       } else {
-        site_url <- "https://ridl-uat.unhcr.org/"
+        site_url <- "https://ridl-uat.unhcr.org"
         key_env_var <- "RIDL_UAT_API_KEY"
 
         if (is.null(key)) {
           key_env <- Sys.getenv("RIDL_UAT_API_KEY")
-          if (key_env == "")
+          if (!nzchar(key_env))
             warning("You are using the test server, you need to properly set the `RIDL_UAT_API_KEY` variable or use the `key parameter` in the `ridl_config_setup` function!",
                     call. = FALSE)
           key <- key_env
           Sys.setenv("RIDL_UAT_API_KEY" = key)
         }
       }
+
+      if (!is.null(log_file)) {
+        Sys.setenv("RIDL_LOG" = log_file)
+        self$data$log_file <- log_file
+        log_appender(appender_file(log_file),
+                     namespace = "ridl")
+        log_formatter(formatter_sprintf,
+                      namespace = "ridl")
+      }
+
 
       self$data$key <- key
       self$data$site_url <- site_url
@@ -76,7 +89,11 @@ RIDLConfig <- R6::R6Class(
       self$data$remoteclient <- HttpClient$new(url = site_url,
                                                headers = headers,
                                                opts = list(http_version = 2L,
-                                                           useragent = user_agent, ...))
+                                                           useragent = user_agent, ...),
+                                               hooks = list(
+                                                 request = log_request,
+                                                 response = log_response
+                                               ))
     },
 
     #' @description
@@ -107,6 +124,13 @@ RIDLConfig <- R6::R6Class(
     #' @return the server URL
     get_site_url = function() {
       self$data$site_url
+    },
+
+    #' @description
+    #' Get the log file used by RIDL
+    #' @return the log file
+    get_log_file = function() {
+      self$data$log_file
     },
 
     #' @description
@@ -193,8 +217,9 @@ RIDLConfig <- R6::R6Class(
 #' Create and RIDL configuration object
 #'
 #' @param site character, the RIDL instance, prod (production server), test (testing server)
-#' @param key Character for the CKAN API key, it is required to push data into RIDL
-#' @param user_agent a character value, a user agent string
+#' @param key character for the CKAN API key, it is required to push data into RIDL
+#' @param user_agent character value, a user agent string
+#' @param log_file character, the log file
 #' @param ... curl options to pass to crul::HttpClient
 #'
 #' @rdname ridl_config
@@ -204,9 +229,11 @@ RIDLConfig <- R6::R6Class(
 ridl_config <- function(site = "prod",
                         key = NULL,
                         user_agent = NULL,
+                        log_file = NULL,
                         ...) {
   RIDLConfig$new(site = site,
                  key = key,
+                 log_file = log_file,
                  user_agent = user_agent,
                  ...)
 }
@@ -218,6 +245,7 @@ ridl_config <- function(site = "prod",
 #' @param site character, the RIDL instance, prod (production server), test (testing server)
 #' @param key character, the CKAN API key, it is required to push data into RIDL
 #' @param user_agent a character, A user agent string
+#' @param log_file character, the log file
 #' @param configuration RIDLConfig, the configuration
 #' @param ... curl options to pass to crul::HttpClient
 #'
@@ -240,6 +268,7 @@ ridl_config <- function(site = "prod",
 ridl_config_set <- function(site = "prod",
                             key = NULL,
                             user_agent = NULL,
+                            log_file = NULL,
                             configuration = NULL,
                             ...) {
   if (!is.null(configuration) & inherits(configuration, "RIDLConfig")) {
@@ -247,6 +276,7 @@ ridl_config_set <- function(site = "prod",
   } else {
     .ridl_env$configuration <- RIDLConfig$new(site = site,
                                               key = key,
+                                              log_file = log_file,
                                               user_agent = user_agent,
                                               ...)
   }

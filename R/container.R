@@ -44,7 +44,7 @@ RIDLContainer <- R6::R6Class(
 
     #' @description
     #' Browse the Container page on RIDL
-    browse = function() {
+    ridl_browse = function() {
       url <- private$configuration$get_site_url()
       browseURL(url = paste0(url, "/organization/", self$data$name))
     },
@@ -159,9 +159,9 @@ ridl_container_show <- function(identifier = NULL,
                     configuration = configuration)
 }
 
-#' @rdname browse
+#' @rdname ridl_browse
 #' @export
-browse.RIDLContainer <- function(x, ...)
+ridl_browse.RIDLContainer <- function(x, ...)
   x$browse()
 
 #' List RIDL containers
@@ -191,9 +191,9 @@ ridl_container_list.default <- function(sort = c("title asc", "name",
                             include_dataset_count = FALSE,
                             type = "data-container"))
 
-    res$raw$raise_for_status()
     res <- configuration$call_action("organization_list",
                                      data)
+    res$raw$raise_for_status()
     res <- unlist(res$result)
   } else {
     data <- drop_nulls(list(permission = "read",
@@ -328,4 +328,51 @@ ridl_container_patch <-  function(container, configuration = NULL) {
                                    body = data,
                                    verb = "post")
   invisible(res)
+}
+
+#' Copy a container metadata
+#'
+#' Copy a container metadata
+#'
+#' @param container RIDLContainer, the container to copy
+#' @param configuration RIDLConfig, the RIDL configuration
+#'
+#' @return a RIDLContainer
+#'
+#' @export
+ridl_container_copy_metadata <-  function(container, configuration = NULL) {
+  if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
+    ridl_config_set(configuration = configuration)
+
+  configuration <- ridl_config_get()
+  assert_container(container)
+  data <- container$data
+
+  nm <- vapply(.ridl_container_schema$fields,
+               function(x) x$field_name, character(1))
+
+  data <- data[nm]
+
+  ridl_container(data,
+                 configuration = configuration)
+}
+
+#' Check if a container name or id is available on RIDL
+#'
+#' Check if a container name or id is available on RIDL
+#'
+#' @param container_name character, the name or id of the RIDLContainer
+#' @param configuration RIDLConfig, the RIDL configuration
+#'
+#' @return A logical value, TRUE if the RIDLContainer exists
+#' @export
+ridl_container_exist <- function(container_name, configuration = NULL) {
+  if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
+    ridl_config_set(configuration = configuration)
+
+    res <- tryCatch({ridl_container_show(container_name);TRUE},
+                    error = function(e) {
+                      FALSE
+                  })
+    res
 }

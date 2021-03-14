@@ -23,6 +23,12 @@ as_pylog <- function(x) {
 }
 
 #' @noRd
+format_size <- function(x) {
+  class(x) <- "object_size"
+  format(x, "auto")
+}
+
+#' @noRd
 check_config_params <- function(site = c("prod", "test"),
                                 key = NULL,
                                 user_agent = NULL) {
@@ -449,29 +455,37 @@ sift_res <- function(z, key = "name", n = 5) {
   }
 }
 
-#' Browse a RIDL object
-#'
-#' Browse a RIDL object
-#'
-#' @param x an RIDL object
-#' @param ... Extra parameters
-#' @rdname browse
-#'
-#'
-#' @return Character Tags of the dataset
-#' @export
-#'
-#' @examples
-#' \dontrun{
-#' # Setting the config to use RIDL default server
-#'  set_ridl_config()
-#'  res <- search_dataset(rows = 3L)
-#'  browse(res[[1]])
-#' }
-browse <- function(x, ...)
-  UseMethod("browse", x)
+#' @noRd
+#' @importFrom logger log_error log_info
+log_response <- function(res) {
+  if (!nzchar(Sys.getenv("RIDL_LOG"))) {
+    times <- res$times[res$times > 0]
 
-#' @rdname browse
-#' @export
-browse.default <- function(x, ...)
-  x$browse()
+    msg <- sprintf(fmt = "STATUS %s - %s - [%s]",
+      res$status_code,
+      res$url,
+      paste0(sprintf("%s:%f",
+                     names(times), times),
+             collapse = ", ")
+    )
+
+    if (res$status_code >= 500) {
+      msg <- paste(msg, rawToChar(res$content),
+                   sep = " - ")
+      logger::log_error("%s", msg)
+    } else {
+      logger::log_info("%s", msg)
+    }
+  }
+}
+
+
+#' @noRd
+#' @importFrom logger log_info
+log_request <- function(req) {
+  if (!!nzchar(Sys.getenv("RIDL_LOG"))) {
+    log_info(fmt = "%s %s",
+             toupper(req$method),
+             req$url$url)
+  }
+}

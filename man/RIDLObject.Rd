@@ -24,7 +24,7 @@ creating, and updating RIDL objects.
 \itemize{
 \item \href{#method-new}{\code{RIDLObject$new()}}
 \item \href{#method-as_list}{\code{RIDLObject$as_list()}}
-\item \href{#method-browse}{\code{RIDLObject$browse()}}
+\item \href{#method-browse_on_ridl}{\code{RIDLObject$browse_on_ridl()}}
 \item \href{#method-get_config}{\code{RIDLObject$get_config()}}
 \item \href{#method-get_fields}{\code{RIDLObject$get_fields()}}
 \item \href{#method-get_required_fields}{\code{RIDLObject$get_required_fields()}}
@@ -69,12 +69,12 @@ a list with RIDLObject field
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-browse"></a>}}
-\if{latex}{\out{\hypertarget{method-browse}{}}}
-\subsection{Method \code{browse()}}{
+\if{html}{\out{<a id="method-browse_on_ridl"></a>}}
+\if{latex}{\out{\hypertarget{method-browse_on_ridl}{}}}
+\subsection{Method \code{browse_on_ridl()}}{
 Browse RIDL
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RIDLObject$browse()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RIDLObject$browse_on_ridl()}\if{html}{\out{</div>}}
 }
 
 }

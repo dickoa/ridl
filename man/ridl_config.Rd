@@ -7,12 +7,13 @@
 \alias{ridl_config_get}
 \title{Create a RIDL configuration object}
 \usage{
-ridl_config(site = "prod", key = NULL, user_agent = NULL, ...)
+ridl_config(site = "prod", key = NULL, user_agent = NULL, log_file = NULL, ...)
 
 ridl_config_set(
   site = "prod",
   key = NULL,
   user_agent = NULL,
+  log_file = NULL,
   configuration = NULL,
   ...
 )
@@ -21,6 +22,7 @@ ridl_config_setup(
   site = "prod",
   key = NULL,
   user_agent = NULL,
+  log_file = NULL,
   configuration = NULL,
   ...
 )
@@ -33,6 +35,8 @@ ridl_config_get()
 \item{key}{character, the CKAN API key, it is required to push data into RIDL}
 
 \item{user_agent}{a character, A user agent string}
+
+\item{log_file}{character, the log file}
 
 \item{...}{curl options to pass to crul::HttpClient}
 

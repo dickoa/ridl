@@ -29,13 +29,13 @@ creating, and updating datasets and associated resources.
 \itemize{
 \item \href{#method-new}{\code{RIDLDataset$new()}}
 \item \href{#method-ridl_resource_get}{\code{RIDLDataset$ridl_resource_get()}}
-\item \href{#method-ridl_resource_list}{\code{RIDLDataset$ridl_resource_list()}}
+\item \href{#method-ridl_resource_get_all}{\code{RIDLDataset$ridl_resource_get_all()}}
 \item \href{#method-ridl_resource_n}{\code{RIDLDataset$ridl_resource_n()}}
 \item \href{#method-ridl_resource_delete}{\code{RIDLDataset$ridl_resource_delete()}}
 \item \href{#method-ridl_resource_delete_all}{\code{RIDLDataset$ridl_resource_delete_all()}}
 \item \href{#method-ridl_resource_add}{\code{RIDLDataset$ridl_resource_add()}}
 \item \href{#method-ridl_container_set}{\code{RIDLDataset$ridl_container_set()}}
-\item \href{#method-browse}{\code{RIDLDataset$browse()}}
+\item \href{#method-ridl_browse}{\code{RIDLDataset$ridl_browse()}}
 \item \href{#method-ridl_config_get}{\code{RIDLDataset$ridl_config_get()}}
 \item \href{#method-get_date_range}{\code{RIDLDataset$get_date_range()}}
 \item \href{#method-ridl_container_get}{\code{RIDLDataset$ridl_container_get()}}
@@ -51,6 +51,7 @@ creating, and updating datasets and associated resources.
 \if{html}{
 \out{<details open ><summary>Inherited methods</summary>}
 \itemize{
+\item \out{<span class="pkg-link" data-pkg="ridl" data-topic="RIDLObject" data-id="browse_on_ridl">}\href{../../ridl/html/RIDLObject.html#method-browse_on_ridl}{\code{ridl::RIDLObject$browse_on_ridl()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="ridl" data-topic="RIDLObject" data-id="get_config">}\href{../../ridl/html/RIDLObject.html#method-get_config}{\code{ridl::RIDLObject$get_config()}}\out{</span>}
 }
 \out{</details>}
@@ -98,12 +99,12 @@ a Resource object, the selected resource
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-ridl_resource_list"></a>}}
-\if{latex}{\out{\hypertarget{method-ridl_resource_list}{}}}
-\subsection{Method \code{ridl_resource_list()}}{
+\if{html}{\out{<a id="method-ridl_resource_get_all"></a>}}
+\if{latex}{\out{\hypertarget{method-ridl_resource_get_all}{}}}
+\subsection{Method \code{ridl_resource_get_all()}}{
 Get all resources of the dataset
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RIDLDataset$ridl_resource_list(pattern = NULL, format = NULL)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RIDLDataset$ridl_resource_get_all(pattern = NULL, format = NULL)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -196,12 +197,12 @@ Add a container to a dataset
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-browse"></a>}}
-\if{latex}{\out{\hypertarget{method-browse}{}}}
-\subsection{Method \code{browse()}}{
+\if{html}{\out{<a id="method-ridl_browse"></a>}}
+\if{latex}{\out{\hypertarget{method-ridl_browse}{}}}
+\subsection{Method \code{ridl_browse()}}{
 Browse the dataset page on RIDL
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RIDLDataset$browse()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RIDLDataset$ridl_browse()}\if{html}{\out{</div>}}
 }
 
 }

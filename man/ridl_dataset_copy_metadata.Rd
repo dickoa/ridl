@@ -2,12 +2,12 @@
 % Please edit documentation in R/dataset.R
 \name{ridl_dataset_copy_metadata}
 \alias{ridl_dataset_copy_metadata}
-\title{Copy a dataset}
+\title{Copy a dataset metadata}
 \usage{
 ridl_dataset_copy_metadata(dataset, configuration = NULL)
 }
 \arguments{
-\item{dataset}{RIDLDataset, the dataset to upload}
+\item{dataset}{RIDLDataset, the dataset to copy}
 
 \item{configuration}{RIDLConfig, the RIDL configuration}
 }
@@ -15,5 +15,5 @@ ridl_dataset_copy_metadata(dataset, configuration = NULL)
 a RIDLDataset
 }
 \description{
-Copy a dataset
+Copy a dataset metadata
 }

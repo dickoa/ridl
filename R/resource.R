@@ -128,12 +128,18 @@ RIDLResource <- R6::R6Class(
       hxl <- tolower(self$data$`hxl-ated`) != "true"
 
       switch(format,
-             csv = read_ridl_delim(file_path, hxl = hxl, ...),
-             xlsx = read_ridl_excel(file_path, sheet = sheet, hxl = hxl, ...),
-             xls = read_ridl_excel(file_path, sheet = sheet, hxl = hxl, ...),
-             `.csv` = read_ridl_delim(file_path, hxl = hxl, ...),
-             `.xlsx` = read_ridl_excel(file_path, sheet = sheet, hxl = hxl, ...),
-             `.xls` = read_ridl_excel(file_path, sheet = sheet, hxl = hxl, ...),
+             csv = read_ridl_delim(file_path,
+                                   hxl = hxl, ...),
+             xlsx = read_ridl_excel(file_path, sheet = sheet,
+                                    hxl = hxl, ...),
+             xls = read_ridl_excel(file_path, sheet = sheet,
+                                   hxl = hxl, ...),
+             `.csv` = read_ridl_delim(file_path,
+                                      hxl = hxl, ...),
+             `.xlsx` = read_ridl_excel(file_path, sheet = sheet,
+                                       hxl = hxl, ...),
+             `.xls` = read_ridl_excel(file_path, sheet = sheet,
+                                      hxl = hxl, ...),
              stata = read_ridl_stata(file_path, ...),
              dta = read_ridl_stata(file_path, ...),
              `.dta` = read_ridl_stata(file_path, ...))
@@ -158,12 +164,13 @@ RIDLResource <- R6::R6Class(
       file_path <- self$download(folder = download_folder,
                                  quiet = quiet,
                                  force = force_download)
-y
+
       if (is.null(format))
       format <- self$get_format()
 
       if (!format %in% c("xlsx", "xls"))
-        stop("`get_sheets work only with Excel file", call. = FALSE)
+        stop("`get_sheets work only with Excel file",
+             call. = FALSE)
 
       switch(format,
              xlsx = get_ridl_sheets_(file_path),
@@ -204,6 +211,39 @@ y
       if (!all(n1 %in% n2))
         stop(sprintf("Field %s is missing in the Resource object!\n",
                      setdiff(n1, n2)), call. = FALSE)
+    },
+
+    #' @description
+    #' Get the file that will be or has been uploaded if any
+    #'
+    #' @return the file to upload
+    get_file_to_upload = function() {
+      self$data$file_to_upload
+    },
+
+    #' @description
+    #' Get the file that will be or has been uploaded if any
+    #'
+    #' @param file_to_upload character the path to the file to upload
+    set_file_to_upload = function(file_to_upload) {
+      if ("url" %in% names(self$data))
+        self$data$url <- NULL
+
+      self$data$file_to_upload <- file_to_upload
+      self$data$url_type <- "upload"
+    },
+
+    #' @description
+    #' Check if the resource has an url or a file to upload but not both
+    #'
+    #' @return a logical value, TRUE if the the resource don't mix 'url' and
+    #' and 'file_to_upload'
+    check_url_or_file_to_upload = function() {
+      nm <- names(self$data)
+      if ("url" %in% nm & "file_to_upload" %in% nm)
+        stop("You can't use `url` and `file_to_upload` simultaneously",
+             call. = FALSE)
+      TRUE
     },
 
     #' @description
@@ -255,12 +295,12 @@ y
 
     #' @description
     #' Browse the resource page on RIDL
-    browse = function() {
+    ridl_browse = function() {
       url <- private$configuration$get_site_url()
       dataset_id <- self$data$package_id
       resource_id <- self$data$id
-      browseURL(url = paste0(url, "/dataset/",
-                             dataset_id, "/resource/", resource_id))
+      browseURL(url = paste0(url, "/dataset/", dataset_id,
+                             "/resource/", resource_id))
     },
 
     #' @description
@@ -270,8 +310,8 @@ y
       cat("  Name: ", self$data$name, "\n", sep = "")
       cat("  Description: ", self$data$description, "\n", sep = "")
       cat("  Type: ", self$data$file_type, "\n", sep = "")
-      cat("  Size: ", self$data$size, "\n", sep = "")
-      cat("  Format: ", self$data$format, "\n", sep = "")
+      cat("  Size: ", format_size(self$data$size), "\n", sep = "")
+      cat("  Format: ", tolower(self$data$format), "\n", sep = "")
       invisible(self)
     }
   )
@@ -518,10 +558,10 @@ ridl_resource <- function(data, configuration = NULL) {
   RIDLResource$new(data, configuration)
 }
 
-#' @rdname browse
+#' @rdname ridl_browse
 #' @export
-browse.RIDLResource <- function(x, ...)
-  x$browse()
+ridl_browse.RIDLResource <- function(x, ...)
+  x$ridl_browse()
 
 #' Create a resource on RIDL
 #'
@@ -531,6 +571,7 @@ browse.RIDLResource <- function(x, ...)
 #' @param file_path character, the path to the file to upload
 #' @param dataset_id character, the id or the name of the RIDLDataset
 #' @param configuration RIDLConfig, the configuration
+#'
 #'
 #' @importFrom tools file_ext
 #' @importFrom crul upload
@@ -597,7 +638,6 @@ ridl_resource_update <-  function(resource,
   invisible(res)
 }
 
-
 #' Patch a resource on RIDL
 #'
 #' Patch a resource on RIDL
@@ -633,4 +673,50 @@ ridl_resource_patch <- function(resource,
                                    encode = "multipart")
 
   invisible(res)
+}
+
+#' Copy a resource metadata
+#'
+#' Copy a resource metadata
+#'
+#' @param resource RIDLResource, the resource to upload
+#' @param configuration RIDLConfig, the RIDL configuration
+#'
+#' @return a RIDLResource
+#'
+#' @export
+ridl_resource_copy_metadata <- function(resource, configuration = NULL) {
+  if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
+    ridl_config_set(configuration = configuration)
+
+  configuration <- ridl_config_get()
+  assert_resource(resource)
+  data <- resource$data
+  nm <- vapply(.ridl_dataset_schema$resource_fields,
+               function(x) x$field_name, character(1))
+  data <- data[nm]
+  data$url <- NULL
+
+  ridl_resource(data,
+                configuration = configuration)
+}
+
+#' Check if a resource id is available on RIDL
+#'
+#' Check if a resource id is available on RIDL
+#'
+#' @param resource_id character, the id of the RIDLResource
+#' @param configuration RIDLConfig, the RIDL configuration
+#'
+#' @return A logical value, TRUE if the RIDLResource exists
+#' @export
+ridl_resource_exist <- function(resource_id, configuration = NULL) {
+    if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
+    ridl_config_set(configuration = configuration)
+
+    res <- tryCatch({ridl_resource_show(resource_id);TRUE},
+                    error = function(e) {
+                      FALSE
+                  })
+    res
 }

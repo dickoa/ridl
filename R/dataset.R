@@ -59,7 +59,7 @@ RIDLDataset <- R6::R6Class(
     #' @param format character, format of the resources
     #'
     #' @return a list of Resource objects, all resources available in the dataset
-    ridl_resource_list = function(pattern = NULL, format = NULL) {
+    ridl_resource_get_all = function(pattern = NULL, format = NULL) {
       l <- self$resources
 
       if (!is.null(pattern)) {
@@ -71,7 +71,8 @@ RIDLDataset <- R6::R6Class(
 
       if (!is.null(format)) {
         b <- sapply(self$data$resources,
-                    function(x) tolower(x$format) %in% tolower(format))
+                    function(x)
+                      tolower(x$format) %in% tolower(format))
         l <- l[b]
       }
 
@@ -147,7 +148,7 @@ RIDLDataset <- R6::R6Class(
 
     #' @description
     #' Browse the dataset page on RIDL
-    browse = function() {
+    ridl_browse = function() {
       url <- private$configuration$get_site_url()
       browseURL(url = paste0(url, "/dataset/", self$data$name))
     },
@@ -226,7 +227,7 @@ RIDLDataset <- R6::R6Class(
     #' is not missing a required field and throws an error otherwise
     check_required_fields = function() {
       data_fields <- names(self$data)
-      all_fields <- self$get_fields()
+      all_fields <- union(self$get_fields(), "resources")
       required_fields <- self$get_required_fields()
       extra_fields <- setdiff(data_fields, all_fields)
       missing_required_fields <- setdiff(required_fields, data_fields)
@@ -310,14 +311,14 @@ ridl_resource_get.RIDLDataset <- function(dataset, n) {
 #' @param pattern character, regex pattern to match resource name
 #' @param format character, format of the resources
 #'
-#' @rdname ridl_resource_list
+#' @rdname ridl_resource_get_all
 #'
 #' @export
-#' @return A ridl_resource_list
-ridl_resource_list.RIDLDataset <- function(dataset, pattern = NULL,
-                                           format = NULL) {
-  dataset$ridl_resource_list(pattern = pattern,
-                             format = format)
+#' @return A ridl_resource_get_all
+ridl_resource_get_all.RIDLDataset <- function(dataset, pattern = NULL,
+                                              format = NULL) {
+  dataset$ridl_resource_get_all(pattern = pattern,
+                                format = format)
 }
 
 #' Delete resource from a dataset
@@ -463,10 +464,10 @@ ridl_dataset_list.default <- function(container = NULL, configuration = NULL) {
   unlist(res$result)
 }
 
-#' @rdname browse
+#' @rdname ridl_browse
 #' @export
-browse.RIDLDataset <- function(x, ...)
-  x$browse()
+ridl_browse.RIDLDataset <- function(x, ...)
+  x$ridl_browse()
 
 #' Get the dataset container
 #'
@@ -639,7 +640,7 @@ ridl_dataset_update <-  function(dataset, configuration = NULL) {
 #' @param configuration RIDLConfig, the RIDL configuration
 #'
 #' @export
-ridl_dataset_update <-  function(dataset, configuration = NULL) {
+ridl_dataset_patch <-  function(dataset, configuration = NULL) {
   if (!is.null(configuration) &  inherits(configuration, "RIDLConfig"))
     ridl_config_set(configuration = configuration)
 
@@ -657,23 +658,57 @@ ridl_dataset_update <-  function(dataset, configuration = NULL) {
 #'
 #' Copy a dataset metadata
 #'
-#' @param dataset RIDLDataset, the dataset to upload
+#' @param dataset RIDLDataset, the dataset to copy
 #' @param configuration RIDLConfig, the RIDL configuration
 #'
 #' @return a RIDLDataset
 #'
 #' @export
 ridl_dataset_copy_metadata <-  function(dataset, configuration = NULL) {
-  if (!is.null(configuration) &  inherits(configuration, "RIDLConfig"))
+  if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
     ridl_config_set(configuration = configuration)
 
   configuration <- ridl_config_get()
   assert_dataset(dataset)
   data <- dataset$data
+
+  if ("resources" %in% names(data)) {
+    rs_data <- data$resources
+    rs_nm <- vapply(.ridl_dataset_schema$resource_fields,
+                    function(x) x$field_name, character(1))
+    rs_data <- lapply(rs_data, function(d) {
+      d <- d[rs_nm]
+      d$url <- NULL
+      d
+    })
+  }
+
   nm <- vapply(.ridl_dataset_schema$dataset_fields,
                function(x) x$field_name, character(1))
+
   data <- data[nm]
+  data$resources <- rs_data
 
   ridl_dataset(data,
                configuration = configuration)
+}
+
+#' Check if a dataset name or id is available on RIDL
+#'
+#' Check if a dataset name or id is available on RIDL
+#'
+#' @param dataset_name character, the name or id of the RIDLDataset
+#' @param configuration RIDLConfig, the RIDL configuration
+#'
+#' @return A logical value, TRUE if the RIDLDataset exists
+#' @export
+ridl_dataset_exist <- function(dataset_name, configuration = NULL) {
+  if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
+    ridl_config_set(configuration = configuration)
+
+    res <- tryCatch({ridl_dataset_show(dataset_name);TRUE},
+                    error = function(e) {
+                      FALSE
+                  })
+    res
 }

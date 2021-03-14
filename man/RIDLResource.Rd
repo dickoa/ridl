@@ -33,11 +33,14 @@ and updating resources
 \item \href{#method-ridl_dataset_get}{\code{RIDLResource$ridl_dataset_get()}}
 \item \href{#method-get_format}{\code{RIDLResource$get_format()}}
 \item \href{#method-check_required_field}{\code{RIDLResource$check_required_field()}}
+\item \href{#method-get_file_to_upload}{\code{RIDLResource$get_file_to_upload()}}
+\item \href{#method-set_file_to_upload}{\code{RIDLResource$set_file_to_upload()}}
+\item \href{#method-check_url_or_file_to_upload}{\code{RIDLResource$check_url_or_file_to_upload()}}
 \item \href{#method-get_fields}{\code{RIDLResource$get_fields()}}
 \item \href{#method-get_required_fields}{\code{RIDLResource$get_required_fields()}}
 \item \href{#method-check_required_fields}{\code{RIDLResource$check_required_fields()}}
 \item \href{#method-as_list}{\code{RIDLResource$as_list()}}
-\item \href{#method-browse}{\code{RIDLResource$browse()}}
+\item \href{#method-ridl_browse}{\code{RIDLResource$ridl_browse()}}
 \item \href{#method-print}{\code{RIDLResource$print()}}
 \item \href{#method-clone}{\code{RIDLResource$clone()}}
 }
@@ -45,6 +48,7 @@ and updating resources
 \if{html}{
 \out{<details open ><summary>Inherited methods</summary>}
 \itemize{
+\item \out{<span class="pkg-link" data-pkg="ridl" data-topic="RIDLObject" data-id="browse_on_ridl">}\href{../../ridl/html/RIDLObject.html#method-browse_on_ridl}{\code{ridl::RIDLObject$browse_on_ridl()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="ridl" data-topic="RIDLObject" data-id="get_config">}\href{../../ridl/html/RIDLObject.html#method-get_config}{\code{ridl::RIDLObject$get_config()}}\out{</span>}
 }
 \out{</details>}
@@ -231,6 +235,50 @@ a required field and throws an error otherwise
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_file_to_upload"></a>}}
+\if{latex}{\out{\hypertarget{method-get_file_to_upload}{}}}
+\subsection{Method \code{get_file_to_upload()}}{
+Get the file that will be or has been uploaded if any
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RIDLResource$get_file_to_upload()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+the file to upload
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_file_to_upload"></a>}}
+\if{latex}{\out{\hypertarget{method-set_file_to_upload}{}}}
+\subsection{Method \code{set_file_to_upload()}}{
+Get the file that will be or has been uploaded if any
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RIDLResource$set_file_to_upload(file_to_upload)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{file_to_upload}}{character the path to the file to upload}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-check_url_or_file_to_upload"></a>}}
+\if{latex}{\out{\hypertarget{method-check_url_or_file_to_upload}{}}}
+\subsection{Method \code{check_url_or_file_to_upload()}}{
+Check if the resource has an url or a file to upload but not both
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RIDLResource$check_url_or_file_to_upload()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+a logical value, TRUE if the the resource don't mix 'url' and
+and 'file_to_upload'
+}
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_fields"></a>}}
 \if{latex}{\out{\hypertarget{method-get_fields}{}}}
 \subsection{Method \code{get_fields()}}{
@@ -284,12 +332,12 @@ a list with resource field
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-browse"></a>}}
-\if{latex}{\out{\hypertarget{method-browse}{}}}
-\subsection{Method \code{browse()}}{
+\if{html}{\out{<a id="method-ridl_browse"></a>}}
+\if{latex}{\out{\hypertarget{method-ridl_browse}{}}}
+\subsection{Method \code{ridl_browse()}}{
 Browse the resource page on RIDL
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RIDLResource$browse()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RIDLResource$ridl_browse()}\if{html}{\out{</div>}}
 }
 
 }

@@ -27,7 +27,7 @@ and updating resources
 \itemize{
 \item \href{#method-new}{\code{RIDLContainer$new()}}
 \item \href{#method-list_datasets}{\code{RIDLContainer$list_datasets()}}
-\item \href{#method-browse}{\code{RIDLContainer$browse()}}
+\item \href{#method-ridl_browse}{\code{RIDLContainer$ridl_browse()}}
 \item \href{#method-get_fields}{\code{RIDLContainer$get_fields()}}
 \item \href{#method-get_required_fields}{\code{RIDLContainer$get_required_fields()}}
 \item \href{#method-check_required_fields}{\code{RIDLContainer$check_required_fields()}}
@@ -39,6 +39,7 @@ and updating resources
 \if{html}{
 \out{<details open ><summary>Inherited methods</summary>}
 \itemize{
+\item \out{<span class="pkg-link" data-pkg="ridl" data-topic="RIDLObject" data-id="browse_on_ridl">}\href{../../ridl/html/RIDLObject.html#method-browse_on_ridl}{\code{ridl::RIDLObject$browse_on_ridl()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="ridl" data-topic="RIDLObject" data-id="get_config">}\href{../../ridl/html/RIDLObject.html#method-get_config}{\code{ridl::RIDLObject$get_config()}}\out{</span>}
 }
 \out{</details>}
@@ -79,12 +80,12 @@ list of RIDLDataset objects
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-browse"></a>}}
-\if{latex}{\out{\hypertarget{method-browse}{}}}
-\subsection{Method \code{browse()}}{
+\if{html}{\out{<a id="method-ridl_browse"></a>}}
+\if{latex}{\out{\hypertarget{method-ridl_browse}{}}}
+\subsection{Method \code{ridl_browse()}}{
 Browse the Container page on RIDL
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RIDLContainer$browse()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RIDLContainer$ridl_browse()}\if{html}{\out{</div>}}
 }
 
 }
