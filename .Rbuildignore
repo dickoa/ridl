@@ -6,3 +6,5 @@ appveyor.yml
 codecov.yml
 cran-comments.md
 pkgdown/*
+^.*\.Rproj$
+^\.Rproj\.user$
