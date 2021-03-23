@@ -315,7 +315,8 @@ ridl_resource_get.RIDLDataset <- function(dataset, n) {
 #'
 #' @export
 #' @return A ridl_resource_get_all
-ridl_resource_get_all.RIDLDataset <- function(dataset, pattern = NULL,
+ridl_resource_get_all.RIDLDataset <- function(dataset,
+                                              pattern = NULL,
                                               format = NULL) {
   dataset$ridl_resource_get_all(pattern = pattern,
                                 format = format)
@@ -603,10 +604,33 @@ ridl_dataset_create <-  function(dataset, configuration = NULL) {
   configuration <- ridl_config_get()
   assert_dataset(dataset)
   data <- dataset$data
-  res <- configuration$call_action("package_create",
-                                   body = data,
-                                   verb = "post",
-                                   encode = "json")
+
+  if ("resources" %in% names(data)) {
+    rs <- lapply(data$resources, function(r)
+      RIDLResource$new(r, configuration))
+    data$resources <- NULL
+
+    res_ds <- configuration$call_action("package_create",
+                                        body = data,
+                                        verb = "post",
+                                        encode = "json")
+    res_ds$raw$raise_for_status()
+
+    res_rs <- lapply(rs, function(r) {
+      ridl_resource_create(resource = r,
+                           dataset_id = res_ds$result$id,
+                           configuration)
+    })
+
+    res <- list(dataset = res_ds,
+                resources = res_rs)
+  } else {
+    res <- configuration$call_action("package_create",
+                                     body = data,
+                                     verb = "post",
+                                     encode = "json")
+    res$raw$raise_for_status()
+  }
   invisible(res)
 }
 

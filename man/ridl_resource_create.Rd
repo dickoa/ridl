@@ -4,14 +4,12 @@
 \alias{ridl_resource_create}
 \title{Create a resource on RIDL}
 \usage{
-ridl_resource_create(resource, dataset_id, file_path, configuration = NULL)
+ridl_resource_create(resource, dataset_id, configuration = NULL)
 }
 \arguments{
 \item{resource}{RIDLResource, a resource object}
 
 \item{dataset_id}{character, the id or the name of the RIDLDataset}
-
-\item{file_path}{character, the path to the file to upload}
 
 \item{configuration}{RIDLConfig, the configuration}
 }

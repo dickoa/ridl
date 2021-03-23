@@ -222,7 +222,10 @@ RIDLResource <- R6::R6Class(
     },
 
     #' @description
-    #' Get the file that will be or has been uploaded if any
+    #' Set the file that will be uploaded
+    #'
+    #' @importFrom crul upload
+    #' @importFrom tools file_ext
     #'
     #' @param file_to_upload character the path to the file to upload
     set_file_to_upload = function(file_to_upload) {
@@ -231,6 +234,9 @@ RIDLResource <- R6::R6Class(
 
       self$data$file_to_upload <- file_to_upload
       self$data$url_type <- "upload"
+      self$data$upload <- upload(file_to_upload)
+      self$data$format <- file_ext(basename(file_to_upload))
+      self$data$size <- file.size(file_to_upload)
     },
 
     #' @description
@@ -413,6 +419,35 @@ get_format.RIDLResource <- function(resource) {
   resource$get_format()
 }
 
+#' Set the file to upload
+#'
+#' Set the file to upload
+#'
+#' @param file_to_upload character the path to the file to upload
+#' @param resource RIDLResource, a RIDL resource
+#'
+#' @rdname set_file_to_upload
+#'
+#' @return A RIDLResource with a file
+#' @export
+set_file_to_upload.RIDLResource <- function(resource, file_to_upload) {
+  resource$set_file_to_upload(file_to_upload)
+}
+
+#' Get the file to upload
+#'
+#' Get the file to upload
+#'
+#' @param resource RIDLResource, a RIDL resource
+#'
+#' @rdname get_file_to_upload
+#'
+#' @return A character, the path to file to upload or NULL if not available
+#' @export
+get_file_to_upload.RIDLResource <- function(resource) {
+  resource$get_file_to_upload()
+}
+
 #' Get the dataset containing the resource
 #'
 #' @param resource RIDLResource, a RIDL resource
@@ -568,38 +603,30 @@ ridl_browse.RIDLResource <- function(x, ...)
 #' Create a resource on RIDL
 #'
 #' @param resource RIDLResource, a resource object
-#' @param file_path character, the path to the file to upload
 #' @param dataset_id character, the id or the name of the RIDLDataset
 #' @param configuration RIDLConfig, the configuration
 #'
-#'
-#' @importFrom tools file_ext
-#' @importFrom crul upload
 #'
 #' @return RIDLResource, the resource
 #' @export
 ridl_resource_create <- function(resource,
                                  dataset_id,
-                                 file_path,
                                  configuration = NULL) {
 
   if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
     ridl_config_set(configuration = configuration)
 
   configuration <- ridl_config_get()
-  assert_resource(resource)
+  assert_resource_upload(resource)
   data <- resource$data
-
-  file_path_base <- basename(file_path)
   data$package_id <- dataset_id
-  data$url_type <- "upload"
-  data$upload <- upload(file_path)
-  data$format <- file_ext(file_path_base)
 
   res <- configuration$call_action("resource_create",
                                    body = data,
                                    verb = "post",
                                    encode = "multipart")
+
+  res$raw$raise_for_status()
   invisible(res)
 }
 

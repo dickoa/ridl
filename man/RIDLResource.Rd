@@ -251,7 +251,7 @@ the file to upload
 \if{html}{\out{<a id="method-set_file_to_upload"></a>}}
 \if{latex}{\out{\hypertarget{method-set_file_to_upload}{}}}
 \subsection{Method \code{set_file_to_upload()}}{
-Get the file that will be or has been uploaded if any
+Set the file that will be uploaded
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{RIDLResource$set_file_to_upload(file_to_upload)}\if{html}{\out{</div>}}
 }

@@ -113,6 +113,30 @@ get_sheets.default <- function(resource, format, download_folder, quiet) {
        call. = TRUE)
 }
 
+#' @rdname set_file_to_upload
+#' @export
+set_file_to_upload <- function(resource, file_to_upload)
+  UseMethod("set_file_to_upload")
+
+#' @rdname set_file_to_upload
+#' @export
+set_file_to_upload.default <- function(resource, file_to_upload) {
+  stop("Only available for a RIDLResource object",
+       call. = TRUE)
+}
+
+#' @rdname get_file_to_upload
+#' @export
+get_file_to_upload <- function(resource)
+  UseMethod("get_file_to_upload")
+
+#' @rdname get_file_to_upload
+#' @export
+get_file_to_upload.default <- function(resource) {
+  stop("Only available for a RIDLResource object",
+       call. = TRUE)
+}
+
 #' @rdname ridl_dataset_get
 #' @export
 ridl_dataset_get <- function(resource)

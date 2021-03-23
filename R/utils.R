@@ -24,8 +24,11 @@ as_pylog <- function(x) {
 
 #' @noRd
 format_size <- function(x) {
-  class(x) <- "object_size"
-  format(x, "auto")
+  if (!is.null(x)) {
+    class(x) <- "object_size"
+    x <- format(x, "auto")
+  }
+  x
 }
 
 #' @noRd
@@ -174,6 +177,16 @@ validate_resource_data <- function(x) {
   if ("hxl-ated" %in% names(x))
     x$`hxl-ated` <- as_pylog(x$`hxl-ated`)
   x
+}
+
+#' @noRd
+assert_resource_upload <- function(x) {
+  if (!inherits(x, "RIDLResource"))
+    stop("Not an RIDL Resource object!", call. = FALSE)
+  if (is.null(x$data$upload) | !inherits(x$data$upload, "form_file"))
+    stop("Use set_file_to_upload to add a file to upload!",
+         call. = FALSE)
+  invisible(x)
 }
 
 #' @noRd

@@ -1,0 +1,122 @@
+http_interactions:
+- request:
+    method: get
+    uri: https://ridl.unhcr.org/api/3/action/package_show?id=ddi-uga-unhcr-kap-2019-kyangwali-v1-0
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      User-Agent: 'ridl/0.1.0.9000 (Linux/5.11.8-arch1-1 #1 SMP PREEMPT Sun, 21 Mar
+        2021 01:55:51 +0000; R/4.0.4-Patched)'
+      Accept-Encoding: gzip, deflate
+      Accept: application/json, text/xml, application/xml, */*
+      Authorization: 495e11e2-67b6-4dfc-a35e-d272666faaf6
+  response:
+    status:
+      status_code: '200'
+      message: OK
+      explanation: Request fulfilled, document follows
+    headers:
+      status: HTTP/1.1 200 OK
+      date: Tue, 23 Mar 2021 10:06:34 GMT
+      content-type: application/json;charset=utf-8
+      content-length: '8337'
+      connection: keep-alive
+      cache-control: private
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"help": "https://ridl.unhcr.org/api/3/action/help_show?name=package_show",
+        "success": true, "result": {"external_access_level": "not_available", "unit_of_measurement":
+        "Households", "license_title": null, "maintainer": "", "relationships_as_object":
+        [], "geog_coverage": "", "private": false, "maintainer_email": "", "num_tags":
+        0, "keywords": ["4"], "admin_notes": "", "id": "da3f18e5-b4df-47e2-8cc5-c85e3505cdf5",
+        "metadata_created": "2020-02-07T07:32:54.435689", "archived": "False", "metadata_modified":
+        "2020-07-22T12:30:22.061914", "author": "UNHCR", "author_email": "", "data_sensitivity":
+        "", "state": "active", "version": "v1.0:  Basic raw data, obtained from data
+        entry (before editing).", "data_collector": "UNHCR", "creator_user_id": "242abf2b-6d60-49a8-b380-8c3b26648423",
+        "type": "dataset", "weight_notes": "No info presented; to be computed post
+        hoc", "resources": [{"cache_last_updated": null, "file_type": "other", "package_id":
+        "da3f18e5-b4df-47e2-8cc5-c85e3505cdf5", "datastore_active": false, "id": "d6fa40b1-cc8d-4526-a472-be78acdd1c27",
+        "size": 6384, "state": "active", "type": "attachment", "hash": "", "description":
+        "", "format": "XML", "last_modified": "2020-02-07T07:32:54.697478", "url_type":
+        "upload", "mimetype": "text/xml", "cache_url": null, "name": "DDI XML", "created":
+        "2020-02-07T07:32:54.720558", "url": "https://ridl.unhcr.org/dataset/da3f18e5-b4df-47e2-8cc5-c85e3505cdf5/resource/d6fa40b1-cc8d-4526-a472-be78acdd1c27/download/ddi_uga_unhcr_kap_2019_kyangwali.xml",
+        "mimetype_inner": null, "position": 0, "revision_id": "77c21935-9bbf-498c-90a1-93ad987ee61d",
+        "resource_type": null}, {"cache_last_updated": null, "file_type": "other",
+        "package_id": "da3f18e5-b4df-47e2-8cc5-c85e3505cdf5", "datastore_active":
+        false, "id": "e108b9c9-1c74-4700-8f7e-384f9b30ea7f", "size": 194, "state":
+        "active", "type": "attachment", "hash": "", "description": "", "format": "RDF",
+        "last_modified": "2020-02-07T07:32:54.891590", "url_type": "upload", "mimetype":
+        "application/rdf+xml", "cache_url": null, "name": "DDI RDF", "created": "2020-02-07T07:32:54.918922",
+        "url": "https://ridl.unhcr.org/dataset/da3f18e5-b4df-47e2-8cc5-c85e3505cdf5/resource/e108b9c9-1c74-4700-8f7e-384f9b30ea7f/download/ddi_uga_unhcr_kap_2019_kyangwali.rdf",
+        "mimetype_inner": null, "position": 1, "revision_id": "6c64e3f0-cde0-4491-bf24-2d7860717c0b",
+        "resource_type": null}, {"cache_last_updated": null, "file_type": "microdata",
+        "hxl-ated": "", "package_id": "da3f18e5-b4df-47e2-8cc5-c85e3505cdf5", "identifiability":
+        "personally_identifiable", "datastore_active": false, "id": "145445bc-37e9-4bf9-b605-adddcdb267f0",
+        "size": 395285, "date_range_end": "2019-11-30", "state": "active", "version":
+        "0", "type": "data", "hash": "", "description": "", "format": "XLSX", "mimetype_inner":
+        null, "url_type": "upload", "mimetype": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        "cache_url": null, "name": "Raw data", "created": "2020-02-07T07:34:38.917278",
+        "url": "https://ridl.unhcr.org/dataset/da3f18e5-b4df-47e2-8cc5-c85e3505cdf5/resource/145445bc-37e9-4bf9-b605-adddcdb267f0/download/ddi_uga_unhcr_wash_kap_survey_raw_data_kyangwali_2019.xlsx",
+        "date_range_start": "2019-11-01", "last_modified": "2020-02-07T07:34:38.888339",
+        "process_status": "raw", "position": 2, "revision_id": "869f5be8-4a9d-4e76-ac1f-f9ce99ff1278",
+        "resource_type": null}, {"cache_last_updated": null, "file_type": "questionnaire",
+        "package_id": "da3f18e5-b4df-47e2-8cc5-c85e3505cdf5", "datastore_active":
+        false, "id": "0727ab63-895b-4e16-aa94-586b014eb8f3", "size": 141824, "state":
+        "active", "type": "attachment", "hash": "", "description": "", "format": "XLSX",
+        "last_modified": "2020-02-07T07:41:18.101751", "url_type": "upload", "mimetype":
+        "application/vnd.ms-excel", "cache_url": null, "name": "Questionnaire, tools",
+        "created": "2020-02-07T07:41:18.132522", "url": "https://ridl.unhcr.org/dataset/da3f18e5-b4df-47e2-8cc5-c85e3505cdf5/resource/0727ab63-895b-4e16-aa94-586b014eb8f3/download/ddi_uga_unhcr_kap_survey_questionnaire_kyangwali_2019.xls",
+        "mimetype_inner": null, "position": 3, "revision_id": "f609cc3e-a066-4d74-b221-6c17fff55caa",
+        "resource_type": null}, {"cache_last_updated": null, "file_type": "report",
+        "package_id": "da3f18e5-b4df-47e2-8cc5-c85e3505cdf5", "datastore_active":
+        false, "id": "5f430659-a272-407e-842f-3af4283b5c49", "size": 2854313, "state":
+        "active", "type": "attachment", "hash": "", "description": "", "format": "PDF",
+        "last_modified": "2020-02-07T07:43:24.728991", "url_type": "upload", "mimetype":
+        "application/pdf", "cache_url": null, "name": "Final report", "created": "2020-02-07T07:43:24.758427",
+        "url": "https://ridl.unhcr.org/dataset/da3f18e5-b4df-47e2-8cc5-c85e3505cdf5/resource/5f430659-a272-407e-842f-3af4283b5c49/download/ddi_uga_unhcr_wash_kap_survey_kyangwali_2019.pdf",
+        "mimetype_inner": null, "position": 4, "revision_id": "89a75796-2087-421d-b529-d8e20c197475",
+        "resource_type": null}, {"cache_last_updated": null, "file_type": "microdata",
+        "hxl-ated": "", "package_id": "da3f18e5-b4df-47e2-8cc5-c85e3505cdf5", "identifiability":
+        "anonymized_enclave", "datastore_active": false, "id": "1f7d7dbb-7f46-48a4-9bb6-9eba57184a0b",
+        "size": 3786196, "date_range_end": "2019-11-30", "state": "active", "version":
+        "0", "type": "data", "hash": "", "description": "", "format": "ZIP", "mimetype_inner":
+        null, "url_type": "upload", "mimetype": "application/zip", "cache_url": null,
+        "name": "Anonymized Data", "created": "2020-02-07T07:55:33.148212", "url":
+        "https://ridl.unhcr.org/dataset/da3f18e5-b4df-47e2-8cc5-c85e3505cdf5/resource/1f7d7dbb-7f46-48a4-9bb6-9eba57184a0b/download/uga_kap_kyangwali_2019_annonymized.zip",
+        "date_range_start": "2019-11-01", "last_modified": "2020-02-07T07:55:33.117521",
+        "process_status": "anonymized", "position": 5, "revision_id": "dbfd163c-53fb-4ead-8fab-3e7182f49d57",
+        "resource_type": null}], "data_collection_notes": "", "num_resources": 6,
+        "data_collection_technique": "capi", "tags": [], "clean_ops_notes": "", "visibility":
+        "public", "operational_purpose_of_data": [], "original_id": "DDI_UGA_UNHCR_KAP_2019_Kyangwali_v1.0",
+        "groups": [], "license_id": null, "response_rate_notes": "", "relationships_as_subject":
+        [], "organization": {"description": "", "created": "2019-05-20T08:40:22.119150",
+        "title": "Uganda : WASH KAP", "name": "uga-wash-kap", "is_organization": true,
+        "state": "active", "image_url": "", "revision_id": "bad04e3b-af50-4b85-8198-2c5237581194",
+        "type": "data-container", "id": "ada7d847-a4a4-44a0-913c-772c3c201942", "approval_status":
+        "approved"}, "name": "ddi-uga-unhcr-kap-2019-kyangwali-v1-0", "isopen": false,
+        "sampling_procedure_notes": "Stratified random sampling", "url": "", "notes":
+        "Uganda is hosting over 1 million refugees with about 114,716 (OPM Nov 2019)
+        of them settled in Kyangwali refugee settlement. This rapid influx of refugees
+        has put pressure on basic social services including education, food, shelter
+        and WASH infrastructure. In order to efficiently and effectively improve WASH
+        service delivery in the settlement, there is need for accurate and reliable
+        information on which to base programmatic decisions. \r\nKyangwali settlement
+        has had a number of interventions by different partners, and in as much as
+        there were access indicators obtained regularly by the partners that provide
+        extremely useful average figures at settlement level, there has been a gap
+        in the in-depth understanding of the situation at household level and to account
+        for disparities within the settlement so as to measure the impact of the interventions.
+        \r\nThe survey mainly utilized 2 methods: Household questionnaire survey and
+        documentary review. The survey covered all the five zones of the settlement,
+        with samples drawn from all the villages in the different zones. Sample sizes
+        for each zone were calculated using the UNHCR sample size determination tool.
+        A sample of 403 (only refugees) was interviewed using household questionnaire
+        survey administered through Kobo collect and Open Data Kit (ODK) tool. Reviewed
+        documents included: partners periodic updates, minutes of WASH meetings.",
+        "owner_org": "ada7d847-a4a4-44a0-913c-772c3c201942", "short_title": "", "data_accs_notes":
+        "", "sampling_procedure": [], "title": "WASH KAP Survey Kyangwali Refugee
+        Camp, November 2019", "revision_id": "59346872-258e-4379-bdaf-a7ffa0ba005f"}}'
+  recorded_at: 2021-03-23 10:08:19 GMT
+  recorded_with: vcr/0.6.5.93, webmockr/0.8.0
