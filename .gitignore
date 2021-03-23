@@ -4,3 +4,4 @@
 .Rbuildignore
 docs/*
 README.html
+tests/fixtures/*
