@@ -10,6 +10,10 @@ Authors@R: c(person(given = "Ahmadou",
              person(given = "Federico",
 	            family = "Sanson",
                     email = "sanson@unhcr.org",
+		    role = "ctb"),
+             person(given = "Hisham",
+                    family = "Galal",
+	   	    email = "galal@unhcr.org",
 		    role = "ctb"))
 License: MIT + file LICENSE
 LazyData: TRUE

@@ -127,11 +127,13 @@ RIDLDataset <- R6::R6Class(
       if ("package_id" %in% names(resource$data))
         stop("This resource already have a dataset id",
              call. = FALSE)
-      if (length(self$data$resources) > 0) {
-        i <- self$data$num_resources
-        self$data$resources[[i + 1]] <- resource$data
-        self$resources[[i + 1]] <- RIDLResource$new(resource$data)
-        self$data$num_resources <- self$data$num_resources + 1
+      n <- length(self$data$resources)
+      if (is.null(self$data$num_resources))
+        self$data$num_resources <- n
+      if (n > 0) {
+        self$data$resources[[n + 1]] <- resource$data
+        self$resources[[n + 1]] <- RIDLResource$new(resource$data)
+        self$data$num_resources <- n + 1
       } else {
         self$data$resources[[1]] <- resource$data
         self$resources <- list(RIDLResource$new(resource$data))
@@ -414,7 +416,8 @@ ridl_dataset_search <- function(query = "*:*",
                       offset_param = "start",
                       limit = rows,
                       chunk = page_size)
-  suppressMessages(cc$get(path = paste0("/api/3/action/", "package_search"),
+  suppressMessages(cc$get(path = paste0("/api/3/action/",
+                                        "package_search"),
                           list(q = query, fq = filter_query, ...)))
   list_of_ds <- fromJSON(cc$parse(),
                          simplifyVector = FALSE)$result$results
@@ -567,7 +570,40 @@ ridl_container_set.RIDLDataset <- function(dataset, container_name, configuratio
 #'
 #' Create a RIDL dataset from list with required fields
 #'
-#' @param data List, list of data
+#' @param title character, Title(*) - Make sure to include: 'Survey name/title', 'Location', 'Country', and 'Year(s)' in the order indicated.
+#' @param name character, URL(*) - The canonical name of the dataset, eg. my-dataset.
+#' @param short_title character, Short title - eg. Short title for the project.
+#' @param notes character, Description(*) - Some useful notes about the data. Please include the number of observations.
+#' @param tag_string character,  Tags - eg. economy, mental health, government.
+#' @param url character,  Project URL - Website URL associated with this data project (if applicable).
+#' @param owner_org character, Data container(*)  - Use the canonical name for the container.
+#' @param private character, Visibility (Private/Public).
+#' @param visibility character, Internal Access Level(*). Allowed values: `restricted` (Private), `public` (Internally Visible).
+#' @param external_access_level character, External access level(*). Allowed values: `not_available` (Not available), `direct_access` (Direct access), `public_use` (Public use), `licensed_use` (Licensed use), `data_enclave` (Data enclave), `open_access` (Open access).
+#' @param data_sensitivity character,  Data sensitivity - Apply to both Anonymized and Personally identifiable data. Allowed values: `yes` (Yes), `no` (No).
+#' @param original_id character, Original ID - If the dataset already has an ID from the source org, DDI, etc...
+#' @param data_collector character,  Data Collector(*) - Which organization owns / collected the data. Multiple values are allowed.
+#' @param date_range_start Date, Date collection first date - Use dd/mm/yyyy format.
+#' @param date_range_end Date, Date collection last date - Use dd/mm/yyyy format.
+#' @param keywords character,  Topic classifications(*) - Tags useful for searching for the datasets. Multiple values are allowed.
+#' @param unit_of_measurement character, Unit of measurement(*) - Unit of measurement / observation for the dataset.
+#' @param sampling_procedure character, Sampling Procedure. Multiple values are allowed. Allowed values: `total_universe_complete_enumeration` (Total universe/Complete enumeration), `probability_simple_random` (Probability: Simple random), `probability_systematic_random` (Probability: Systematic random), `probability_stratified` (Probability: Stratified), `probability_stratified_proportional` (Probability: Stratified: Proportional), `probability_stratified_disproportional` (Probability: Stratified: Disproportional), `probability_cluster` (Probability: Cluster), `probability_cluster_simple_random` (Probability: Cluster: Simple random ), `probability_cluster_stratified_random` (Probability: Cluster: Stratified random), `probability_multistage` (Probability: Multistage), `nonprobability` (Non-probability), `nonprobability_availability` (Non-probability: Availability), `nonprobability_purposive` (Non-probability: Purposive), `nonprobability_quota` (Non-probability: Quota), `nonprobability_respondentassisted` (Non-probability: Respondent-assisted), `mixed_probability_nonprobability` (Mixed probability and non-probability), `other_other` (Use if the sampling procedure is known, but not found in the list..).
+#' @param operational_purpose_of_data character,  Operational purpose of data - Classification of the type of data contained in the file. Multiple values are allowed. Allowed values: `participatory_assessments` (Participatory assessments), `baseline_household_survey` (Baseline Household Survey), `rapid_needs_assessment` (Rapid Needs Assessment), `protection_monitoring` (Protection Monitoring), `programme_monitoring` (Programme monitoring), `population_data` (Population Data), `cartography` (Cartography, Infrastructure & GIS).
+#' @param process_status character, Dataset Process Status. Allowed values: `raw` (Raw-Uncleaned), `cleaned` (Cleaned Only), `anonymized` (Cleaned & Anonymized).
+#' @param identifiability character, Identifiability. Allowd values: `personally_identifiable` (Personally identifiable), `anonymized_enclave` (Anonymized 1st level: Data Enclave - only removed direct identifiers), `anonymized_scientific` (Anonymized 2st level: Scientific Use File (SUF)), `anonymized_public` (Anonymized 3rd level: Public Use File (PUF)).
+#' @param geog_coverage character, Geographic Coverage - eg. National coverage, or name of the area, etc.
+#' @param data_collection_technique character, Data collection technique(*). Allowed values: `nf` (Not specified), `f2f` (Face-to-face interview), `capi` (Face-to-face interview: Computerised), `cami` (Face-to-face interview: Mobile), `papi` (Face-to-face interview: Paper-and-pencil), `tri` (Telephone interview), `eri` (E-mail interview), `wri` (Web-based interview: audio-visual technology enabling the interviewer(s) and interviewee(s) to communicate in real time), `easi` (Self-administered questionnaire: E-mail), `pasi` (Self-administered questionnaire: Paper), `sasi` (Self-administered questionnaire: SMS/MMS), `casi` (Self-administered questionnaire: Computer-assisted), `cawi` (Self-administered questionnaire: Web-based), `foc` (Face-to-face focus group), `tfoc` (Telephone focus group), `obs` (Observation), `oth` (Other).
+#' @param linked_datasets character, Linked Datasets - Links to other RIDL datasets. It supports multiple selections.
+#' @param hxlated logical, Dataset with resources having HXL tags
+#' @param archived logical, Archived(*) - Allows users to indicate if the dataset is archived or active. Allowed values: `False` (No), `True` (Yes).
+#' @param admin_notes character, Admin Notes - General. You can use Markdown formatting here.
+#' @param sampling_procedure_notes character, Admin Notes - Sampling Procedure. You can use Markdown formatting here.
+#' @param response_rate_notes character, Admin Notes - Response Rate. You can use Markdown formatting here.
+#' @param data_collection_notes character, Admin Notes - Data Collection. You can use Markdown formatting here.
+#' @param weight_notes character, Admin Notes - Weighting. You can use Markdown formatting here.
+#' @param clean_ops_notes character, Admin Notes - Cleaning. You can use Markdown formatting here.
+#' @param data_accs_notes character, Admin Notes - Access authority. You can use Markdown formatting here.
+#' @param ddi DDI.
 #' @param configuration RIDLConfig, RIDL configuration used
 #'
 #' @return RIDLDataset the dataset
@@ -576,15 +612,87 @@ ridl_container_set.RIDLDataset <- function(dataset, container_name, configuratio
 #' @examples
 #' \dontrun{
 #'
-#'  dsdata <- list(name = "hum-dataset",
-#'                 title = "Humanitarian dataset")
-#'  res <- ridl_dataset(dsdata)
+#'  res <- ridl_dataset(name = "hum-dataset",
+#'                      title = "Humanitarian dataset",
+#'                      owner_org = "africa")
 #'  res
 #' }
-ridl_dataset <- function(data, configuration = NULL) {
+ridl_dataset <- function(title,
+                         name,
+                         owner_org,
+                         notes,
+                         keywords,
+                         visibility,
+                         archived,
+                         external_access_level,
+                         unit_of_measurement,
+                         data_collector,
+                         data_collection_technique,
+                         date_range_start = NULL,
+                         date_range_end = NULL,
+                         short_title = NULL,
+                         tag_string  = NULL,
+                         url = NULL,
+                         private = NULL,
+                         data_sensitivity = NULL,
+                         original_id = NULL,
+                         sampling_procedure = NULL,
+                         operational_purpose_of_data = NULL,
+                         hxlated = NULL,
+                         process_status = NULL,
+                         identifiability = NULL,
+                         geog_coverage = NULL,
+                         linked_datasets = NULL,
+                         admin_notes = NULL,
+                         sampling_procedure_notes = NULL,
+                         response_rate_notes = NULL,
+                         data_collection_notes = NULL,
+                         weight_notes = NULL,
+                         clean_ops_notes = NULL,
+                         data_accs_notes = NULL,
+                         ddi = NULL,
+                         configuration = NULL) {
+
   if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
     ridl_config_set(configuration = configuration)
   configuration <- ridl_config_get()
+
+  data <-  list(title = title,
+                name = name,
+                short_title = short_title,
+                notes = notes,
+                tag_string = tag_string,
+                url = url,
+                owner_org = owner_org,
+                private = private,
+                visibility = visibility,
+                external_access_level = external_access_level,
+                data_sensitivity = data_sensitivity,
+                original_id = original_id,
+                data_collector = data_collector,
+                date_range_start = date_range_start,
+                date_range_end = date_range_end,
+                keywords = keywords,
+                unit_of_measurement = unit_of_measurement,
+                sampling_procedure = sampling_procedure,
+                operational_purpose_of_data = operational_purpose_of_data,
+                `hxl-ated` = hxlated,
+                process_status = process_status,
+                identifiability = identifiability,
+                geog_coverage = geog_coverage,
+                data_collection_technique = data_collection_technique,
+                linked_datasets = linked_datasets,
+                archived = archived,
+                admin_notes = admin_notes,
+                sampling_procedure_notes = sampling_procedure_notes,
+                response_rate_notes = response_rate_notes,
+                data_collection_notes = data_collection_notes,
+                weight_notes = weight_notes,
+                clean_ops_notes = clean_ops_notes,
+                data_accs_notes = data_accs_notes,
+                ddi = ddi)
+
+  data <- drop_nulls(data)
   data <- validate_dataset_data(data)
   RIDLDataset$new(data, configuration)
 }
@@ -618,7 +726,7 @@ ridl_dataset_create <-  function(dataset, configuration = NULL) {
 
     res_rs <- lapply(rs, function(r) {
       ridl_resource_create(resource = r,
-                           dataset_id = res_ds$result$id,
+                           dataset = RIDLDataset$new(res_ds$result),
                            configuration)
     })
 
@@ -638,83 +746,281 @@ ridl_dataset_create <-  function(dataset, configuration = NULL) {
 #'
 #' Update a dataset on RIDL
 #'
-#' @param dataset RIDLDataset, the dataset to upload
+#' @param dataset RIDLDataset, the dataset to be updated
+#' @param title character, Title(*) - Make sure to include: 'Survey name/title', 'Location', 'Country', and 'Year(s)' in the order indicated.
+#' @param name character, URL(*) - The canonical name of the dataset, eg. my-dataset.
+#' @param short_title character, Short title - eg. Short title for the project.
+#' @param notes character, Description(*) - Some useful notes about the data. Please include the number of observations.
+#' @param tag_string character,  Tags - eg. economy, mental health, government.
+#' @param url character,  Project URL - Website URL associated with this data project (if applicable).
+#' @param owner_org character, Data container(*)  - Use the canonical name for the container.
+#' @param private character, Visibility (Private/Public).
+#' @param visibility character, Internal Access Level(*). Allowed values: `restricted` (Private), `public` (Internally Visible).
+#' @param external_access_level character, External access level(*). Allowed values: `not_available` (Not available), `direct_access` (Direct access), `public_use` (Public use), `licensed_use` (Licensed use), `data_enclave` (Data enclave), `open_access` (Open access).
+#' @param data_sensitivity character,  Data sensitivity - Apply to both Anonymized and Personally identifiable data. Allowed values: `yes` (Yes), `no` (No).
+#' @param original_id character, Original ID - If the dataset already has an ID from the source org, DDI, etc...
+#' @param data_collector character,  Data Collector(*) - Which organization owns / collected the data. Multiple values are allowed.
+#' @param date_range_start Date, Date collection first date - Use dd/mm/yyyy format.
+#' @param date_range_end Date, Date collection last date - Use dd/mm/yyyy format.
+#' @param keywords character,  Topic classifications(*) - Tags useful for searching for the datasets. Multiple values are allowed.
+#' @param unit_of_measurement character, Unit of measurement(*) - Unit of measurement / observation for the dataset.
+#' @param sampling_procedure character, Sampling Procedure. Multiple values are allowed. Allowed values: `total_universe_complete_enumeration` (Total universe/Complete enumeration), `probability_simple_random` (Probability: Simple random), `probability_systematic_random` (Probability: Systematic random), `probability_stratified` (Probability: Stratified), `probability_stratified_proportional` (Probability: Stratified: Proportional), `probability_stratified_disproportional` (Probability: Stratified: Disproportional), `probability_cluster` (Probability: Cluster), `probability_cluster_simple_random` (Probability: Cluster: Simple random ), `probability_cluster_stratified_random` (Probability: Cluster: Stratified random), `probability_multistage` (Probability: Multistage), `nonprobability` (Non-probability), `nonprobability_availability` (Non-probability: Availability), `nonprobability_purposive` (Non-probability: Purposive), `nonprobability_quota` (Non-probability: Quota), `nonprobability_respondentassisted` (Non-probability: Respondent-assisted), `mixed_probability_nonprobability` (Mixed probability and non-probability), `other_other` (Use if the sampling procedure is known, but not found in the list..).
+#' @param operational_purpose_of_data character,  Operational purpose of data - Classification of the type of data contained in the file. Multiple values are allowed. Allowed values: `participatory_assessments` (Participatory assessments), `baseline_household_survey` (Baseline Household Survey), `rapid_needs_assessment` (Rapid Needs Assessment), `protection_monitoring` (Protection Monitoring), `programme_monitoring` (Programme monitoring), `population_data` (Population Data), `cartography` (Cartography, Infrastructure & GIS).
+#' @param process_status character, Dataset Process Status. Allowed values: `raw` (Raw-Uncleaned), `cleaned` (Cleaned Only), `anonymized` (Cleaned & Anonymized).
+#' @param identifiability character, Identifiability. Allowd values: `personally_identifiable` (Personally identifiable), `anonymized_enclave` (Anonymized 1st level: Data Enclave - only removed direct identifiers), `anonymized_scientific` (Anonymized 2st level: Scientific Use File (SUF)), `anonymized_public` (Anonymized 3rd level: Public Use File (PUF)).
+#' @param geog_coverage character, Geographic Coverage - eg. National coverage, or name of the area, etc.
+#' @param data_collection_technique character, Data collection technique(*). Allowed values: `nf` (Not specified), `f2f` (Face-to-face interview), `capi` (Face-to-face interview: Computerised), `cami` (Face-to-face interview: Mobile), `papi` (Face-to-face interview: Paper-and-pencil), `tri` (Telephone interview), `eri` (E-mail interview), `wri` (Web-based interview: audio-visual technology enabling the interviewer(s) and interviewee(s) to communicate in real time), `easi` (Self-administered questionnaire: E-mail), `pasi` (Self-administered questionnaire: Paper), `sasi` (Self-administered questionnaire: SMS/MMS), `casi` (Self-administered questionnaire: Computer-assisted), `cawi` (Self-administered questionnaire: Web-based), `foc` (Face-to-face focus group), `tfoc` (Telephone focus group), `obs` (Observation), `oth` (Other).
+#' @param linked_datasets character, Linked Datasets - Links to other RIDL datasets. It supports multiple selections.
+#' @param hxlated logical, Dataset with resources having HXL tags
+#' @param archived logical, Archived(*) - Allows users to indicate if the dataset is archived or active. Allowed values: `False` (No), `True` (Yes).
+#' @param admin_notes character, Admin Notes - General. You can use Markdown formatting here.
+#' @param sampling_procedure_notes character, Admin Notes - Sampling Procedure. You can use Markdown formatting here.
+#' @param response_rate_notes character, Admin Notes - Response Rate. You can use Markdown formatting here.
+#' @param data_collection_notes character, Admin Notes - Data Collection. You can use Markdown formatting here.
+#' @param weight_notes character, Admin Notes - Weighting. You can use Markdown formatting here.
+#' @param clean_ops_notes character, Admin Notes - Cleaning. You can use Markdown formatting here.
+#' @param data_accs_notes character, Admin Notes - Access authority. You can use Markdown formatting here.
+#' @param ddi DDI.
 #' @param configuration RIDLConfig, the RIDL configuration
 #'
 #' @export
-ridl_dataset_update <-  function(dataset, configuration = NULL) {
-  if (!is.null(configuration) &  inherits(configuration, "RIDLConfig"))
-    ridl_config_set(configuration = configuration)
-
-  configuration <- ridl_config_get()
-  assert_dataset(dataset)
-  data <- dataset$data
-  res <- configuration$call_action("package_update",
-                                   body = data,
-                                   verb = "post",
-                                   encode = "json")
-  invisible(res)
-}
-
-#' Patch a dataset on RIDL
-#'
-#' Patch a dataset on RIDL
-#'
-#' @param dataset RIDLDataset, the dataset to upload
-#' @param configuration RIDLConfig, the RIDL configuration
-#'
-#' @export
-ridl_dataset_patch <-  function(dataset, configuration = NULL) {
-  if (!is.null(configuration) &  inherits(configuration, "RIDLConfig"))
-    ridl_config_set(configuration = configuration)
-
-  configuration <- ridl_config_get()
-  assert_dataset(dataset)
-  data <- dataset$data
-  res <- configuration$call_action("package_patch",
-                                   body = data,
-                                   verb = "post",
-                                   encode = "json")
-  invisible(res)
-}
-
-#' Copy a dataset metadata
-#'
-#' Copy a dataset metadata
-#'
-#' @param dataset RIDLDataset, the dataset to copy
-#' @param configuration RIDLConfig, the RIDL configuration
-#'
-#' @return a RIDLDataset
-#'
-#' @export
-ridl_dataset_copy_metadata <-  function(dataset, configuration = NULL) {
+ridl_dataset_update <- function(dataset,
+                                title,
+                                name,
+                                owner_org,
+                                notes,
+                                keywords,
+                                visibility,
+                                archived,
+                                external_access_level,
+                                unit_of_measurement,
+                                data_collector,
+                                data_collection_technique,
+                                date_range_start = NULL,
+                                date_range_end = NULL,
+                                short_title = NULL,
+                                tag_string  = NULL,
+                                url = NULL,
+                                private = NULL,
+                                data_sensitivity = NULL,
+                                original_id = NULL,
+                                sampling_procedure = NULL,
+                                operational_purpose_of_data = NULL,
+                                hxlated = NULL,
+                                process_status = NULL,
+                                identifiability = NULL,
+                                geog_coverage = NULL,
+                                linked_datasets = NULL,
+                                admin_notes = NULL,
+                                sampling_procedure_notes = NULL,
+                                response_rate_notes = NULL,
+                                data_collection_notes = NULL,
+                                weight_notes = NULL,
+                                clean_ops_notes = NULL,
+                                data_accs_notes = NULL,
+                                ddi = NULL,
+                                configuration = NULL) {
   if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
     ridl_config_set(configuration = configuration)
 
   configuration <- ridl_config_get()
+  assert_dataset_on_ridl(dataset)
+
+  data <-  list(title = title,
+                name = name,
+                short_title = short_title,
+                notes = notes,
+                tag_string = tag_string,
+                url = url,
+                owner_org = owner_org,
+                private = private,
+                visibility = visibility,
+                external_access_level = external_access_level,
+                data_sensitivity = data_sensitivity,
+                original_id = original_id,
+                data_collector = data_collector,
+                date_range_start = date_range_start,
+                date_range_end = date_range_end,
+                keywords = keywords,
+                unit_of_measurement = unit_of_measurement,
+                sampling_procedure = sampling_procedure,
+                operational_purpose_of_data = operational_purpose_of_data,
+                `hxl-ated` = hxlated,
+                process_status = process_status,
+                identifiability = identifiability,
+                geog_coverage = geog_coverage,
+                data_collection_technique = data_collection_technique,
+                linked_datasets = linked_datasets,
+                archived = archived,
+                admin_notes = admin_notes,
+                sampling_procedure_notes = sampling_procedure_notes,
+                response_rate_notes = response_rate_notes,
+                data_collection_notes = data_collection_notes,
+                weight_notes = weight_notes,
+                clean_ops_notes = clean_ops_notes,
+                data_accs_notes = data_accs_notes,
+                ddi = ddi)
+
+  data <- drop_nulls(data)
+  data <- validate_dataset_data(data)
+
+  res <- configuration$call_action("package_update",
+                                   body = data,
+                                   verb = "post",
+                                   encode = "json")
+
+  res$raw$raise_for_status()
+  invisible(res)
+}
+
+#' Patch a dataset on RIDL
+#'
+#' Patch a dataset on RIDL
+#'
+#' @param dataset RIDLDataset, the dataset to upload
+#' @param title character, Title(*) - Make sure to include: 'Survey name/title', 'Location', 'Country', and 'Year(s)' in the order indicated.
+#' @param name character, URL(*) - The canonical name of the dataset, eg. my-dataset.
+#' @param short_title character, Short title - eg. Short title for the project.
+#' @param notes character, Description(*) - Some useful notes about the data. Please include the number of observations.
+#' @param tag_string character,  Tags - eg. economy, mental health, government.
+#' @param url character,  Project URL - Website URL associated with this data project (if applicable).
+#' @param owner_org character, Data container(*)  - Use the canonical name for the container.
+#' @param private character, Visibility (Private/Public).
+#' @param visibility character, Internal Access Level(*). Allowed values: `restricted` (Private), `public` (Internally Visible).
+#' @param external_access_level character, External access level(*). Allowed values: `not_available` (Not available), `direct_access` (Direct access), `public_use` (Public use), `licensed_use` (Licensed use), `data_enclave` (Data enclave), `open_access` (Open access).
+#' @param data_sensitivity character,  Data sensitivity - Apply to both Anonymized and Personally identifiable data. Allowed values: `yes` (Yes), `no` (No).
+#' @param original_id character, Original ID - If the dataset already has an ID from the source org, DDI, etc...
+#' @param data_collector character,  Data Collector(*) - Which organization owns / collected the data. Multiple values are allowed.
+#' @param date_range_start Date, Date collection first date - Use dd/mm/yyyy format.
+#' @param date_range_end Date, Date collection last date - Use dd/mm/yyyy format.
+#' @param keywords character,  Topic classifications(*) - Tags useful for searching for the datasets. Multiple values are allowed.
+#' @param unit_of_measurement character, Unit of measurement(*) - Unit of measurement / observation for the dataset.
+#' @param sampling_procedure character, Sampling Procedure. Multiple values are allowed. Allowed values: `total_universe_complete_enumeration` (Total universe/Complete enumeration), `probability_simple_random` (Probability: Simple random), `probability_systematic_random` (Probability: Systematic random), `probability_stratified` (Probability: Stratified), `probability_stratified_proportional` (Probability: Stratified: Proportional), `probability_stratified_disproportional` (Probability: Stratified: Disproportional), `probability_cluster` (Probability: Cluster), `probability_cluster_simple_random` (Probability: Cluster: Simple random ), `probability_cluster_stratified_random` (Probability: Cluster: Stratified random), `probability_multistage` (Probability: Multistage), `nonprobability` (Non-probability), `nonprobability_availability` (Non-probability: Availability), `nonprobability_purposive` (Non-probability: Purposive), `nonprobability_quota` (Non-probability: Quota), `nonprobability_respondentassisted` (Non-probability: Respondent-assisted), `mixed_probability_nonprobability` (Mixed probability and non-probability), `other_other` (Use if the sampling procedure is known, but not found in the list..).
+#' @param operational_purpose_of_data character,  Operational purpose of data - Classification of the type of data contained in the file. Multiple values are allowed. Allowed values: `participatory_assessments` (Participatory assessments), `baseline_household_survey` (Baseline Household Survey), `rapid_needs_assessment` (Rapid Needs Assessment), `protection_monitoring` (Protection Monitoring), `programme_monitoring` (Programme monitoring), `population_data` (Population Data), `cartography` (Cartography, Infrastructure & GIS).
+#' @param process_status character, Dataset Process Status. Allowed values: `raw` (Raw-Uncleaned), `cleaned` (Cleaned Only), `anonymized` (Cleaned & Anonymized).
+#' @param identifiability character, Identifiability. Allowd values: `personally_identifiable` (Personally identifiable), `anonymized_enclave` (Anonymized 1st level: Data Enclave - only removed direct identifiers), `anonymized_scientific` (Anonymized 2st level: Scientific Use File (SUF)), `anonymized_public` (Anonymized 3rd level: Public Use File (PUF)).
+#' @param geog_coverage character, Geographic Coverage - eg. National coverage, or name of the area, etc.
+#' @param data_collection_technique character, Data collection technique(*). Allowed values: `nf` (Not specified), `f2f` (Face-to-face interview), `capi` (Face-to-face interview: Computerised), `cami` (Face-to-face interview: Mobile), `papi` (Face-to-face interview: Paper-and-pencil), `tri` (Telephone interview), `eri` (E-mail interview), `wri` (Web-based interview: audio-visual technology enabling the interviewer(s) and interviewee(s) to communicate in real time), `easi` (Self-administered questionnaire: E-mail), `pasi` (Self-administered questionnaire: Paper), `sasi` (Self-administered questionnaire: SMS/MMS), `casi` (Self-administered questionnaire: Computer-assisted), `cawi` (Self-administered questionnaire: Web-based), `foc` (Face-to-face focus group), `tfoc` (Telephone focus group), `obs` (Observation), `oth` (Other).
+#' @param linked_datasets character, Linked Datasets - Links to other RIDL datasets. It supports multiple selections.
+#' @param hxlated logical, Dataset with resources having HXL tags
+#' @param archived logical, Archived(*) - Allows users to indicate if the dataset is archived or active. Allowed values: `False` (No), `True` (Yes).
+#' @param admin_notes character, Admin Notes - General. You can use Markdown formatting here.
+#' @param sampling_procedure_notes character, Admin Notes - Sampling Procedure. You can use Markdown formatting here.
+#' @param response_rate_notes character, Admin Notes - Response Rate. You can use Markdown formatting here.
+#' @param data_collection_notes character, Admin Notes - Data Collection. You can use Markdown formatting here.
+#' @param weight_notes character, Admin Notes - Weighting. You can use Markdown formatting here.
+#' @param clean_ops_notes character, Admin Notes - Cleaning. You can use Markdown formatting here.
+#' @param data_accs_notes character, Admin Notes - Access authority. You can use Markdown formatting here.
+#' @param ddi DDI.
+#' @param configuration RIDLConfig, the RIDL configuration
+#'
+#' @export
+ridl_dataset_patch <-  function(dataset,
+                                title = NULL,
+                                name = NULL,
+                                owner_org = NULL,
+                                notes = NULL,
+                                keywords = NULL,
+                                visibility = NULL,
+                                archived = NULL,
+                                external_access_level = NULL,
+                                unit_of_measurement = NULL,
+                                data_collector = NULL,
+                                data_collection_technique = NULL,
+                                date_range_start = NULL,
+                                date_range_end = NULL,
+                                short_title = NULL,
+                                tag_string  = NULL,
+                                url = NULL,
+                                private = NULL,
+                                data_sensitivity = NULL,
+                                original_id = NULL,
+                                sampling_procedure = NULL,
+                                operational_purpose_of_data = NULL,
+                                hxlated = NULL,
+                                process_status = NULL,
+                                identifiability = NULL,
+                                geog_coverage = NULL,
+                                linked_datasets = NULL,
+                                admin_notes = NULL,
+                                sampling_procedure_notes = NULL,
+                                response_rate_notes = NULL,
+                                data_collection_notes = NULL,
+                                weight_notes = NULL,
+                                clean_ops_notes = NULL,
+                                data_accs_notes = NULL,
+                                ddi = NULL,
+                                configuration = NULL) {
+  if (!is.null(configuration) &  inherits(configuration, "RIDLConfig"))
+    ridl_config_set(configuration = configuration)
+
+  configuration <- ridl_config_get()
+  assert_dataset_on_ridl(dataset)
+
+  data <-  list(title = title,
+                name = name,
+                short_title = short_title,
+                notes = notes,
+                tag_string = tag_string,
+                url = url,
+                owner_org = owner_org,
+                private = private,
+                visibility = visibility,
+                external_access_level = external_access_level,
+                data_sensitivity = data_sensitivity,
+                original_id = original_id,
+                data_collector = data_collector,
+                date_range_start = date_range_start,
+                date_range_end = date_range_end,
+                keywords = keywords,
+                unit_of_measurement = unit_of_measurement,
+                sampling_procedure = sampling_procedure,
+                operational_purpose_of_data = operational_purpose_of_data,
+                `hxl-ated` = hxlated,
+                process_status = process_status,
+                identifiability = identifiability,
+                geog_coverage = geog_coverage,
+                data_collection_technique = data_collection_technique,
+                linked_datasets = linked_datasets,
+                archived = archived,
+                admin_notes = admin_notes,
+                sampling_procedure_notes = sampling_procedure_notes,
+                response_rate_notes = response_rate_notes,
+                data_collection_notes = data_collection_notes,
+                weight_notes = weight_notes,
+                clean_ops_notes = clean_ops_notes,
+                data_accs_notes = data_accs_notes,
+                ddi = ddi,
+                id = dataset$data$id)
+  data <- drop_nulls(data)
+
+  res <- configuration$call_action("package_patch",
+                                   body = data,
+                                   verb = "post",
+                                   encode = "json")
+
+  #res$raw$raise_for_status()
+  invisible(res)
+}
+
+#' @rdname ridl_clone
+#' @export
+ridl_clone.RIDLDataset <- function(x, configuration = NULL) {
+  if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
+    ridl_config_set(configuration = configuration)
+
+  dataset <- x
+  configuration <- ridl_config_get()
   assert_dataset(dataset)
   data <- dataset$data
-
-  if ("resources" %in% names(data)) {
-    rs_data <- data$resources
-    rs_nm <- vapply(.ridl_dataset_schema$resource_fields,
-                    function(x) x$field_name, character(1))
-    rs_data <- lapply(rs_data, function(d) {
-      d <- d[rs_nm]
-      d$url <- NULL
-      d
-    })
-  }
 
   nm <- vapply(.ridl_dataset_schema$dataset_fields,
                function(x) x$field_name, character(1))
 
   data <- data[nm]
-  data$resources <- rs_data
 
-  ridl_dataset(data,
-               configuration = configuration)
+  RIDLDataset$new(data,
+                  configuration = configuration)
 }
 
 #' Check if a dataset name or id is available on RIDL

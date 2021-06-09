@@ -235,7 +235,8 @@ RIDLResource <- R6::R6Class(
       self$data$file_to_upload <- file_to_upload
       self$data$url_type <- "upload"
       self$data$upload <- upload(file_to_upload)
-      self$data$format <- file_ext(basename(file_to_upload))
+      if (is.null(self$data$format))
+        self$data$format <- file_ext(basename(file_to_upload))
       self$data$size <- file.size(file_to_upload)
     },
 
@@ -244,10 +245,15 @@ RIDLResource <- R6::R6Class(
     #'
     #' @return a logical value, TRUE if the the resource don't mix 'url' and
     #' and 'file_to_upload'
-    check_url_or_file_to_upload = function() {
+    check_url_filetoupload = function() {
       nm <- names(self$data)
-      if ("url" %in% nm & "file_to_upload" %in% nm)
-        stop("You can't use `url` and `file_to_upload` simultaneously",
+      bool1 <- "url" %in% nm & "file_to_upload" %in% nm
+      bool2 <- !"url" %in% nm & !"file_to_upload" %in% nm
+      if (bool1)
+        stop("You can't use a url and file to upload simultaneously",
+             call. = FALSE)
+      if (bool2)
+        stop( "You have to use either a url a file to upload",
              call. = FALSE)
       TRUE
     },
@@ -432,6 +438,7 @@ get_format.RIDLResource <- function(resource) {
 #' @export
 set_file_to_upload.RIDLResource <- function(resource, file_to_upload) {
   resource$set_file_to_upload(file_to_upload)
+  invisible(resource)
 }
 
 #' Get the file to upload
@@ -571,26 +578,72 @@ ridl_resource_show <- function(identifier, configuration = NULL) {
 #'
 #' Create a RIDL resource from list with required fields
 #'
-#' @param data list, list of data
+#' @param type character, Resource type(*) - The kind of file you want to upload. Allowed values: `data` (Data file), `attachment` (Additional attachment).
+#' @param url character, Upload - The file name as it will be recorded in the system.
+#' @param description character, Description - Some usefule notes about the data.
+#' @param format character, File format - eg. CSV, XML, or JSON.
+#' @param file_type character, File type(*) - Indicates what is contained in the file. Allowed values: `microdata` (Microdata), `questionnaire` (Questionnaire), `report` (Report), `sampling_methodology` (Sampling strategy & methodology Description), `infographics` (Infographics & Dashboard), `script` (Script), `concept note` (Concept Note), `other` (Other).
+#' @param file_to_upload character, path of the file to upload
+#' @param date_range_start Date, Data collection first date(*) - Use yyyy-mm-dd format.
+#' @param date_range_end Date, Data collection last date(*) - Use yyyy-mm-dd format.
+#' @param version character, Version(*).
+#' @param hxlated logical, HXL-ated. Allowed values: `False` (No), `True` (Yes).
+#' @param process_status character, File process status(*) - Indicates the processing stage of the data. 'Raw' means that the data has not been cleaned since collection. 'In process' means that it is being cleaned. 'Final' means that the dataset is final and ready for use in analytical products. Allowed valued: `raw` (Raw-Uncleaned), `cleaned` (Cleaned Only), `anonymized` (Cleaned & Anonymized).
+#' @param identifiability character, Identifiability(*) - Indicates if personally identifiable data is contained in the dataset. Allowed values: `personally_identifiable` (Personally identifiable), `anonymized_enclave` (Anonymized 1st level: Data Enclave - only removed direct identifiers), `anonymized_scientific` (Anonymized 2st level: Scientific Use File (SUF)), `anonymized_public` (Anonymized 3st level: Public Use File (PUF)).
+#' @param name character, the name of the resource
+#' @param title character, title of the resource
 #' @param configuration RIDLConfig, the configuration
 #'
-#' @return Resource the resource
+#' @return Resource the resources
 #' @export
 #'
 #' @examples
 #' \dontrun{
 #'
-#'  rsdata <- list(name = "hum-resource",
-#'                 title = "Humanitarian resource")
-#'  res <- ridl_resource(rsdata)
+#'  res <- ridl_resource(type = "microdata",
+#'                       format = "csv")
 #'  res
 #' }
-ridl_resource <- function(data, configuration = NULL) {
+ridl_resource <- function(type,
+                          file_type,
+                          date_range_start,
+                          date_range_end,
+                          version,
+                          process_status,
+                          identifiability,
+                          file_to_upload = NULL,
+                          url = NULL,
+                          name = NULL,
+                          title = NULL,
+                          description = NULL,
+                          format = NULL,
+                          hxlated = NULL,
+                          configuration = NULL) {
   if (!is.null(configuration) &  inherits(configuration, "RIDLConfig"))
     ridl_config_set(configuration = configuration)
   configuration <- ridl_config_get()
+
+  data <- list(type = type,
+               url = url,
+               name = name,
+               description = description,
+               format = format,
+               file_type = file_type,
+               date_range_start = date_range_start,
+               date_range_end = date_range_end,
+               version = version,
+               `hxl-ated` = hxlated,
+               process_status = process_status,
+               identifiability = identifiability)
+  data <- drop_nulls(data)
+
   data <- validate_resource_data(data)
-  RIDLResource$new(data, configuration)
+  rs <- RIDLResource$new(data,
+                         configuration)
+
+  if (!is.null(file_to_upload))
+    rs <- rs$set_file_to_upload(file_to_upload)
+  rs
 }
 
 #' @rdname ridl_browse
@@ -603,23 +656,26 @@ ridl_browse.RIDLResource <- function(x, ...)
 #' Create a resource on RIDL
 #'
 #' @param resource RIDLResource, a resource object
-#' @param dataset_id character, the id or the name of the RIDLDataset
+#' @param dataset RIDLDataset, the dataset where you can share the dataset
 #' @param configuration RIDLConfig, the configuration
 #'
 #'
 #' @return RIDLResource, the resource
 #' @export
 ridl_resource_create <- function(resource,
-                                 dataset_id,
+                                 dataset,
                                  configuration = NULL) {
 
   if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
     ridl_config_set(configuration = configuration)
 
   configuration <- ridl_config_get()
-  assert_resource_upload(resource)
+  assert_resource(resource)
+  assert_dataset_on_ridl(dataset)
+  resource$check_url_filetoupload()
+
   data <- resource$data
-  data$package_id <- dataset_id
+  data$package_id <- dataset$data$id
 
   res <- configuration$call_action("resource_create",
                                    body = data,
@@ -634,34 +690,69 @@ ridl_resource_create <- function(resource,
 #'
 #' Update a resource on RIDL
 #'
-#' @param resource RIDLResource, a resource object
-#' @param file_path character, the path to the file to upload
-#' @param dataset_id character, the id or the name of the RIDLDataset
+#' @param resource RIDLResource, the resource to update
+#' @param type character, Resource type(*) - The kind of file you want to upload. Allowed values: `data` (Data file), `attachment` (Additional attachment).
+#' @param url character, Upload - The file name as it will be recorded in the system.
+#' @param description character, Description - Some usefule notes about the data.
+#' @param format character, File format - eg. CSV, XML, or JSON.
+#' @param file_type character, File type(*) - Indicates what is contained in the file. Allowed values: `microdata` (Microdata), `questionnaire` (Questionnaire), `report` (Report), `sampling_methodology` (Sampling strategy & methodology Description), `infographics` (Infographics & Dashboard), `script` (Script), `concept note` (Concept Note), `other` (Other).
+#' @param file_to_upload character, path of the file to upload
+#' @param date_range_start Date, Data collection first date(*) - Use yyyy-mm-dd format.
+#' @param date_range_end Date, Data collection last date(*) - Use yyyy-mm-dd format.
+#' @param version character, Version(*).
+#' @param hxlated logical, HXL-ated. Allowed values: `False` (No), `True` (Yes).
+#' @param process_status character, File process status(*) - Indicates the processing stage of the data. 'Raw' means that the data has not been cleaned since collection. 'In process' means that it is being cleaned. 'Final' means that the dataset is final and ready for use in analytical products. Allowed valued: `raw` (Raw-Uncleaned), `cleaned` (Cleaned Only), `anonymized` (Cleaned & Anonymized).
+#' @param identifiability character, Identifiability(*) - Indicates if personally identifiable data is contained in the dataset. Allowed values: `personally_identifiable` (Personally identifiable), `anonymized_enclave` (Anonymized 1st level: Data Enclave - only removed direct identifiers), `anonymized_scientific` (Anonymized 2st level: Scientific Use File (SUF)), `anonymized_public` (Anonymized 3st level: Public Use File (PUF)).
+#' @param name character, the name of the resource
+#' @param title character, title of the resource
 #' @param configuration RIDLConfig, the configuration
 #'
 #' @return RIDLResource, the resource
 #' @export
-ridl_resource_update <-  function(resource,
-                                  file_path,
-                                  dataset_id,
-                                  configuration = NULL) {
+ridl_resource_update <- function(resource,
+                                 type,
+                                 file_type,
+                                 date_range_start,
+                                 date_range_end,
+                                 version,
+                                 process_status,
+                                 identifiability,
+                                 file_to_upload = NULL,
+                                 url = NULL,
+                                 name = NULL,
+                                 title = NULL,
+                                 description = NULL,
+                                 format = NULL,
+                                 hxlated = NULL,
+                                 configuration = NULL) {
 
   if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
     ridl_config_set(configuration = configuration)
 
   configuration <- ridl_config_get()
-  assert_resource(resource)
-  data <- resource$data
+  assert_resource_on_ridl(resource)
 
-  file_path_base <- basename(file_path)
-  data$package_id <- dataset_id
-  data$url_type <- "upload"
-  data$upload <- upload(file_path)
-  data$format <- file_ext(file_path_base)
+  data <- list(type = type,
+               url = url,
+               name = name,
+               description = description,
+               format = format,
+               file_type = file_type,
+               date_range_start = date_range_start,
+               date_range_end = date_range_end,
+               version = version,
+               `hxl-ated` = hxlated,
+               process_status = process_status,
+               identifiability = identifiability,
+               id = resource$data$id)
+  data <- drop_nulls(data)
+  data <- validate_resource_data(data)
 
   res <- configuration$call_action("resource_update",
                                    body = data,
                                    verb = "multipart")
+
+  res$raw$raise_for_status()
   invisible(res)
 }
 
@@ -669,53 +760,79 @@ ridl_resource_update <-  function(resource,
 #'
 #' Patch a resource on RIDL
 #'
-#' @param resource RIDLResource, a resource object
-#' @param file_path character, the path to the file to upload
-#' @param dataset_id character, the id or the name of the RIDLDataset
+#' @param resource RIDLResource, the resource to patch
+#' @param type character, Resource type(*) - The kind of file you want to upload. Allowed values: `data` (Data file), `attachment` (Additional attachment).
+#' @param url character, Upload - The file name as it will be recorded in the system.
+#' @param description character, Description - Some usefule notes about the data.
+#' @param format character, File format - eg. CSV, XML, or JSON.
+#' @param file_type character, File type(*) - Indicates what is contained in the file. Allowed values: `microdata` (Microdata), `questionnaire` (Questionnaire), `report` (Report), `sampling_methodology` (Sampling strategy & methodology Description), `infographics` (Infographics & Dashboard), `script` (Script), `concept note` (Concept Note), `other` (Other).
+#' @param file_to_upload character, path of the file to upload
+#' @param date_range_start Date, Data collection first date(*) - Use yyyy-mm-dd format.
+#' @param date_range_end Date, Data collection last date(*) - Use yyyy-mm-dd format.
+#' @param version character, Version(*).
+#' @param hxlated logical, HXL-ated. Allowed values: `False` (No), `True` (Yes).
+#' @param process_status character, File process status(*) - Indicates the processing stage of the data. 'Raw' means that the data has not been cleaned since collection. 'In process' means that it is being cleaned. 'Final' means that the dataset is final and ready for use in analytical products. Allowed valued: `raw` (Raw-Uncleaned), `cleaned` (Cleaned Only), `anonymized` (Cleaned & Anonymized).
+#' @param identifiability character, Identifiability(*) - Indicates if personally identifiable data is contained in the dataset. Allowed values: `personally_identifiable` (Personally identifiable), `anonymized_enclave` (Anonymized 1st level: Data Enclave - only removed direct identifiers), `anonymized_scientific` (Anonymized 2st level: Scientific Use File (SUF)), `anonymized_public` (Anonymized 3st level: Public Use File (PUF)).
+#' @param name character, the name of the resource
+#' @param title character, title of the resource
 #' @param configuration RIDLConfig, the configuration
 #'
 #' @return RIDLResource, the resource
 #' @export
 ridl_resource_patch <- function(resource,
-                                file_path,
-                                dataset_id,
+                                type = NULL,
+                                file_type = NULL,
+                                date_range_start = NULL,
+                                date_range_end = NULL,
+                                version = NULL,
+                                process_status = NULL,
+                                identifiability = NULL,
+                                file_to_upload = NULL,
+                                url = NULL,
+                                name = NULL,
+                                title = NULL,
+                                description = NULL,
+                                format = NULL,
+                                hxlated = NULL,
                                 configuration = NULL) {
 
   if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
     ridl_config_set(configuration = configuration)
 
   configuration <- ridl_config_get()
-  assert_resource(resource)
-  data <- resource$data
+  assert_resource_on_ridl(resource)
 
-  file_path_base <- basename(file_path)
-  data$package_id <- dataset_id
-  data$url_type <- "upload"
-  data$upload <- upload(file_path)
-  data$format <- file_ext(file_path_base)
+  data <- list(type = type,
+               url = url,
+               name = name,
+               description = description,
+               format = format,
+               file_type = file_type,
+               date_range_start = date_range_start,
+               date_range_end = date_range_end,
+               version = version,
+               `hxl-ated` = hxlated,
+               process_status = process_status,
+               identifiability = identifiability,
+               id = resource$data$id)
+  data <- drop_nulls(data)
 
   res <- configuration$call_action("resource_patch",
                                    body = data,
                                    verb = "post",
                                    encode = "multipart")
 
+  res$raw$raise_for_status()
   invisible(res)
 }
 
-#' Copy a resource metadata
-#'
-#' Copy a resource metadata
-#'
-#' @param resource RIDLResource, the resource to upload
-#' @param configuration RIDLConfig, the RIDL configuration
-#'
-#' @return a RIDLResource
-#'
+#' @rdname ridl_clone
 #' @export
-ridl_resource_copy_metadata <- function(resource, configuration = NULL) {
+ridl_clone.RIDLResource <- function(x, configuration = NULL) {
   if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
     ridl_config_set(configuration = configuration)
 
+  resource <- x
   configuration <- ridl_config_get()
   assert_resource(resource)
   data <- resource$data
@@ -724,8 +841,8 @@ ridl_resource_copy_metadata <- function(resource, configuration = NULL) {
   data <- data[nm]
   data$url <- NULL
 
-  ridl_resource(data,
-                configuration = configuration)
+  RIDLResource$new(data,
+                   configuration = configuration)
 }
 
 #' Check if a resource id is available on RIDL

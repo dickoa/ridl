@@ -4,10 +4,115 @@
 \alias{ridl_dataset_patch}
 \title{Patch a dataset on RIDL}
 \usage{
-ridl_dataset_patch(dataset, configuration = NULL)
+ridl_dataset_patch(
+  dataset,
+  title = NULL,
+  name = NULL,
+  owner_org = NULL,
+  notes = NULL,
+  keywords = NULL,
+  visibility = NULL,
+  archived = NULL,
+  external_access_level = NULL,
+  unit_of_measurement = NULL,
+  data_collector = NULL,
+  data_collection_technique = NULL,
+  date_range_start = NULL,
+  date_range_end = NULL,
+  short_title = NULL,
+  tag_string = NULL,
+  url = NULL,
+  private = NULL,
+  data_sensitivity = NULL,
+  original_id = NULL,
+  sampling_procedure = NULL,
+  operational_purpose_of_data = NULL,
+  hxlated = NULL,
+  process_status = NULL,
+  identifiability = NULL,
+  geog_coverage = NULL,
+  linked_datasets = NULL,
+  admin_notes = NULL,
+  sampling_procedure_notes = NULL,
+  response_rate_notes = NULL,
+  data_collection_notes = NULL,
+  weight_notes = NULL,
+  clean_ops_notes = NULL,
+  data_accs_notes = NULL,
+  ddi = NULL,
+  configuration = NULL
+)
 }
 \arguments{
 \item{dataset}{RIDLDataset, the dataset to upload}
+
+\item{title}{character, Title(*) - Make sure to include: 'Survey name/title', 'Location', 'Country', and 'Year(s)' in the order indicated.}
+
+\item{name}{character, URL(*) - The canonical name of the dataset, eg. my-dataset.}
+
+\item{owner_org}{character, Data container(*)  - Use the canonical name for the container.}
+
+\item{notes}{character, Description(*) - Some useful notes about the data. Please include the number of observations.}
+
+\item{keywords}{character,  Topic classifications(*) - Tags useful for searching for the datasets. Multiple values are allowed.}
+
+\item{visibility}{character, Internal Access Level(*). Allowed values: \code{restricted} (Private), \code{public} (Internally Visible).}
+
+\item{archived}{logical, Archived(*) - Allows users to indicate if the dataset is archived or active. Allowed values: \code{False} (No), \code{True} (Yes).}
+
+\item{external_access_level}{character, External access level(*). Allowed values: \code{not_available} (Not available), \code{direct_access} (Direct access), \code{public_use} (Public use), \code{licensed_use} (Licensed use), \code{data_enclave} (Data enclave), \code{open_access} (Open access).}
+
+\item{unit_of_measurement}{character, Unit of measurement(*) - Unit of measurement / observation for the dataset.}
+
+\item{data_collector}{character,  Data Collector(*) - Which organization owns / collected the data. Multiple values are allowed.}
+
+\item{data_collection_technique}{character, Data collection technique(*). Allowed values: \code{nf} (Not specified), \code{f2f} (Face-to-face interview), \code{capi} (Face-to-face interview: Computerised), \code{cami} (Face-to-face interview: Mobile), \code{papi} (Face-to-face interview: Paper-and-pencil), \code{tri} (Telephone interview), \code{eri} (E-mail interview), \code{wri} (Web-based interview: audio-visual technology enabling the interviewer(s) and interviewee(s) to communicate in real time), \code{easi} (Self-administered questionnaire: E-mail), \code{pasi} (Self-administered questionnaire: Paper), \code{sasi} (Self-administered questionnaire: SMS/MMS), \code{casi} (Self-administered questionnaire: Computer-assisted), \code{cawi} (Self-administered questionnaire: Web-based), \code{foc} (Face-to-face focus group), \code{tfoc} (Telephone focus group), \code{obs} (Observation), \code{oth} (Other).}
+
+\item{date_range_start}{Date, Date collection first date - Use dd/mm/yyyy format.}
+
+\item{date_range_end}{Date, Date collection last date - Use dd/mm/yyyy format.}
+
+\item{short_title}{character, Short title - eg. Short title for the project.}
+
+\item{tag_string}{character,  Tags - eg. economy, mental health, government.}
+
+\item{url}{character,  Project URL - Website URL associated with this data project (if applicable).}
+
+\item{private}{character, Visibility (Private/Public).}
+
+\item{data_sensitivity}{character,  Data sensitivity - Apply to both Anonymized and Personally identifiable data. Allowed values: \code{yes} (Yes), \code{no} (No).}
+
+\item{original_id}{character, Original ID - If the dataset already has an ID from the source org, DDI, etc...}
+
+\item{sampling_procedure}{character, Sampling Procedure. Multiple values are allowed. Allowed values: \code{total_universe_complete_enumeration} (Total universe/Complete enumeration), \code{probability_simple_random} (Probability: Simple random), \code{probability_systematic_random} (Probability: Systematic random), \code{probability_stratified} (Probability: Stratified), \code{probability_stratified_proportional} (Probability: Stratified: Proportional), \code{probability_stratified_disproportional} (Probability: Stratified: Disproportional), \code{probability_cluster} (Probability: Cluster), \code{probability_cluster_simple_random} (Probability: Cluster: Simple random ), \code{probability_cluster_stratified_random} (Probability: Cluster: Stratified random), \code{probability_multistage} (Probability: Multistage), \code{nonprobability} (Non-probability), \code{nonprobability_availability} (Non-probability: Availability), \code{nonprobability_purposive} (Non-probability: Purposive), \code{nonprobability_quota} (Non-probability: Quota), \code{nonprobability_respondentassisted} (Non-probability: Respondent-assisted), \code{mixed_probability_nonprobability} (Mixed probability and non-probability), \code{other_other} (Use if the sampling procedure is known, but not found in the list..).}
+
+\item{operational_purpose_of_data}{character,  Operational purpose of data - Classification of the type of data contained in the file. Multiple values are allowed. Allowed values: \code{participatory_assessments} (Participatory assessments), \code{baseline_household_survey} (Baseline Household Survey), \code{rapid_needs_assessment} (Rapid Needs Assessment), \code{protection_monitoring} (Protection Monitoring), \code{programme_monitoring} (Programme monitoring), \code{population_data} (Population Data), \code{cartography} (Cartography, Infrastructure & GIS).}
+
+\item{hxlated}{logical, Dataset with resources having HXL tags}
+
+\item{process_status}{character, Dataset Process Status. Allowed values: \code{raw} (Raw-Uncleaned), \code{cleaned} (Cleaned Only), \code{anonymized} (Cleaned & Anonymized).}
+
+\item{identifiability}{character, Identifiability. Allowd values: \code{personally_identifiable} (Personally identifiable), \code{anonymized_enclave} (Anonymized 1st level: Data Enclave - only removed direct identifiers), \code{anonymized_scientific} (Anonymized 2st level: Scientific Use File (SUF)), \code{anonymized_public} (Anonymized 3rd level: Public Use File (PUF)).}
+
+\item{geog_coverage}{character, Geographic Coverage - eg. National coverage, or name of the area, etc.}
+
+\item{linked_datasets}{character, Linked Datasets - Links to other RIDL datasets. It supports multiple selections.}
+
+\item{admin_notes}{character, Admin Notes - General. You can use Markdown formatting here.}
+
+\item{sampling_procedure_notes}{character, Admin Notes - Sampling Procedure. You can use Markdown formatting here.}
+
+\item{response_rate_notes}{character, Admin Notes - Response Rate. You can use Markdown formatting here.}
+
+\item{data_collection_notes}{character, Admin Notes - Data Collection. You can use Markdown formatting here.}
+
+\item{weight_notes}{character, Admin Notes - Weighting. You can use Markdown formatting here.}
+
+\item{clean_ops_notes}{character, Admin Notes - Cleaning. You can use Markdown formatting here.}
+
+\item{data_accs_notes}{character, Admin Notes - Access authority. You can use Markdown formatting here.}
+
+\item{ddi}{DDI.}
 
 \item{configuration}{RIDLConfig, the RIDL configuration}
 }

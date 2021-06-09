@@ -149,6 +149,7 @@ ridl_container_show <- function(identifier = NULL,
   if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
     ridl_config_set(configuration = configuration)
   configuration <- ridl_config_get()
+
   res <- configuration$call_action("organization_show",
                                    list(id = identifier,
                                         type = "data-container",
@@ -236,7 +237,16 @@ ridl_dataset_list.RIDLContainer <- function(container = NULL,
 #'
 #' Create a RIDL container from list with required fields
 #'
-#' @param data List, list of data
+#' @param title character, the title of the container
+#' @param name character, the name of the container
+#' @param description character, the description of the data
+#' @param not_used character, name of the parent container
+#' @param country character, a vector of UNHCR country code
+#' @param geographic_area character, Geographic area referenced.
+#' @param sectoral_area character, The sectoral areas covered by the datasets included within. Multiple values are allowed.
+#' @param population character, Description of the population covered by the container
+#' @param tag_string character, the tag eg. economy, mental health, government
+#' @param visible_external logical, Visible to Partner users
 #' @param configuration RIDLConfig, RIDL configuration used
 #'
 #' @return RIDLContainer the container
@@ -245,17 +255,38 @@ ridl_dataset_list.RIDLContainer <- function(container = NULL,
 #' @examples
 #' \dontrun{
 #'
-#'  dsdata <- list(name = "hum-container",
-#'                 title = "Humanitarian container")
 #'  res <- ridl_container(dsdata)
 #'  res
 #' }
-ridl_container <- function(data, configuration = NULL) {
+ridl_container <- function(country,
+                           visible_external,
+                           geographic_area,
+                           title = NULL,
+                           name = NULL,
+                           description = NULL,
+                           not_used = NULL,
+                           sectoral_area = NULL,
+                           population = NULL,
+                           tag_string = NULL,
+                           configuration = NULL) {
   if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
     ridl_config_set(configuration = configuration)
   configuration <- ridl_config_get()
+
+  data <- list(country = country,
+               visible_external = visible_external,
+               geographic_area = geographic_area,
+               title = title,
+               name = name,
+               description = description,
+               not_used = not_used,
+               sectoral_area = sectoral_area,
+               population = population,
+               tag_string = tag_string)
+
   data <- validate_container_data(data)
-  RIDLContainer$new(data, configuration)
+  RIDLContainer$new(data,
+                    configuration)
 }
 
 #' Create a container on RIDL
@@ -276,9 +307,12 @@ ridl_container_create <-  function(container, configuration = NULL) {
   configuration <- ridl_config_get()
   assert_container(container)
   data <- container$data
+
   res <- configuration$call_action("organization_create",
                                    body = data,
                                    verb = "post")
+
+  res$raw$raise_for_status()
   invisible(res)
 }
 
@@ -286,64 +320,131 @@ ridl_container_create <-  function(container, configuration = NULL) {
 #'
 #' Update a container on RIDL
 #'
-#' @param container RIDLContainer, the container
+#' @param container RIDLContainer, the container to update
+#' @param title character, the title of the container
+#' @param name character, the name of the container
+#' @param description character, the description of the data
+#' @param not_used character, name of the parent container
+#' @param country character, a vector of UNHCR country code
+#' @param geographic_area character, Geographic area referenced.
+#' @param sectoral_area character, The sectoral areas covered by the datasets included within. Multiple values are allowed.
+#' @param population character, Description of the population covered by the container
+#' @param tag_string character, the tag eg. economy, mental health, government
+#' @param visible_external logical, Visible to Partner users
 #' @param configuration RIDLConfig, the configuration
 #'
 #' @return A HttpResponse object
 #'
 #' @export
-ridl_container_update <-  function(container, configuration = NULL) {
+ridl_container_update <-  function(container,
+                                   country,
+                                   visible_external,
+                                   geographic_area,
+                                   title = NULL,
+                                   name = NULL,
+                                   description = NULL,
+                                   not_used = NULL,
+                                   sectoral_area = NULL,
+                                   population = NULL,
+                                   tag_string = NULL,
+                                   configuration = NULL) {
 
-  if (!is.null(configuration) &  inherits(configuration, "RIDLConfig"))
-    ridl_config_set(configuration = configuration)
-
-  configuration <- ridl_config_get()
-  assert_container(container)
-  data <- container$data
-  res <- configuration$call_action("organization_update",
-                                   body = data,
-                                   verb = "post")
-  invisible(res)
-}
-
-#' Patch a container on RIDL
-#'
-#' Patch a container on RIDL
-#'
-#' @param container RIDLContainer, the container
-#' @param configuration RIDLConfig, the configuration
-#'
-#' @return A HttpResponse object
-#'
-#' @export
-ridl_container_patch <-  function(container, configuration = NULL) {
-
-  if (!is.null(configuration) &  inherits(configuration, "RIDLConfig"))
-    ridl_config_set(configuration = configuration)
-
-  configuration <- ridl_config_get()
-  assert_container(container)
-  data <- container$data
-  res <- configuration$call_action("organization_patch",
-                                   body = data,
-                                   verb = "post")
-  invisible(res)
-}
-
-#' Copy a container metadata
-#'
-#' Copy a container metadata
-#'
-#' @param container RIDLContainer, the container to copy
-#' @param configuration RIDLConfig, the RIDL configuration
-#'
-#' @return a RIDLContainer
-#'
-#' @export
-ridl_container_copy_metadata <-  function(container, configuration = NULL) {
   if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
     ridl_config_set(configuration = configuration)
 
+  configuration <- ridl_config_get()
+  assert_container_on_ridl(container)
+
+  data <- list(country = country,
+               visible_external = visible_external,
+               geographic_area = geographic_area,
+               title = title,
+               name = name,
+               description = description,
+               not_used = not_used,
+               sectoral_area = sectoral_area,
+               population = population,
+               tag_string = tag_string,
+               id = container$data$id)
+
+  data <- drop_nulls(data)
+  data <- validate_container_data(data)
+
+  res <- configuration$call_action("organization_update",
+                                   body = data,
+                                   verb = "post")
+
+  res$raw$raise_for_status()
+  invisible(res)
+}
+
+#' Patch a container on RIDL
+#'
+#' Patch a container on RIDL
+#'
+#' @param container RIDLContainer, the container to patch
+#' @param title character, the title of the container
+#' @param name character, the name of the container
+#' @param description character, the description of the data
+#' @param not_used character, name of the parent container
+#' @param country character, a vector of UNHCR country code
+#' @param geographic_area character, Geographic area referenced.
+#' @param sectoral_area character, The sectoral areas covered by the datasets included within. Multiple values are allowed.
+#' @param population character, Description of the population covered by the container
+#' @param tag_string character, the tag eg. economy, mental health, government
+#' @param visible_external logical, Visible to Partner users
+#' @param configuration RIDLConfig, the configuration
+#'
+#' @return A HttpResponse object
+#'
+#' @export
+ridl_container_patch <-  function(container,
+                                  country = NULL,
+                                  visible_external = NULL,
+                                  geographic_area = NULL,
+                                  title = NULL,
+                                  name = NULL,
+                                  description = NULL,
+                                  not_used = NULL,
+                                  sectoral_area = NULL,
+                                  population = NULL,
+                                  tag_string = NULL,
+                                  configuration = NULL) {
+
+  if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
+    ridl_config_set(configuration = configuration)
+
+  configuration <- ridl_config_get()
+  assert_container_on_ridl(container)
+
+  data <- list(country = country,
+               visible_external = visible_external,
+               geographic_area = geographic_area,
+               title = title,
+               name = name,
+               description = description,
+               not_used = not_used,
+               sectoral_area = sectoral_area,
+               population = population,
+               tag_string = tag_string,
+               id = container$data$id)
+
+  data <- drop_nulls(data)
+
+  res <- configuration$call_action("organization_patch",
+                                   body = data,
+                                   verb = "post")
+  res$raw$raise_for_status()
+  invisible(res)
+}
+
+#' @rdname ridl_clone
+#' @export
+ridl_clone.RIDLContainer <-  function(x, configuration = NULL) {
+  if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
+    ridl_config_set(configuration = configuration)
+
+  container <- x
   configuration <- ridl_config_get()
   assert_container(container)
   data <- container$data
@@ -353,8 +454,8 @@ ridl_container_copy_metadata <-  function(container, configuration = NULL) {
 
   data <- data[nm]
 
-  ridl_container(data,
-                 configuration = configuration)
+  RIDLContainer$new(data,
+                    configuration = configuration)
 }
 
 #' Check if a container name or id is available on RIDL

@@ -4,12 +4,12 @@
 \alias{ridl_resource_create}
 \title{Create a resource on RIDL}
 \usage{
-ridl_resource_create(resource, dataset_id, configuration = NULL)
+ridl_resource_create(resource, dataset, configuration = NULL)
 }
 \arguments{
 \item{resource}{RIDLResource, a resource object}
 
-\item{dataset_id}{character, the id or the name of the RIDLDataset}
+\item{dataset}{RIDLDataset, the dataset where you can share the dataset}
 
 \item{configuration}{RIDLConfig, the configuration}
 }

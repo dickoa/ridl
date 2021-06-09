@@ -34,11 +34,7 @@
                                             package = "ridl")
   .ridl_container_schema <<- fromJSON(ridl_container_schema_file,
                                       simplifyVector = FALSE)
-
   ridl_config_set()
-
-  invisible()
-
 }
 
 ## .onAttach <- function(libname, pkgname) { # nolint

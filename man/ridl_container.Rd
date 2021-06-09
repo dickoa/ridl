@@ -4,10 +4,40 @@
 \alias{ridl_container}
 \title{Create a RIDL container from list}
 \usage{
-ridl_container(data, configuration = NULL)
+ridl_container(
+  country,
+  visible_external,
+  geographic_area,
+  title = NULL,
+  name = NULL,
+  description = NULL,
+  not_used = NULL,
+  sectoral_area = NULL,
+  population = NULL,
+  tag_string = NULL,
+  configuration = NULL
+)
 }
 \arguments{
-\item{data}{List, list of data}
+\item{country}{character, a vector of UNHCR country code}
+
+\item{visible_external}{logical, Visible to Partner users}
+
+\item{geographic_area}{character, Geographic area referenced.}
+
+\item{title}{character, the title of the container}
+
+\item{name}{character, the name of the container}
+
+\item{description}{character, the description of the data}
+
+\item{not_used}{character, name of the parent container}
+
+\item{sectoral_area}{character, The sectoral areas covered by the datasets included within. Multiple values are allowed.}
+
+\item{population}{character, Description of the population covered by the container}
+
+\item{tag_string}{character, the tag eg. economy, mental health, government}
 
 \item{configuration}{RIDLConfig, RIDL configuration used}
 }
@@ -20,8 +50,6 @@ Create a RIDL container from list with required fields
 \examples{
 \dontrun{
 
- dsdata <- list(name = "hum-container",
-                title = "Humanitarian container")
  res <- ridl_container(dsdata)
  res
 }

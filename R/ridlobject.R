@@ -273,7 +273,6 @@ download.default <- function(resource, folder, filename, quiet, force, ...) {
        call. = TRUE)
 }
 
-
 #' Browse a RIDL object
 #'
 #' Browse a RIDL object
@@ -300,3 +299,31 @@ ridl_browse <- function(x, ...)
 #' @export
 ridl_browse.default <- function(x, ...)
   x$browse()
+
+#' Copy metadata from a RIDL object
+#'
+#' Copy metadata from a RIDL object
+#'
+#' @param x an RIDL object
+#' @param configuration RIDLConfig, the configuration
+#' @rdname ridl_clone
+#'
+#' @return Character Tags of the dataset
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#'
+#'  # Setting the config to use RIDL default server
+#'  ridl_config_set()
+#'  res <- ridl_dataset_search(rows = 3L)
+#'  ridl_clone(res[[1]])
+#' }
+ridl_clone <- function(x, configuration)
+  UseMethod("ridl_clone")
+
+#' @rdname ridl_clone
+#' @export
+ridl_clone.default <- function(x, configuration)
+  stop("It only works with a RIDLObject",
+       call. = TRUE)

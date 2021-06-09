@@ -4,15 +4,57 @@
 \alias{ridl_resource}
 \title{Create a RIDL resource from list}
 \usage{
-ridl_resource(data, configuration = NULL)
+ridl_resource(
+  type,
+  file_type,
+  date_range_start,
+  date_range_end,
+  version,
+  process_status,
+  identifiability,
+  file_to_upload = NULL,
+  url = NULL,
+  name = NULL,
+  title = NULL,
+  description = NULL,
+  format = NULL,
+  hxlated = NULL,
+  configuration = NULL
+)
 }
 \arguments{
-\item{data}{list, list of data}
+\item{type}{character, Resource type(*) - The kind of file you want to upload. Allowed values: \code{data} (Data file), \code{attachment} (Additional attachment).}
+
+\item{file_type}{character, File type(*) - Indicates what is contained in the file. Allowed values: \code{microdata} (Microdata), \code{questionnaire} (Questionnaire), \code{report} (Report), \code{sampling_methodology} (Sampling strategy & methodology Description), \code{infographics} (Infographics & Dashboard), \code{script} (Script), \verb{concept note} (Concept Note), \code{other} (Other).}
+
+\item{date_range_start}{Date, Data collection first date(*) - Use yyyy-mm-dd format.}
+
+\item{date_range_end}{Date, Data collection last date(*) - Use yyyy-mm-dd format.}
+
+\item{version}{character, Version(*).}
+
+\item{process_status}{character, File process status(*) - Indicates the processing stage of the data. 'Raw' means that the data has not been cleaned since collection. 'In process' means that it is being cleaned. 'Final' means that the dataset is final and ready for use in analytical products. Allowed valued: \code{raw} (Raw-Uncleaned), \code{cleaned} (Cleaned Only), \code{anonymized} (Cleaned & Anonymized).}
+
+\item{identifiability}{character, Identifiability(*) - Indicates if personally identifiable data is contained in the dataset. Allowed values: \code{personally_identifiable} (Personally identifiable), \code{anonymized_enclave} (Anonymized 1st level: Data Enclave - only removed direct identifiers), \code{anonymized_scientific} (Anonymized 2st level: Scientific Use File (SUF)), \code{anonymized_public} (Anonymized 3st level: Public Use File (PUF)).}
+
+\item{file_to_upload}{character, path of the file to upload}
+
+\item{url}{character, Upload - The file name as it will be recorded in the system.}
+
+\item{name}{character, the name of the resource}
+
+\item{title}{character, title of the resource}
+
+\item{description}{character, Description - Some usefule notes about the data.}
+
+\item{format}{character, File format - eg. CSV, XML, or JSON.}
+
+\item{hxlated}{logical, HXL-ated. Allowed values: \code{False} (No), \code{True} (Yes).}
 
 \item{configuration}{RIDLConfig, the configuration}
 }
 \value{
-Resource the resource
+Resource the resources
 }
 \description{
 Create a RIDL resource from list with required fields
@@ -20,9 +62,8 @@ Create a RIDL resource from list with required fields
 \examples{
 \dontrun{
 
- rsdata <- list(name = "hum-resource",
-                title = "Humanitarian resource")
- res <- ridl_resource(rsdata)
+ res <- ridl_resource(type = "microdata",
+                      format = "csv")
  res
 }
 }

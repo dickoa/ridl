@@ -14,6 +14,31 @@ drop_nulls <- function(x) {
 }
 
 #' @noRd
+merge_list_update <- function(x, y) {
+  n1 <- names(x)
+  n2 <- names(y)
+  n <- union(n1, n2)
+  for (field in n) {
+    if (field %in% n2)
+      x[[field]] <- y[[field]]
+  }
+  x
+}
+
+#' @noRd
+merge_list_patch <- function(x, y) {
+  n1 <- names(x)
+  n2 <- names(y)
+  cn <- intersect(n1, n2)
+  n <- union(n1, n2)
+  for (field in n) {
+    if (field %in% n2)
+      x[[field]] <- y[[field]]
+  }
+  x
+}
+
+#' @noRd
 as_pylog <- function(x) {
   stopifnot(is.logical(x))
   if (x)
@@ -54,6 +79,13 @@ assert_configuration <- function(configuration)
 assert_dataset <- function(x) {
   if (!inherits(x, "RIDLDataset"))
     stop("Not an RIDL dataset!", call. = FALSE)
+}
+
+#' @noRd
+assert_dataset_on_ridl <- function(x) {
+  if (!inherits(x, "RIDLDataset") &
+        (is.null(x$data$id) | !is_valid_uuid(x$data$id)))
+    stop("Not an RIDL dataset or dataset on RIDL!", call. = FALSE)
 }
 
 #' @noRd
@@ -109,6 +141,17 @@ dataset_fields_choices_val <- function() {
 }
 
 #' @noRd
+validate_dataset_data_minimal <- function(x) {
+  fields <- RIDLDataset$new()$get_fields()
+  nm <- names(x)
+  m <- match(nm, fields)
+  if (!all(is.na(m)))
+    stop("You need at least one RIDL Dataset field to patch",
+         call. = FALSE)
+  invisible(x)
+}
+
+#' @noRd
 validate_dataset_data <- function(x) {
   RIDLDataset$new(x)$check_required_fields()
   choices_val <- dataset_fields_choices_val()
@@ -123,18 +166,6 @@ validate_dataset_data <- function(x) {
            call. = FALSE)
     }
   }
-  ## nm <- names(.ridl_dataset_lookup_list)
-  ## no_nm <- setdiff(names(x), nm)
-  ## x_nm <- lapply(nm, function(n) {
-  ##   x[[n]] <- ridl_dataset_param_lookup(n,
-  ##                                       x[[n]])
-  ## })
-  ## c(x[no_nm], x_nm)
-  ## x$archived <- as_pylog(x$archived)
-  ## x$keywords <- ridl_dataset_param_lookup("keywords",
-  ##                                         x$keywords)
-  ## x$keywords <- ridl_dataset_param_lookup("data_collection_technique",
-  ##                                         x$data_collection_technique)
   x
 }
 
@@ -173,9 +204,6 @@ validate_resource_data <- function(x) {
   if (x$file_type == "microdata" && x$type != "data")
     stop("If you use file_type='microdata', you also need to use type='data'",
          call. = FALSE)
-
-  if ("hxl-ated" %in% names(x))
-    x$`hxl-ated` <- as_pylog(x$`hxl-ated`)
   x
 }
 
@@ -193,6 +221,15 @@ assert_resource_upload <- function(x) {
 assert_resource <- function(x) {
   if (!inherits(x, "RIDLResource"))
     stop("Not an RIDL Resource object!", call. = FALSE)
+  invisible(x)
+}
+
+#' @noRd
+assert_resource_on_ridl <- function(x) {
+  if (!inherits(x, "RIDLResource") &
+        (is.null(x$data$id) | !is_valid_uuid(x$data$id)))
+    stop("Not an RIDLResource object or not on RIDL yet!",
+         call. = FALSE)
   invisible(x)
 }
 
@@ -285,6 +322,15 @@ ridl_container_country <- function() {
 assert_container <- function(x) {
   if (!inherits(x, "RIDLContainer"))
     stop("Not an RIDL Container object!", call. = FALSE)
+  invisible(x)
+}
+
+#' @noRd
+assert_container_on_ridl <- function(x) {
+  if (!inherits(x, "RIDLContainer") &
+        (is.null(x$data$id) | !is_valid_uuid(x$data$id)))
+    stop("Not an RIDLContainer object or not on RIDL yet!",
+         call. = FALSE)
   invisible(x)
 }
 
@@ -482,7 +528,7 @@ log_response <- function(res) {
              collapse = ", ")
     )
 
-    if (res$status_code >= 500) {
+    if (res$status_code >= 400) {
       msg <- paste(msg, rawToChar(res$content),
                    sep = " - ")
       logger::log_error("%s", msg)

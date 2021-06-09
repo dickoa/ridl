@@ -69,6 +69,7 @@ RIDLConfig <- R6::R6Class(
         }
       }
 
+      hooks <- NULL
       if (!is.null(log_file)) {
         Sys.setenv("RIDL_LOG" = log_file)
         self$data$log_file <- log_file
@@ -76,12 +77,13 @@ RIDLConfig <- R6::R6Class(
                      namespace = "ridl")
         log_formatter(formatter_sprintf,
                       namespace = "ridl")
+        hooks <- list(request = log_request,
+                      response = log_response)
       }
-
 
       self$data$key <- key
       self$data$site_url <- site_url
-      headers <- list(Authorization = key)
+      headers <- list(`X-CKAN-API-Key` = key)
 
       if (is.null(user_agent))
         user_agent <- get_user_agent()
@@ -90,10 +92,7 @@ RIDLConfig <- R6::R6Class(
                                                headers = headers,
                                                opts = list(http_version = 2L,
                                                            useragent = user_agent, ...),
-                                               hooks = list(
-                                                 request = log_request,
-                                                 response = log_response
-                                               ))
+                                               hooks = hooks)
     },
 
     #' @description
