@@ -87,7 +87,7 @@ RIDLDataset <- R6::R6Class(
     #' Get number of dataset resources
     #'
     #' @return The number of RIDLResource objects
-    ridl_resource_n = function() {
+    ridl_resource_count = function() {
       length(self$resources)
     },
 
@@ -279,7 +279,7 @@ as_tibble.RIDLDataset <- function(x, ...) {
   tibble::tibble(dataset_title = tolower(x$data$title),
                  dataset_name = x$data$name,
                  container_name = x$data$owner_org,
-                 n_resources = ridl_resource_n(x),
+                 n_resources = ridl_resource_count(x),
                  dataset = list(x))
 }
 
@@ -500,7 +500,7 @@ ridl_container_get.RIDLDataset <- function(dataset) {
 #'
 #' @param dataset RIDLDataset
 #'
-#' @rdname ridl_resource_n
+#' @rdname ridl_resource_count
 #'
 #' @return integer, the number of resources
 #' @export
@@ -509,11 +509,11 @@ ridl_container_get.RIDLDataset <- function(dataset) {
 #' \dontrun{
 #'  # Setting the config to use RIDL
 #'  res <- ridl_dataset_search(rows = 3L, visibility = "public")
-#'  ridl_resource_n(res[[2]])
+#'  ridl_resource_count(res[[2]])
 #' }
 #' @export
-ridl_resource_n.RIDLDataset <- function(dataset) {
-  dataset$ridl_resource_n()
+ridl_resource_count.RIDLDataset <- function(dataset) {
+  dataset$ridl_resource_count()
 }
 
 #' Add a Resource to a dataset

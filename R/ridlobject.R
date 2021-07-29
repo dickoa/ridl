@@ -233,14 +233,14 @@ ridl_container_get.default <- function(dataset) {
        call. = TRUE)
 }
 
-#' @rdname ridl_resource_n
+#' @rdname ridl_resource_count
 #' @export
-ridl_resource_n <- function(dataset)
-  UseMethod("ridl_resource_n")
+ridl_resource_count <- function(dataset)
+  UseMethod("ridl_resource_count")
 
-#' @rdname ridl_resource_n
+#' @rdname ridl_resource_count
 #' @export
-ridl_resource_n.default <- function(dataset) {
+ridl_resource_count.default <- function(dataset) {
   stop("It only works with RIDLDataset object",
        call. = TRUE)
 }

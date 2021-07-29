@@ -30,7 +30,7 @@ creating, and updating datasets and associated resources.
 \item \href{#method-new}{\code{RIDLDataset$new()}}
 \item \href{#method-ridl_resource_get}{\code{RIDLDataset$ridl_resource_get()}}
 \item \href{#method-ridl_resource_get_all}{\code{RIDLDataset$ridl_resource_get_all()}}
-\item \href{#method-ridl_resource_n}{\code{RIDLDataset$ridl_resource_n()}}
+\item \href{#method-ridl_resource_count}{\code{RIDLDataset$ridl_resource_count()}}
 \item \href{#method-ridl_resource_delete}{\code{RIDLDataset$ridl_resource_delete()}}
 \item \href{#method-ridl_resource_delete_all}{\code{RIDLDataset$ridl_resource_delete_all()}}
 \item \href{#method-ridl_resource_add}{\code{RIDLDataset$ridl_resource_add()}}
@@ -121,12 +121,12 @@ a list of Resource objects, all resources available in the dataset
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-ridl_resource_n"></a>}}
-\if{latex}{\out{\hypertarget{method-ridl_resource_n}{}}}
-\subsection{Method \code{ridl_resource_n()}}{
+\if{html}{\out{<a id="method-ridl_resource_count"></a>}}
+\if{latex}{\out{\hypertarget{method-ridl_resource_count}{}}}
+\subsection{Method \code{ridl_resource_count()}}{
 Get number of dataset resources
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RIDLDataset$ridl_resource_n()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RIDLDataset$ridl_resource_count()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
