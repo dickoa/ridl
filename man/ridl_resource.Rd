@@ -12,6 +12,7 @@ ridl_resource(
   version,
   process_status,
   identifiability,
+  visibility,
   file_to_upload = NULL,
   url = NULL,
   name = NULL,
@@ -19,6 +20,8 @@ ridl_resource(
   description = NULL,
   format = NULL,
   hxlated = NULL,
+  kobo_type = NULL,
+  kobo_details = NULL,
   configuration = NULL
 )
 }
@@ -37,6 +40,8 @@ ridl_resource(
 
 \item{identifiability}{character, Identifiability(*) - Indicates if personally identifiable data is contained in the dataset. Allowed values: \code{personally_identifiable} (Personally identifiable), \code{anonymized_enclave} (Anonymized 1st level: Data Enclave - only removed direct identifiers), \code{anonymized_scientific} (Anonymized 2st level: Scientific Use File (SUF)), \code{anonymized_public} (Anonymized 3st level: Public Use File (PUF)).}
 
+\item{visibility}{character, Internal Access Level(*). Allowed values: \code{restricted} (Private), \code{public} (Internally Visible).}
+
 \item{file_to_upload}{character, path of the file to upload}
 
 \item{url}{character, Upload - The file name as it will be recorded in the system.}
@@ -51,6 +56,10 @@ ridl_resource(
 
 \item{hxlated}{logical, HXL-ated. Allowed values: \code{False} (No), \code{True} (Yes).}
 
+\item{kobo_type}{character, type}
+
+\item{kobo_details}{character, details}
+
 \item{configuration}{RIDLConfig, the configuration}
 }
 \value{
@@ -63,7 +72,7 @@ Create a RIDL resource from list with required fields
 \dontrun{
 
  res <- ridl_resource(type = "microdata",
-                      format = "csv")
+                      file_type = "csv")
  res
 }
 }

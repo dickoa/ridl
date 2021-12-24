@@ -39,6 +39,7 @@ ridl_dataset(
   clean_ops_notes = NULL,
   data_accs_notes = NULL,
   ddi = NULL,
+  kobo_asset_id = NULL,
   configuration = NULL
 )
 }
@@ -110,6 +111,8 @@ ridl_dataset(
 \item{data_accs_notes}{character, Admin Notes - Access authority. You can use Markdown formatting here.}
 
 \item{ddi}{DDI.}
+
+\item{kobo_asset_id}{KoBoToolbox Asset ID.}
 
 \item{configuration}{RIDLConfig, RIDL configuration used}
 }

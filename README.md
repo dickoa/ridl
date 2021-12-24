@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# ridl <img src="https://gitlab.com/dickoa/ridl/-/raw/master/inst/img/hex_ridl.png" align="right" height="139" />
+# ridl <img src="https://gitlab.com/dickoa/ridl/-/raw/master/man/figures/hex_ridl.png" align="right" width="120" />
 
 [![Project Status: Active - Initial development is in progress, but
 there has not yet been a stable, usable release suitable for the
@@ -75,7 +75,7 @@ further use. The easiest way to do that is to store your API key in your
 You can retrieve your `API key` in your [user
 page](https://ridl.unhcr.org/user/).
 
-![api\_key\_img](./inst/img/ridl_api_key.png)
+![api_key_img](man/figures/ridl_api_key.png)
 
 You can either edit directly the `.Renviron` file or access it by
 calling `usethis::edit_r_environ()` (assuming you have the `usethis`
@@ -341,10 +341,10 @@ data <- list(name = "test-dataset-pen",
              notes = "Some description",
              owner_org = "africa",
              data_collector = "unhcr",
-             keywords = c(6, 7), ## check ridl_dataset_keywords()
+             keywords = c("solution", "basic needs"), ## check ridl_dataset_keywords()
              unit_of_measurement = "kg",
              data_collection_technique = "f2f",
-             archived = "False",
+             archived = FALSE,
              visibility = "restricted",
              external_access_level = "data_enclave")
 
@@ -355,6 +355,67 @@ ridl_dataset(data)
 ##   Visibility: restricted
 ##   Container: Africa
 ##   Resources (up to 5):
+```
+
+``` r
+ds_data <- list(name = "test-dataset",
+                title = "Test Dataset",
+                notes = "An example dataset",
+                owner_org = "west-africa",
+                data_collector = "ACF, UNHCR",
+                keywords = list(3, 4), ## check ridl_dataset_keywords()
+                unit_of_measurement = "individual",
+                data_collection_technique = "f2f",
+                sampling_procedure = "nonprobability",
+                operational_purpose_of_data = "cartography",
+                archived = "False",
+                visibility = "restricted",
+                external_access_level = "open_access")
+
+ds <- ridl_dataset(ds_data)
+ds
+## <RIDL Dataset>
+##   Title: Test Dataset
+##   Name: test-dataset
+##   Visibility: public
+##   Resources (up to 5):
+```
+
+`ridl_resource` can also be used to create a `RIDLResource`.
+
+``` r
+rs_data <- list(name = "Test resource",
+                type = "data",
+                format = "CSV",
+                file_type = "microdata",
+                identifiability = "anonymized_public",
+                date_range_start = "2018-01-01",
+                date_range_end = "2019-01-01",
+                process_status = "anonymized",
+                version = 1L)
+
+rs <- ridl_resource(rs_data)
+rs
+## <RIDL Resource>
+##   Name: Test resource
+##   Description:
+##   Type: microdata
+##   Size:
+##   Format: CSV
+```
+
+We can add the resource to the dataset and upload it to the RIDL
+platform.
+
+``` r
+ds <- ds %>%
+  ridl_resource_add(rs)
+ds
+## <RIDL Dataset>
+##   Title: Test Dataset
+##   Name: test-dataset
+##   Visibility: restricted
+##   Resources (up to 5): Test resource
 ```
 
 ## Meta

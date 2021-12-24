@@ -8,7 +8,7 @@
 \usage{
 \method{ridl_dataset_list}{RIDLContainer}(container = NULL, collaborator = FALSE, configuration = NULL)
 
-\method{ridl_dataset_list}{default}(container = NULL, configuration = NULL, collaborator = FALSE)
+\method{ridl_dataset_list}{default}(container = NULL, collaborator = FALSE, configuration = NULL)
 
 ridl_dataset_list(container, collaborator, configuration)
 }

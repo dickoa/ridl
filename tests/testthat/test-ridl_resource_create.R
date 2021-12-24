@@ -8,6 +8,7 @@ test_that("ridl_resource returns a RIDLResource", {
                           hxlated = FALSE,
                           process_status = "raw",
                           identifiability = "personally_identifiable",
+                          visibility = "public",
                           name = "my.csv",
                           version = as.character(Sys.Date()),
                           format = "csv",

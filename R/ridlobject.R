@@ -89,10 +89,10 @@ ridl_dataset_list <- function(container, collaborator, configuration)
 ridl_dataset_delete <- function(dataset, configuration)
   UseMethod("ridl_dataset_delete")
 
-#' @rdname ridl_dataset_collaborator_list
-#' @export
-ridl_dataset_collaborator_list.default <- function(user, capacity, configuration)
-  UseMethod("ridl_dataset_collaborator_list")
+## #' @rdname ridl_dataset_collaborator_list
+## #' @export
+## ridl_dataset_collaborator_list.default <- function(user, capacity, configuration)
+##   UseMethod("ridl_dataset_collaborator_list")
 
 #' @rdname ridl_container_list
 #' @export

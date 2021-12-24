@@ -274,10 +274,10 @@ RIDLResource <- R6::R6Class(
     #' @return list of required fields for a resource
     get_required_fields = function() {
       nm <- self$get_fields()
-      b <- lapply(.ridl_dataset_schema$resource_fields,
+      bool <- lapply(.ridl_dataset_schema$resource_fields,
                   function(x) x$required)
-      b <- vapply(b, function(x) !is.null(x), logical(1))
-      nm[b]
+      bool <- vapply(bool, isTRUE, logical(1))
+      nm[bool]
     },
 
     #' @description
@@ -491,7 +491,7 @@ read.RIDLResource <- function(resource,
                               sheet = NULL,
                               format = NULL,
                               download_folder = NULL,
-                               force_download = FALSE,
+                              force_download = FALSE,
                               quiet_download = TRUE, ...) {
   resource$read(sheet = sheet,
                 format = format,
@@ -583,6 +583,7 @@ ridl_resource_show <- function(identifier, configuration = NULL) {
 #' @param description character, Description - Some usefule notes about the data.
 #' @param format character, File format - eg. CSV, XML, or JSON.
 #' @param file_type character, File type(*) - Indicates what is contained in the file. Allowed values: `microdata` (Microdata), `questionnaire` (Questionnaire), `report` (Report), `sampling_methodology` (Sampling strategy & methodology Description), `infographics` (Infographics & Dashboard), `script` (Script), `concept note` (Concept Note), `other` (Other).
+#' @param visibility character, Internal Access Level(*). Allowed values: `restricted` (Private), `public` (Internally Visible).
 #' @param file_to_upload character, path of the file to upload
 #' @param date_range_start Date, Data collection first date(*) - Use yyyy-mm-dd format.
 #' @param date_range_end Date, Data collection last date(*) - Use yyyy-mm-dd format.
@@ -590,6 +591,8 @@ ridl_resource_show <- function(identifier, configuration = NULL) {
 #' @param hxlated logical, HXL-ated. Allowed values: `False` (No), `True` (Yes).
 #' @param process_status character, File process status(*) - Indicates the processing stage of the data. 'Raw' means that the data has not been cleaned since collection. 'In process' means that it is being cleaned. 'Final' means that the dataset is final and ready for use in analytical products. Allowed valued: `raw` (Raw-Uncleaned), `cleaned` (Cleaned Only), `anonymized` (Cleaned & Anonymized).
 #' @param identifiability character, Identifiability(*) - Indicates if personally identifiable data is contained in the dataset. Allowed values: `personally_identifiable` (Personally identifiable), `anonymized_enclave` (Anonymized 1st level: Data Enclave - only removed direct identifiers), `anonymized_scientific` (Anonymized 2st level: Scientific Use File (SUF)), `anonymized_public` (Anonymized 3st level: Public Use File (PUF)).
+#' @param kobo_type character, type
+#' @param kobo_details character, details
 #' @param name character, the name of the resource
 #' @param title character, title of the resource
 #' @param configuration RIDLConfig, the configuration
@@ -601,7 +604,7 @@ ridl_resource_show <- function(identifier, configuration = NULL) {
 #' \dontrun{
 #'
 #'  res <- ridl_resource(type = "microdata",
-#'                       format = "csv")
+#'                       file_type = "csv")
 #'  res
 #' }
 ridl_resource <- function(type,
@@ -611,6 +614,7 @@ ridl_resource <- function(type,
                           version,
                           process_status,
                           identifiability,
+                          visibility,
                           file_to_upload = NULL,
                           url = NULL,
                           name = NULL,
@@ -618,6 +622,8 @@ ridl_resource <- function(type,
                           description = NULL,
                           format = NULL,
                           hxlated = NULL,
+                          kobo_type = NULL,
+                          kobo_details = NULL,
                           configuration = NULL) {
   if (!is.null(configuration) &  inherits(configuration, "RIDLConfig"))
     ridl_config_set(configuration = configuration)
@@ -634,7 +640,10 @@ ridl_resource <- function(type,
                version = version,
                `hxl-ated` = hxlated,
                process_status = process_status,
-               identifiability = identifiability)
+               identifiability = identifiability,
+               visibility = visibility,
+               kobo_type = kobo_type,
+               kobo_details = kobo_details)
   data <- drop_nulls(data)
 
   data <- validate_resource_data(data)

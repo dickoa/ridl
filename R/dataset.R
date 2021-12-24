@@ -255,7 +255,7 @@ RIDLDataset <- R6::R6Class(
       nm <- self$get_fields()
       bool <- lapply(.ridl_dataset_schema$dataset_fields,
                      function(x) x$required)
-      bool <- vapply(bool, function(x) !is.null(x), logical(1))
+      bool <- vapply(bool, isTRUE, logical(1))
       union("owner_org", nm[bool])
     },
 
@@ -497,14 +497,17 @@ ridl_dataset_show <-  function(identifier, configuration = NULL) {
 #' @rdname ridl_dataset_list
 #' @export
 ridl_dataset_list.default <- function(container = NULL,
-                                      configuration = NULL,
-                                      collaborator = FALSE) {
+                                      collaborator = FALSE,
+                                      configuration = NULL) {
   if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
     ridl_config_set(configuration = configuration)
   configuration <- ridl_config_get()
-  if (collaborator)
-    res <- configuration$call_action("package_collaborator_list_for_user")
-  res <- configuration$call_action("package_list")
+  if (isTRUE(collaborator)) {
+    res <- configuration$call_action("package_collaborator_list_for_user",
+                                     list(id = "dickoa"))
+  } else {
+    res <- configuration$call_action("package_list")
+  }
   res$raw$raise_for_status()
   unlist(res$result)
 }
@@ -525,22 +528,23 @@ ridl_dataset_delete.RIDLDataset <- function(dataset, configuration = NULL) {
                       configuration = configuration)
 }
 
-#' Get all collaborators for a given dataset
-#'
-#' Get all collaborators for a given dataset
-#'
-#' @param dataset RIDLDataset, the dataset
-#' @param user character, id or name of the user
-#' @param capacity character, the user capacity
-#'
-#' @rdname ridl_dataset_collaborator_list
-#' @export
-ridl_dataset_collaborator_list.RIDLDataset <- function(dataset,
-                                                       user = NULL,
-                                                       capacity = "member",
-                                                       configuration = NULL)
-  dataset$collaborator_list(user = user, capacity = capacity,
-                            configuration = configuration)
+## #' Get all collaborators for a given dataset
+## #'
+## #' Get all collaborators for a given dataset
+## #'
+## #' @param dataset RIDLDataset, the dataset
+## #' @param user character, id or name of the user
+## #' @param capacity character, the user capacity
+## #' @param configuration RIDLConfig, the configuration
+## #'
+## #' @rdname ridl_dataset_collaborator_list
+## #' @export
+## ridl_dataset_collaborator_list.RIDLDataset <- function(dataset,
+##                                                        user = NULL,
+##                                                        capacity = "member",
+##                                                        configuration = NULL)
+##   dataset$collaborator_list(user = user, capacity = capacity,
+##                             configuration = configuration)
 
 
 #' @rdname ridl_browse
@@ -679,6 +683,7 @@ ridl_container_set.RIDLDataset <- function(dataset, container_name, configuratio
 #' @param clean_ops_notes character, Admin Notes - Cleaning. You can use Markdown formatting here.
 #' @param data_accs_notes character, Admin Notes - Access authority. You can use Markdown formatting here.
 #' @param ddi DDI.
+#' @param kobo_asset_id KoBoToolbox Asset ID.
 #' @param configuration RIDLConfig, RIDL configuration used
 #'
 #' @return RIDLDataset the dataset
@@ -726,6 +731,7 @@ ridl_dataset <- function(title,
                          clean_ops_notes = NULL,
                          data_accs_notes = NULL,
                          ddi = NULL,
+                         kobo_asset_id = NULL,
                          configuration = NULL) {
 
   if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))

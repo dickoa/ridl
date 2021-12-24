@@ -2,7 +2,7 @@
 title: "R client to UNHCR Raw Internal Data Library"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Tidy data}
+  %\VignetteIndexEntry{R client to UNHCR Raw Internal Data Library}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -24,4 +24,4 @@ The `ridl` package requires you to add your API key and store it for further use
 You can retrieve your `API key` in your [user page](https://ridl.unhcr.org/user/).
 
 
-![api_key_img](../img/ridl_api_key.png)
+![api_key_img](../man/figures/ridl_api_key.png)

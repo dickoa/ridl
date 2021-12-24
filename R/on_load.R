@@ -25,15 +25,7 @@
   ridl_dataset_list.default <<- memoise(ridl_dataset_list.default,
                                                  cache = .ridl_cm)
   ridl_container_list.default <<- memoise(ridl_container_list.default,
-                                                   cache = .ridl_cm)
-  ridl_dataset_schema_file <- system.file("schemas/dataset.json",
-                                          package = "ridl")
-  .ridl_dataset_schema <<- fromJSON(ridl_dataset_schema_file,
-                                    simplifyVector = FALSE)
-  ridl_container_schema_file <- system.file("schemas/data_container.json",
-                                            package = "ridl")
-  .ridl_container_schema <<- fromJSON(ridl_container_schema_file,
-                                      simplifyVector = FALSE)
+                                          cache = .ridl_cm)
   ridl_config_set()
 }
 

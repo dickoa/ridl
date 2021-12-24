@@ -66,7 +66,7 @@ RIDLContainer <- R6::R6Class(
       nm <- self$get_fields()
       bool <- lapply(.ridl_container_schema$fields,
                      function(x) x$required)
-      bool <- vapply(bool, function(x) !is.null(x), logical(1))
+      bool <- vapply(bool, isTRUE, logical(1))
       nm[bool]
     },
 
