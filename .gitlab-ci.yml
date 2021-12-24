@@ -13,7 +13,7 @@ pages:
   script:
     - Rscript -e 'install.packages("pkgdown")'
     - Rscript -e 'devtools::install_deps(dependencies = TRUE)'
-    - Rscript -e 'remotes::install_gitlab("vidonne/unhcrtemplate")'
+    - Rscript -e 'remotes::install_github("vidonne/unhcrtemplate")'
     - Rscript -e 'install.packages("crul", repos = "http://packages.ropensci.org")'
     - Rscript -e 'remotes::install_gitlab("dickoa/ridl")'
     - Rscript -e 'pkgdown::build_site(override = list(destination = "public"))'
