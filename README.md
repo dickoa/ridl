@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# ridl <img src="https://gitlab.com/dickoa/ridl/-/raw/master/man/figures/hex_ridl.png" align="right" width="120" />
+# ridl <img src="man/figures/hex_ridl.png" align="right" width="140" />
 
 [![Project Status: Active - Initial development is in progress, but
 there has not yet been a stable, usable release suitable for the
@@ -392,6 +392,7 @@ rs_data <- list(name = "Test resource",
                 date_range_start = "2018-01-01",
                 date_range_end = "2019-01-01",
                 process_status = "anonymized",
+                visibility = "public",
                 version = 1L)
 
 rs <- ridl_resource(rs_data)
