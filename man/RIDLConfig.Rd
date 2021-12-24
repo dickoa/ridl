@@ -14,8 +14,7 @@ and setup project where you can interact with the RIDL platform
 }
 \examples{
 \dontrun{
-set_ridl_config()
-get_rhd_config()
+ridl_config()
 }
 }
 \section{Public fields}{

@@ -14,7 +14,9 @@ Authors@R: c(person(given = "Ahmadou",
              person(given = "Hisham",
                     family = "Galal",
 	   	    email = "galal@unhcr.org",
-		    role = "ctb"))
+		    role = "ctb"),
+	     person("UNHCR",
+		    role = "cph"))
 License: MIT + file LICENSE
 LazyData: TRUE
 URL: https://gitlab.com/dickoa/ridl
@@ -42,7 +44,10 @@ Suggests:
     webmockr,
     vcr (>= 0.6.0)
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 Encoding: UTF-8
 Language: en-US
 VignetteBuilder: knitr
+Config/testthat/edition: 3
+Config/Needs/website:
+    vidonne/unhcrtemplate

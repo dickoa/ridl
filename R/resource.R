@@ -491,7 +491,7 @@ read.RIDLResource <- function(resource,
                               sheet = NULL,
                               format = NULL,
                               download_folder = NULL,
-                              force_download = FALSE,
+                               force_download = FALSE,
                               quiet_download = TRUE, ...) {
   resource$read(sheet = sheet,
                 format = format,

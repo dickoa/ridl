@@ -142,6 +142,22 @@ RIDLDataset <- R6::R6Class(
     },
 
     #' @description
+    #'
+    #' Delete a dataset
+    #'
+    #' @param id character, the id or name of the dataset to delete
+    #' @param configuration RIDLConfig, the configuration
+    ridl_delete = function(id, configuration = NULL) {
+      if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
+        ridl_config_set(configuration = configuration)
+      configuration <- ridl_config_get()
+      res <- configuration$call_action("package_delete",
+                                       list(id = id))
+      res$raw$raise_for_status()
+      res$result
+    },
+
+    #' @description
     #' Add a container to a dataset
     #' @param container_name the name of the container to add
     ridl_container_set = function(container_name) {
@@ -199,6 +215,27 @@ RIDLDataset <- R6::R6Class(
         res <-  self$ridl_container_get()$data$title
       }
       res
+    },
+
+    #' Get all collaborators for a given dataset
+    #'
+    #' Get all collaborators for a given dataset
+    #'
+    #' @param user character, id or name of the user
+    #' @param capacity character, the user capacity
+    #' @param configuration RIDLConfig, the configuration
+    #' @return a character, the title
+    collaborator_list = function(user = NULL,
+                                 capacity = "member",
+                                 configuration = NULL) {
+      if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
+        ridl_config_set(configuration = configuration)
+      configuration <- ridl_config_get()
+      res <- configuration$call_action("package_collaborator_list_for_user",
+                                   list(id = user,
+                                        capacity = capacity))
+      res$raw$raise_for_status()
+      res$result
     },
 
     #' @description
@@ -429,7 +466,7 @@ ridl_dataset_search <- function(query = "*:*",
   list_of_ds
 }
 
-#' Pull a RIDL dataset
+#' Pull and show a RIDL dataset
 #'
 #' Read a RIDL dataset from its name or id
 #'
@@ -459,14 +496,52 @@ ridl_dataset_show <-  function(identifier, configuration = NULL) {
 
 #' @rdname ridl_dataset_list
 #' @export
-ridl_dataset_list.default <- function(container = NULL, configuration = NULL) {
+ridl_dataset_list.default <- function(container = NULL,
+                                      configuration = NULL,
+                                      collaborator = FALSE) {
   if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
     ridl_config_set(configuration = configuration)
   configuration <- ridl_config_get()
+  if (collaborator)
+    res <- configuration$call_action("package_collaborator_list_for_user")
   res <- configuration$call_action("package_list")
   res$raw$raise_for_status()
   unlist(res$result)
 }
+
+#' Delete a dataset
+#'
+#' Delete a dataset
+#'
+#' @param dataset a RIDLDataset, the dataset to delete
+#' @param configuration a RIDLConfig, the configuration
+#'
+#' @rdname ridl_dataset_delete
+#'
+#' @export
+#' @return a RIDLResource
+ridl_dataset_delete.RIDLDataset <- function(dataset, configuration = NULL) {
+  dataset$ridl_delete(dataset$data$id,
+                      configuration = configuration)
+}
+
+#' Get all collaborators for a given dataset
+#'
+#' Get all collaborators for a given dataset
+#'
+#' @param dataset RIDLDataset, the dataset
+#' @param user character, id or name of the user
+#' @param capacity character, the user capacity
+#'
+#' @rdname ridl_dataset_collaborator_list
+#' @export
+ridl_dataset_collaborator_list.RIDLDataset <- function(dataset,
+                                                       user = NULL,
+                                                       capacity = "member",
+                                                       configuration = NULL)
+  dataset$collaborator_list(user = user, capacity = capacity,
+                            configuration = configuration)
+
 
 #' @rdname ridl_browse
 #' @export

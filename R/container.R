@@ -214,6 +214,7 @@ ridl_container_list.default <- function(sort = c("title asc", "name",
 #' List RIDL datasets
 #'
 #' @param container RIDLContainer, the container containing the datasets
+#' @param collaborator logical, list datasets the user is a collaborator in
 #' @param configuration a RIDLConfig, the configuration object
 #'
 #' @rdname ridl_dataset_list
@@ -224,11 +225,13 @@ ridl_container_list.default <- function(sort = c("title asc", "name",
 #' \dontrun{
 #' # Setting the config to use RIDL default server
 #'  ridl_config_set()
-#'  list_ridl_dataset()
+#'  ct <- ridl_container_show("africa")
+#'  ridl_dataset_list(ct)
 #' }
 #'
 #' @export
 ridl_dataset_list.RIDLContainer <- function(container = NULL,
+                                            collaborator = FALSE,
                                             configuration = NULL) {
   container$list_datasets()
 }

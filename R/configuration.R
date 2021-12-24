@@ -10,8 +10,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' set_ridl_config()
-#' get_rhd_config()
+#' ridl_config()
 #' }
 RIDLConfig <- R6::R6Class(
   classname = "RIDLConfig",

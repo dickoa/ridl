@@ -34,12 +34,14 @@ creating, and updating datasets and associated resources.
 \item \href{#method-ridl_resource_delete}{\code{RIDLDataset$ridl_resource_delete()}}
 \item \href{#method-ridl_resource_delete_all}{\code{RIDLDataset$ridl_resource_delete_all()}}
 \item \href{#method-ridl_resource_add}{\code{RIDLDataset$ridl_resource_add()}}
+\item \href{#method-ridl_delete}{\code{RIDLDataset$ridl_delete()}}
 \item \href{#method-ridl_container_set}{\code{RIDLDataset$ridl_container_set()}}
 \item \href{#method-ridl_browse}{\code{RIDLDataset$ridl_browse()}}
 \item \href{#method-ridl_config_get}{\code{RIDLDataset$ridl_config_get()}}
 \item \href{#method-get_date_range}{\code{RIDLDataset$get_date_range()}}
 \item \href{#method-ridl_container_get}{\code{RIDLDataset$ridl_container_get()}}
 \item \href{#method-ridl_container_get_title}{\code{RIDLDataset$ridl_container_get_title()}}
+\item \href{#method-collaborator_list}{\code{RIDLDataset$collaborator_list()}}
 \item \href{#method-get_fields}{\code{RIDLDataset$get_fields()}}
 \item \href{#method-get_required_fields}{\code{RIDLDataset$get_required_fields()}}
 \item \href{#method-check_required_fields}{\code{RIDLDataset$check_required_fields()}}
@@ -180,6 +182,25 @@ Add a resource to a dataset
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-ridl_delete"></a>}}
+\if{latex}{\out{\hypertarget{method-ridl_delete}{}}}
+\subsection{Method \code{ridl_delete()}}{
+Delete a dataset
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RIDLDataset$ridl_delete(id, configuration = NULL)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{id}}{character, the id or name of the dataset to delete}
+
+\item{\code{configuration}}{RIDLConfig, the configuration}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-ridl_container_set"></a>}}
 \if{latex}{\out{\hypertarget{method-ridl_container_set}{}}}
 \subsection{Method \code{ridl_container_set()}}{
@@ -256,6 +277,36 @@ Get the title of the dataset for pretty printing
 \if{html}{\out{<div class="r">}}\preformatted{RIDLDataset$ridl_container_get_title()}\if{html}{\out{</div>}}
 }
 
+\subsection{Returns}{
+a character, the title
+Get all collaborators for a given dataset
+
+Get all collaborators for a given dataset
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-collaborator_list"></a>}}
+\if{latex}{\out{\hypertarget{method-collaborator_list}{}}}
+\subsection{Method \code{collaborator_list()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RIDLDataset$collaborator_list(
+  user = NULL,
+  capacity = "member",
+  configuration = NULL
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{user}}{character, id or name of the user}
+
+\item{\code{capacity}}{character, the user capacity}
+
+\item{\code{configuration}}{RIDLConfig, the configuration}
+}
+\if{html}{\out{</div>}}
+}
 \subsection{Returns}{
 a character, the title
 }

@@ -6,14 +6,16 @@
 \alias{ridl_dataset_list}
 \title{List RIDL datasets}
 \usage{
-\method{ridl_dataset_list}{RIDLContainer}(container = NULL, configuration = NULL)
+\method{ridl_dataset_list}{RIDLContainer}(container = NULL, collaborator = FALSE, configuration = NULL)
 
-\method{ridl_dataset_list}{default}(container = NULL, configuration = NULL)
+\method{ridl_dataset_list}{default}(container = NULL, configuration = NULL, collaborator = FALSE)
 
-ridl_dataset_list(container, configuration)
+ridl_dataset_list(container, collaborator, configuration)
 }
 \arguments{
 \item{container}{RIDLContainer, the container containing the datasets}
+
+\item{collaborator}{logical, list datasets the user is a collaborator in}
 
 \item{configuration}{a RIDLConfig, the configuration object}
 }
@@ -27,7 +29,8 @@ List RIDL datasets
 \dontrun{
 # Setting the config to use RIDL default server
  ridl_config_set()
- list_ridl_dataset()
+ ct <- ridl_container_show("africa")
+ ridl_dataset_list(ct)
 }
 
 }

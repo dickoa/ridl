@@ -81,8 +81,18 @@ RIDLObject <- R6::R6Class(
 
 #' @rdname ridl_dataset_list
 #' @export
-ridl_dataset_list <- function(container, configuration)
+ridl_dataset_list <- function(container, collaborator, configuration)
   UseMethod("ridl_dataset_list")
+
+#' @rdname ridl_dataset_delete
+#' @export
+ridl_dataset_delete <- function(dataset, configuration)
+  UseMethod("ridl_dataset_delete")
+
+#' @rdname ridl_dataset_collaborator_list
+#' @export
+ridl_dataset_collaborator_list.default <- function(user, capacity, configuration)
+  UseMethod("ridl_dataset_collaborator_list")
 
 #' @rdname ridl_container_list
 #' @export
@@ -205,6 +215,13 @@ ridl_resource_add <- function(dataset, resource, ignore_dataset_id, configuratio
 #' @rdname ridl_resource_add
 #' @export
 ridl_resource_add.default <- function(dataset, resource, ignore_dataset_id, configuration) {
+  stop("It's only working with RIDLDataset",
+       call. = FALSE)
+}
+
+#' @rdname ridl_dataset_delete
+#' @export
+ridl_dataset_delete.default <- function(dataset, configuration) {
   stop("It's only working with RIDLDataset",
        call. = FALSE)
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/dataset.R
 \name{ridl_dataset_show}
 \alias{ridl_dataset_show}
-\title{Pull a RIDL dataset}
+\title{Pull and show a RIDL dataset}
 \usage{
 ridl_dataset_show(identifier, configuration = NULL)
 }
