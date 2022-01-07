@@ -2,9 +2,12 @@
 % Please edit documentation in R/resource.R
 \name{ridl_resource_search}
 \alias{ridl_resource_search}
+\alias{rr_search}
 \title{Search for RIDL resources}
 \usage{
 ridl_resource_search(query = "*:*", configuration = NULL, ...)
+
+rr_search(query = "*:*", configuration = NULL, ...)
 }
 \arguments{
 \item{query}{character, a query}
@@ -14,7 +17,7 @@ ridl_resource_search(query = "*:*", configuration = NULL, ...)
 \item{...}{extra params}
 }
 \value{
-A list of RIDLDataset
+A list of RIDLResource
 }
 \description{
 Search for RIDL resources

@@ -2,9 +2,25 @@
 % Please edit documentation in R/container.R
 \name{ridl_container_update}
 \alias{ridl_container_update}
+\alias{rc_update}
 \title{Update a container on RIDL}
 \usage{
 ridl_container_update(
+  container,
+  country,
+  visible_external,
+  geographic_area,
+  title = NULL,
+  name = NULL,
+  description = NULL,
+  not_used = NULL,
+  sectoral_area = NULL,
+  population = NULL,
+  tag_string = NULL,
+  configuration = NULL
+)
+
+rc_update(
   container,
   country,
   visible_external,

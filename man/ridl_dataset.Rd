@@ -112,7 +112,7 @@ ridl_dataset(
 
 \item{ddi}{DDI.}
 
-\item{kobo_asset_id}{KoBoToolbox Asset ID.}
+\item{kobo_asset_id}{character, the KoBoToolbox asset id.}
 
 \item{configuration}{RIDLConfig, RIDL configuration used}
 }

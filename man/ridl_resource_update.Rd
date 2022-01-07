@@ -2,9 +2,29 @@
 % Please edit documentation in R/resource.R
 \name{ridl_resource_update}
 \alias{ridl_resource_update}
+\alias{rr_update}
 \title{Update a resource on RIDL}
 \usage{
 ridl_resource_update(
+  resource,
+  type,
+  file_type,
+  date_range_start,
+  date_range_end,
+  version,
+  process_status,
+  identifiability,
+  file_to_upload = NULL,
+  url = NULL,
+  name = NULL,
+  title = NULL,
+  description = NULL,
+  format = NULL,
+  hxlated = NULL,
+  configuration = NULL
+)
+
+rr_update(
   resource,
   type,
   file_type,

@@ -2,15 +2,28 @@
 % Please edit documentation in R/dataset.R, R/ridlobject.R
 \name{ridl_dataset_delete.RIDLDataset}
 \alias{ridl_dataset_delete.RIDLDataset}
+\alias{rd_delete.RIDLDataset}
 \alias{ridl_dataset_delete}
+\alias{rd_delete}
 \alias{ridl_dataset_delete.default}
+\alias{rd_delete.default}
 \title{Delete a dataset}
 \usage{
 \method{ridl_dataset_delete}{RIDLDataset}(dataset, configuration = NULL)
 
+\method{rd_delete}{RIDLDataset}(dataset, configuration = NULL)
+
+ridl_dataset_delete(dataset, configuration)
+
+rd_delete(dataset, configuration)
+
 ridl_dataset_delete(dataset, configuration)
 
 \method{ridl_dataset_delete}{default}(dataset, configuration)
+
+rd_delete(dataset, configuration)
+
+\method{rd_delete}{default}(dataset, configuration)
 }
 \arguments{
 \item{dataset}{a RIDLDataset, the dataset to delete}

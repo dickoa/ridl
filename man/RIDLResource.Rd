@@ -29,9 +29,9 @@ and updating resources
 \item \href{#method-download}{\code{RIDLResource$download()}}
 \item \href{#method-download_folder}{\code{RIDLResource$download_folder()}}
 \item \href{#method-read}{\code{RIDLResource$read()}}
-\item \href{#method-get_sheets}{\code{RIDLResource$get_sheets()}}
-\item \href{#method-ridl_dataset_get}{\code{RIDLResource$ridl_dataset_get()}}
-\item \href{#method-get_format}{\code{RIDLResource$get_format()}}
+\item \href{#method-excel_sheets}{\code{RIDLResource$excel_sheets()}}
+\item \href{#method-ridl_dataset}{\code{RIDLResource$ridl_dataset()}}
+\item \href{#method-file_format}{\code{RIDLResource$file_format()}}
 \item \href{#method-check_required_field}{\code{RIDLResource$check_required_field()}}
 \item \href{#method-get_file_to_upload}{\code{RIDLResource$get_file_to_upload()}}
 \item \href{#method-set_file_to_upload}{\code{RIDLResource$set_file_to_upload()}}
@@ -157,12 +157,12 @@ A \code{tibble}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_sheets"></a>}}
-\if{latex}{\out{\hypertarget{method-get_sheets}{}}}
-\subsection{Method \code{get_sheets()}}{
+\if{html}{\out{<a id="method-excel_sheets"></a>}}
+\if{latex}{\out{\hypertarget{method-excel_sheets}{}}}
+\subsection{Method \code{excel_sheets()}}{
 Get the list of sheets name of resource
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RIDLResource$get_sheets(
+\if{html}{\out{<div class="r">}}\preformatted{RIDLResource$excel_sheets(
   format = NULL,
   download_folder = NULL,
   quiet_download = TRUE,
@@ -188,12 +188,12 @@ the names of the sheets of XLS(X) resources
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-ridl_dataset_get"></a>}}
-\if{latex}{\out{\hypertarget{method-ridl_dataset_get}{}}}
-\subsection{Method \code{ridl_dataset_get()}}{
+\if{html}{\out{<a id="method-ridl_dataset"></a>}}
+\if{latex}{\out{\hypertarget{method-ridl_dataset}{}}}
+\subsection{Method \code{ridl_dataset()}}{
 Get the resource dataset.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RIDLResource$ridl_dataset_get()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RIDLResource$ridl_dataset()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
@@ -201,12 +201,12 @@ a RIDLDataset, the dataset containing the resource
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_format"></a>}}
-\if{latex}{\out{\hypertarget{method-get_format}{}}}
-\subsection{Method \code{get_format()}}{
+\if{html}{\out{<a id="method-file_format"></a>}}
+\if{latex}{\out{\hypertarget{method-file_format}{}}}
+\subsection{Method \code{file_format()}}{
 Get the file format
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RIDLResource$get_format()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RIDLResource$file_format()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{

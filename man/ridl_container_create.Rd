@@ -2,9 +2,12 @@
 % Please edit documentation in R/container.R
 \name{ridl_container_create}
 \alias{ridl_container_create}
+\alias{rc_create}
 \title{Create a container on RIDL}
 \usage{
 ridl_container_create(container, configuration = NULL)
+
+rc_create(container, configuration = NULL)
 }
 \arguments{
 \item{container}{RIDLContainer, the container}

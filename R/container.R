@@ -160,6 +160,10 @@ ridl_container_show <- function(identifier = NULL,
                     configuration = configuration)
 }
 
+#' @rdname ridl_container_show
+#' @export
+rc_show <- ridl_container_show
+
 #' @rdname ridl_browse
 #' @export
 ridl_browse.RIDLContainer <- function(x, ...)
@@ -209,12 +213,16 @@ ridl_container_list.default <- function(sort = c("title asc", "name",
   res
 }
 
+#' @rdname ridl_container_list
+#' @export
+rc_list.default <- ridl_container_list.default
+
 #' List RIDL datasets
 #'
 #' List RIDL datasets
 #'
 #' @param container RIDLContainer, the container containing the datasets
-#' @param collaborator logical, list datasets the user is a collaborator in
+#' @param user character, List datasets from which the user is a member
 #' @param configuration a RIDLConfig, the configuration object
 #'
 #' @rdname ridl_dataset_list
@@ -231,10 +239,14 @@ ridl_container_list.default <- function(sort = c("title asc", "name",
 #'
 #' @export
 ridl_dataset_list.RIDLContainer <- function(container = NULL,
-                                            collaborator = FALSE,
+                                            user = NULL,
                                             configuration = NULL) {
   container$list_datasets()
 }
+
+#' @rdname ridl_dataset_list
+#' @export
+rd_list.RIDLContainer <- ridl_dataset_list.RIDLContainer
 
 #' Create a RIDL container from list
 #'
@@ -257,7 +269,6 @@ ridl_dataset_list.RIDLContainer <- function(container = NULL,
 #'
 #' @examples
 #' \dontrun{
-#'
 #'  res <- ridl_container(dsdata)
 #'  res
 #' }
@@ -318,6 +329,10 @@ ridl_container_create <-  function(container, configuration = NULL) {
   res$raw$raise_for_status()
   invisible(res)
 }
+
+#' @rdname ridl_container_create
+#' @export
+rc_create <- ridl_container_create
 
 #' Update a container on RIDL
 #'
@@ -381,6 +396,10 @@ ridl_container_update <-  function(container,
   invisible(res)
 }
 
+#' @rdname ridl_container_update
+#' @export
+rc_update <- ridl_container_update
+
 #' Patch a container on RIDL
 #'
 #' Patch a container on RIDL
@@ -441,6 +460,10 @@ ridl_container_patch <-  function(container,
   invisible(res)
 }
 
+#' @rdname ridl_container_patch
+#' @export
+rc_patch <- ridl_container_patch
+
 #' @rdname ridl_clone
 #' @export
 ridl_clone.RIDLContainer <-  function(x, configuration = NULL) {
@@ -480,3 +503,7 @@ ridl_container_exist <- function(container_name, configuration = NULL) {
                   })
     res
 }
+
+#' @rdname ridl_container_exist
+#' @export
+rc_exist <- ridl_container_exist

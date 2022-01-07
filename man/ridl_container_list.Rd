@@ -2,7 +2,9 @@
 % Please edit documentation in R/container.R, R/ridlobject.R
 \name{ridl_container_list.default}
 \alias{ridl_container_list.default}
+\alias{rc_list.default}
 \alias{ridl_container_list}
+\alias{rc_list}
 \title{List RIDL containers}
 \usage{
 \method{ridl_container_list}{default}(
@@ -11,7 +13,15 @@
   configuration = NULL
 )
 
+\method{rc_list}{default}(
+  sort = c("title asc", "name", "package_count", "title"),
+  user_container = FALSE,
+  configuration = NULL
+)
+
 ridl_container_list(sort, user_container, configuration)
+
+rc_list(sort, user_container, configuration)
 }
 \arguments{
 \item{sort}{character how to sort the results. Default is "name asc"}

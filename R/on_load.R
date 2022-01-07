@@ -13,17 +13,17 @@
   .ridl_cache <<- x
   .ridl_cm <<- cache_mem()
   ridl_dataset_search <<- memoise(ridl_dataset_search,
-                                    cache = .ridl_cm)
+                                  cache = .ridl_cm)
   ridl_resource_search <<- memoise(ridl_resource_search,
                                    cache = .ridl_cm)
   ridl_dataset_show <<- memoise(ridl_dataset_show,
-                                         cache = .ridl_cm)
+                                cache = .ridl_cm)
   ridl_resource_show <<- memoise(ridl_resource_show,
-                                          cache = .ridl_cm)
+                                 cache = .ridl_cm)
   ridl_container_show <<- memoise(ridl_container_show,
-                                           cache = .ridl_cm)
+                                  cache = .ridl_cm)
   ridl_dataset_list.default <<- memoise(ridl_dataset_list.default,
-                                                 cache = .ridl_cm)
+                                        cache = .ridl_cm)
   ridl_container_list.default <<- memoise(ridl_container_list.default,
                                           cache = .ridl_cm)
   ridl_config_set()

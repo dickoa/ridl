@@ -2,9 +2,12 @@
 % Please edit documentation in R/resource.R
 \name{ridl_resource_create}
 \alias{ridl_resource_create}
+\alias{rr_create}
 \title{Create a resource on RIDL}
 \usage{
 ridl_resource_create(resource, dataset, configuration = NULL)
+
+rr_create(resource, dataset, configuration = NULL)
 }
 \arguments{
 \item{resource}{RIDLResource, a resource object}

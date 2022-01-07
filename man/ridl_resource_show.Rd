@@ -2,9 +2,12 @@
 % Please edit documentation in R/resource.R
 \name{ridl_resource_show}
 \alias{ridl_resource_show}
+\alias{rr_show}
 \title{Pull a RIDL resource}
 \usage{
 ridl_resource_show(identifier, configuration = NULL)
+
+rr_show(identifier, configuration = NULL)
 }
 \arguments{
 \item{identifier}{character, a RIDLResource id}

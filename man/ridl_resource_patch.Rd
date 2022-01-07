@@ -2,9 +2,29 @@
 % Please edit documentation in R/resource.R
 \name{ridl_resource_patch}
 \alias{ridl_resource_patch}
+\alias{rr_patch}
 \title{Patch a resource on RIDL}
 \usage{
 ridl_resource_patch(
+  resource,
+  type = NULL,
+  file_type = NULL,
+  date_range_start = NULL,
+  date_range_end = NULL,
+  version = NULL,
+  process_status = NULL,
+  identifiability = NULL,
+  file_to_upload = NULL,
+  url = NULL,
+  name = NULL,
+  title = NULL,
+  description = NULL,
+  format = NULL,
+  hxlated = NULL,
+  configuration = NULL
+)
+
+rr_patch(
   resource,
   type = NULL,
   file_type = NULL,

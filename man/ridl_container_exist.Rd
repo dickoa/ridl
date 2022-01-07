@@ -2,9 +2,12 @@
 % Please edit documentation in R/container.R
 \name{ridl_container_exist}
 \alias{ridl_container_exist}
+\alias{rc_exist}
 \title{Check if a container name or id is available on RIDL}
 \usage{
 ridl_container_exist(container_name, configuration = NULL)
+
+rc_exist(container_name, configuration = NULL)
 }
 \arguments{
 \item{container_name}{character, the name or id of the RIDLContainer}

@@ -2,9 +2,12 @@
 % Please edit documentation in R/resource.R
 \name{ridl_resource_exist}
 \alias{ridl_resource_exist}
+\alias{rr_exist}
 \title{Check if a resource id is available on RIDL}
 \usage{
 ridl_resource_exist(resource_id, configuration = NULL)
+
+rr_exist(resource_id, configuration = NULL)
 }
 \arguments{
 \item{resource_id}{character, the id of the RIDLResource}

@@ -19,9 +19,18 @@ remotes::install_gitlab("dickoa/ridl")
 ```
 
 
+### Setup the R package `ridl`
+
 The `ridl` package requires you to add your API key and store it for further use. The easiest way to do that is to store your API key in your `.Renviron` file which is automatically read by R on startup.
 
 You can retrieve your `API key` in your [user page](https://ridl.unhcr.org/user/).
 
 
 ![api_key_img](../man/figures/ridl_api_key.png)
+
+
+### RIDL Dataset
+
+### RIDL Resource
+
+### RIDL Container

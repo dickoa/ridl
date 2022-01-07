@@ -123,26 +123,26 @@ RIDLResource <- R6::R6Class(
                                  force = force_download)
 
       if (is.null(format))
-        format <- self$get_format()
+        format <- self$file_format()
 
       hxl <- tolower(self$data$`hxl-ated`) != "true"
 
       switch(format,
-             csv = read_ridl_delim(file_path,
+             csv = read_ridl_delim_(file_path,
                                    hxl = hxl, ...),
-             xlsx = read_ridl_excel(file_path, sheet = sheet,
+             xlsx = read_ridl_excel_(file_path, sheet = sheet,
                                     hxl = hxl, ...),
-             xls = read_ridl_excel(file_path, sheet = sheet,
+             xls = read_ridl_excel_(file_path, sheet = sheet,
                                    hxl = hxl, ...),
-             `.csv` = read_ridl_delim(file_path,
+             `.csv` = read_ridl_delim_(file_path,
                                       hxl = hxl, ...),
-             `.xlsx` = read_ridl_excel(file_path, sheet = sheet,
+             `.xlsx` = read_ridl_excel_(file_path, sheet = sheet,
                                        hxl = hxl, ...),
-             `.xls` = read_ridl_excel(file_path, sheet = sheet,
+             `.xls` = read_ridl_excel_(file_path, sheet = sheet,
                                       hxl = hxl, ...),
-             stata = read_ridl_stata(file_path, ...),
-             dta = read_ridl_stata(file_path, ...),
-             `.dta` = read_ridl_stata(file_path, ...))
+             stata = read_ridl_stata_(file_path, ...),
+             dta = read_ridl_stata_(file_path, ...),
+             `.dta` = read_ridl_stata_(file_path, ...))
     },
 
     #' @description
@@ -155,7 +155,7 @@ RIDLResource <- R6::R6Class(
     #' @param quiet_download a logical value, if TRUE silent download
     #'
     #' @return the names of the sheets of XLS(X) resources
-    get_sheets = function(format = NULL, download_folder = NULL,
+    excel_sheets = function(format = NULL, download_folder = NULL,
                           quiet_download = TRUE, force_download = FALSE) {
 
       if (!is.null(private$download_folder_) & is.null(download_folder))
@@ -166,22 +166,22 @@ RIDLResource <- R6::R6Class(
                                  force = force_download)
 
       if (is.null(format))
-      format <- self$get_format()
+      format <- self$file_format()
 
       if (!format %in% c("xlsx", "xls"))
-        stop("`get_sheets work only with Excel file",
+        stop("`ridl_resource_excel_sheets works only with Excel file",
              call. = FALSE)
 
       switch(format,
-             xlsx = get_ridl_sheets_(file_path),
-             xls = get_ridl_sheets_(file_path))
+             xlsx = ridl_resource_sheets_(file_path),
+             xls = ridl_resource_sheets_(file_path))
     },
 
     #' @description
     #' Get the resource dataset.
     #'
     #' @return a RIDLDataset, the dataset containing the resource
-    ridl_dataset_get = function() {
+    ridl_dataset = function() {
       dataset_id <- self$data$package_id
       if (is.null(dataset_id)) {
         stop("Resource has no dataset id!", call. = FALSE)
@@ -193,7 +193,7 @@ RIDLResource <- R6::R6Class(
     #' @description
     #' Get the file format
     #' @return a character, the file format of the resource
-    get_format = function() {
+    file_format = function() {
       tolower(self$data$format)
     },
 
@@ -369,23 +369,27 @@ as.list.RIDLResource <- function(x, ...) {
 #' @return character, the download folder path
 #' @export
 #'
-#' @rdname download
+#' @rdname ridl_resource_download
 #'
 #' @examples
 #' \dontrun{
 #' #Setting the config to use RIDL default server
-#'  res <- pull_ridl_resource("98aa1742-b5d3-40c3-94c6-01e31ded6e84")
-#'  download(res, folder = "/tmp")
+#'  res <- ridl_resource_show("98aa1742-b5d3-40c3-94c6-01e31ded6e84")
+#'  ridl_resource_download(res, folder = "/tmp")
 #' }
-download.RIDLResource <- function(resource,
-                                  folder = NULL,
-                                  filename = NULL,
-                                  quiet = FALSE,
-                                  force = FALSE, ...) {
+ridl_resource_download.RIDLResource <- function(resource,
+                                                folder = NULL,
+                                                filename = NULL,
+                                                quiet = FALSE,
+                                                force = FALSE, ...) {
 
   resource$download(folder = folder, filename = filename,
                     quiet = quiet, force = force, ...)
 }
+
+#' @rdname ridl_resource_download
+#' @export
+rr_download.RIDLResource <- ridl_resource_download.RIDLResource
 
 #' Get the names of the sheets of XLS(X) resources
 #'
@@ -396,19 +400,23 @@ download.RIDLResource <- function(resource,
 #' @param download_folder character, path of the directory where you will store the data
 #' @param quiet logical, no progress bar from download (default = FALSE)
 #'
-#' @rdname get_sheets
+#' @rdname ridl_resource_excel_sheets
 #'
 #' @return the names of the sheets of XLS(X) resources
 #'
 #' @export
-get_sheets.RIDLResource <- function(resource,
-                                    format = NULL,
-                                    download_folder = NULL,
-                                    quiet = TRUE) {
-  resource$get_sheets(format = format,
-                      download_folder = download_folder,
-                      quiet = quiet)
+ridl_resource_excel_sheets.RIDLResource <- function(resource,
+                                                    format = NULL,
+                                                    download_folder = NULL,
+                                                    quiet = TRUE) {
+  resource$excel_sheets(format = format,
+                        download_folder = download_folder,
+                        quiet = quiet)
 }
+
+#' @rdname ridl_resource_excel_sheets
+#' @export
+rr_excel_sheets.RIDLResource <- ridl_resource_excel_sheets.RIDLResource
 
 #' Get the file format of the resource
 #'
@@ -416,55 +424,79 @@ get_sheets.RIDLResource <- function(resource,
 #'
 #' @param resource RIDLResource, a RIDL resource
 #'
-#' @rdname get_format
+#' @rdname ridl_resource_file_format
 #'
 #' @return A character, the format of the resource
 #'
 #' @export
-get_format.RIDLResource <- function(resource) {
-  resource$get_format()
+ridl_resource_file_format.RIDLResource <- function(resource) {
+  resource$file_format()
 }
 
-#' Set the file to upload
+#' @rdname ridl_resource_file_format
+#' @export
+rr_file_format.RIDLResource <- ridl_resource_file_format.RIDLResource
+
+#' Get and set the file to upload
 #'
-#' Set the file to upload
+#' Get and set the file to upload
 #'
 #' @param file_to_upload character the path to the file to upload
+#' @param value character, the path of the file to upload
 #' @param resource RIDLResource, a RIDL resource
 #'
-#' @rdname set_file_to_upload
+#' @rdname ridl_resource_file_to_upload
 #'
 #' @return A RIDLResource with a file
 #' @export
-set_file_to_upload.RIDLResource <- function(resource, file_to_upload) {
+ridl_resource_file_to_upload_set.RIDLResource <- function(resource, file_to_upload) {
   resource$set_file_to_upload(file_to_upload)
   invisible(resource)
 }
 
+#' @rdname ridl_resource_file_to_upload
+#' @export
+rr_file_to_upload_set.RIDLResource <- ridl_resource_file_to_upload_set.RIDLResource
+
+#' @rdname ridl_resource_file_to_upload
+#' @export
+`ridl_resource_file_to_upload<-.RIDLResource` <- function(resource, value) {
+  resource$set_file_to_upload(value)
+  invisible(resource)
+}
+
+#' @rdname ridl_resource_file_to_upload
+#' @export
+`rr_file_to_upload<-.RIDLResource` <- `ridl_resource_file_to_upload<-.RIDLResource`
+
 #' Get the file to upload
 #'
 #' Get the file to upload
 #'
 #' @param resource RIDLResource, a RIDL resource
 #'
-#' @rdname get_file_to_upload
+#' @rdname ridl_resource_file_to_upload
 #'
 #' @return A character, the path to file to upload or NULL if not available
 #' @export
-get_file_to_upload.RIDLResource <- function(resource) {
+ridl_resource_file_to_upload_get.RIDLResource <- function(resource) {
   resource$get_file_to_upload()
 }
+
+#' @rdname ridl_resource_file_to_upload
+#' @export
+rr_file_to_upload_get.RIDLResource <- ridl_resource_file_to_upload_get.RIDLResource
 
 #' Get the dataset containing the resource
 #'
 #' @param resource RIDLResource, a RIDL resource
 #'
-#' @rdname ridl_dataset_get
+#' @rdname ridl_resource_dataset
 #'
 #' @return a RIDLDataset, the dataset containing the resource
 #'
 #' @export
- ridl_dataset_get.RIDLResource <- function(resource) {
+ridl_resource_dataset.RIDLResource <- function(resource) {
   resource$ridl_dataset_get()
 }
 
@@ -482,17 +514,17 @@ get_file_to_upload.RIDLResource <- function(resource) {
 #' @param quiet_download logical, silent download
 #' @param ... extra parameters
 #'
-#' @rdname read
+#' @rdname ridl_resource_read
 #'
 #' @return A \code{tibble}
 #'
 #' @export
-read.RIDLResource <- function(resource,
-                              sheet = NULL,
-                              format = NULL,
-                              download_folder = NULL,
-                              force_download = FALSE,
-                              quiet_download = TRUE, ...) {
+ridl_resource_read.RIDLResource <- function(resource,
+                                            sheet = NULL,
+                                            format = NULL,
+                                            download_folder = NULL,
+                                            force_download = FALSE,
+                                            quiet_download = TRUE, ...) {
   resource$read(sheet = sheet,
                 format = format,
                 download_folder = download_folder,
@@ -500,6 +532,10 @@ read.RIDLResource <- function(resource,
                 quiet_download = quiet_download,
                 ...)
 }
+
+#' @rdname ridl_resource_read
+#' @export
+rr_read.RIDLResource <- ridl_resource_read.RIDLResource
 
 #' Search for RIDL resources
 #'
@@ -510,10 +546,11 @@ read.RIDLResource <- function(resource,
 #' @param configuration RIDLConfig, a configuration
 #' @param ... extra params
 #'
-#' @rdname ridl_resource_search
 #' @details Search and find datasets on RIDL
 #'
-#' @return A list of RIDLDataset
+#' @return A list of RIDLResource
+#'
+#' @rdname ridl_resource_search
 #'
 #' @examples
 #' \dontrun{
@@ -535,6 +572,10 @@ ridl_resource_search <- function(query = "*:*", configuration = NULL, ...) {
   class(list_of_rs) <- "ridl_resource_list"
   list_of_rs
 }
+
+#' @rdname ridl_resource_search
+#' @export
+rr_search <- ridl_resource_search
 
 #' @importFrom tibble as_tibble
 #' @aliases RIDLResource
@@ -573,6 +614,10 @@ ridl_resource_show <- function(identifier, configuration = NULL) {
   RIDLResource$new(initial_data = res$result,
                    configuration = configuration)
 }
+
+#' @rdname ridl_resource_show
+#' @export
+rr_show <- ridl_resource_show
 
 #' Create a RIDL resource from list
 #'
@@ -668,6 +713,7 @@ ridl_browse.RIDLResource <- function(x, ...)
 #' @param dataset RIDLDataset, the dataset where you can share the dataset
 #' @param configuration RIDLConfig, the configuration
 #'
+#' @rdname ridl_resource_create
 #'
 #' @return RIDLResource, the resource
 #' @export
@@ -694,6 +740,10 @@ ridl_resource_create <- function(resource,
   res$raw$raise_for_status()
   invisible(res)
 }
+
+#' @rdname ridl_resource_create
+#' @export
+rr_create <- ridl_resource_create
 
 #' Update a resource on RIDL
 #'
@@ -765,6 +815,10 @@ ridl_resource_update <- function(resource,
   invisible(res)
 }
 
+#' @rdname ridl_resource_update
+#' @export
+rr_update <- ridl_resource_update
+
 #' Patch a resource on RIDL
 #'
 #' Patch a resource on RIDL
@@ -835,6 +889,10 @@ ridl_resource_patch <- function(resource,
   invisible(res)
 }
 
+#' @rdname ridl_resource_patch
+#' @export
+rr_patch <- ridl_resource_patch
+
 #' @rdname ridl_clone
 #' @export
 ridl_clone.RIDLResource <- function(x, configuration = NULL) {
@@ -873,3 +931,7 @@ ridl_resource_exist <- function(resource_id, configuration = NULL) {
                   })
     res
 }
+
+#' @rdname ridl_resource_exist
+#' @export
+rr_exist <- ridl_resource_exist

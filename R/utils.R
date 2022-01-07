@@ -450,10 +450,8 @@ is_valid_tag <- function(tag) {
 
 #' @importFrom readr read_delim default_locale locale
 #' @noRd
-read_ridl_delim <- function(file, hxl = FALSE, delim = NULL, locale = default_locale(), ...) {
+read_ridl_delim_ <- function(file, delim = ",", locale = default_locale(), hxl = FALSE, ...) {
   check_packages("readr")
-  if (is.null(delim))
-    delim <- ","
   df <- read_delim(file, delim = delim, locale = locale, ...)
   if (isTRUE(hxl))
     df <- strip_hxl(df)
@@ -462,11 +460,11 @@ read_ridl_delim <- function(file, hxl = FALSE, delim = NULL, locale = default_lo
 
 #' @importFrom readxl excel_sheets read_excel
 #' @noRd
-read_ridl_excel <- function(file = NULL, sheet = NULL, hxl = FALSE, ...) {
+read_ridl_excel_ <- function(file = NULL, sheet = NULL, hxl = FALSE, ...) {
   check_packages("readxl")
   if (is.null(sheet)) {
     sheet <- excel_sheets(file)[[1]]
-    cat("Reading sheet: ", sheet, "\n")
+    message("Reading sheet: ", sheet, "\n")
   }
   df <- read_excel(file, sheet = sheet, ...)
   if (isTRUE(hxl))
@@ -476,14 +474,14 @@ read_ridl_excel <- function(file = NULL, sheet = NULL, hxl = FALSE, ...) {
 
 #' @importFrom haven read_dta
 #' @noRd
-read_ridl_stata <- function(file, ...) {
+read_ridl_stata_ <- function(file, ...) {
   check_packages("haven")
   read_dta(file, ...)
 }
 
 #' @importFrom readxl excel_sheets
 #' @noRd
-get_ridl_sheets_ <- function(file = NULL) {
+ridl_resource_sheets_ <- function(file = NULL) {
   check_packages("readxl")
   excel_sheets(file)
 }
@@ -547,4 +545,11 @@ log_request <- function(req) {
              toupper(req$method),
              req$url$url)
   }
+}
+
+#' @noRd
+dataset_name_ <- function(ids) {
+  vapply(ids, function(id) {
+    rd_show(id)$data$name
+  }, character(1), USE.NAMES = FALSE)
 }

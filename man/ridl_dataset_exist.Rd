@@ -2,9 +2,12 @@
 % Please edit documentation in R/dataset.R
 \name{ridl_dataset_exist}
 \alias{ridl_dataset_exist}
+\alias{rd_exist}
 \title{Check if a dataset name or id is available on RIDL}
 \usage{
 ridl_dataset_exist(dataset_name, configuration = NULL)
+
+rd_exist(dataset_name, configuration = NULL)
 }
 \arguments{
 \item{dataset_name}{character, the name or id of the RIDLDataset}

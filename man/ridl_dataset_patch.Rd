@@ -2,6 +2,7 @@
 % Please edit documentation in R/dataset.R
 \name{ridl_dataset_patch}
 \alias{ridl_dataset_patch}
+\alias{rd_patch}
 \title{Patch a dataset on RIDL}
 \usage{
 ridl_dataset_patch(
@@ -40,6 +41,47 @@ ridl_dataset_patch(
   clean_ops_notes = NULL,
   data_accs_notes = NULL,
   ddi = NULL,
+  kobo_asset_id = NULL,
+  configuration = NULL
+)
+
+rd_patch(
+  dataset,
+  title = NULL,
+  name = NULL,
+  owner_org = NULL,
+  notes = NULL,
+  keywords = NULL,
+  visibility = NULL,
+  archived = NULL,
+  external_access_level = NULL,
+  unit_of_measurement = NULL,
+  data_collector = NULL,
+  data_collection_technique = NULL,
+  date_range_start = NULL,
+  date_range_end = NULL,
+  short_title = NULL,
+  tag_string = NULL,
+  url = NULL,
+  private = NULL,
+  data_sensitivity = NULL,
+  original_id = NULL,
+  sampling_procedure = NULL,
+  operational_purpose_of_data = NULL,
+  hxlated = NULL,
+  process_status = NULL,
+  identifiability = NULL,
+  geog_coverage = NULL,
+  linked_datasets = NULL,
+  admin_notes = NULL,
+  sampling_procedure_notes = NULL,
+  response_rate_notes = NULL,
+  data_collection_notes = NULL,
+  weight_notes = NULL,
+  clean_ops_notes = NULL,
+  data_accs_notes = NULL,
+  ddi = NULL,
+  kobo_asset_id = NULL,
   configuration = NULL
 )
 }
@@ -113,6 +155,8 @@ ridl_dataset_patch(
 \item{data_accs_notes}{character, Admin Notes - Access authority. You can use Markdown formatting here.}
 
 \item{ddi}{DDI.}
+
+\item{kobo_asset_id}{character, the KoBoToolbox asset id.}
 
 \item{configuration}{RIDLConfig, the RIDL configuration}
 }

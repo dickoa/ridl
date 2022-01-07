@@ -2,9 +2,25 @@
 % Please edit documentation in R/container.R
 \name{ridl_container_patch}
 \alias{ridl_container_patch}
+\alias{rc_patch}
 \title{Patch a container on RIDL}
 \usage{
 ridl_container_patch(
+  container,
+  country = NULL,
+  visible_external = NULL,
+  geographic_area = NULL,
+  title = NULL,
+  name = NULL,
+  description = NULL,
+  not_used = NULL,
+  sectoral_area = NULL,
+  population = NULL,
+  tag_string = NULL,
+  configuration = NULL
+)
+
+rc_patch(
   container,
   country = NULL,
   visible_external = NULL,

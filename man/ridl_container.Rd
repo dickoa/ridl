@@ -49,7 +49,6 @@ Create a RIDL container from list with required fields
 }
 \examples{
 \dontrun{
-
  res <- ridl_container(dsdata)
  res
 }

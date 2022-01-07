@@ -2,20 +2,29 @@
 % Please edit documentation in R/container.R, R/dataset.R, R/ridlobject.R
 \name{ridl_dataset_list.RIDLContainer}
 \alias{ridl_dataset_list.RIDLContainer}
+\alias{rd_list.RIDLContainer}
 \alias{ridl_dataset_list.default}
+\alias{rd_list.default}
 \alias{ridl_dataset_list}
+\alias{rd_list}
 \title{List RIDL datasets}
 \usage{
-\method{ridl_dataset_list}{RIDLContainer}(container = NULL, collaborator = FALSE, configuration = NULL)
+\method{ridl_dataset_list}{RIDLContainer}(container = NULL, user = NULL, configuration = NULL)
 
-\method{ridl_dataset_list}{default}(container = NULL, collaborator = FALSE, configuration = NULL)
+\method{rd_list}{RIDLContainer}(container = NULL, user = NULL, configuration = NULL)
 
-ridl_dataset_list(container, collaborator, configuration)
+\method{ridl_dataset_list}{default}(container = NULL, user = NULL, configuration = NULL)
+
+\method{rd_list}{default}(container = NULL, user = NULL, configuration = NULL)
+
+ridl_dataset_list(container, user, configuration)
+
+rd_list(container, user, configuration)
 }
 \arguments{
 \item{container}{RIDLContainer, the container containing the datasets}
 
-\item{collaborator}{logical, list datasets the user is a collaborator in}
+\item{user}{character, List datasets from which the user is a member}
 
 \item{configuration}{a RIDLConfig, the configuration object}
 }

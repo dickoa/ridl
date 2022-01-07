@@ -2,9 +2,12 @@
 % Please edit documentation in R/dataset.R
 \name{ridl_dataset_create}
 \alias{ridl_dataset_create}
+\alias{rd_create}
 \title{Create a dataset on RIDL}
 \usage{
 ridl_dataset_create(dataset, configuration = NULL)
+
+rd_create(dataset, configuration = NULL)
 }
 \arguments{
 \item{dataset}{RIDLDataset, the dataset to upload}

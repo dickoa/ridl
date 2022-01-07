@@ -2,9 +2,22 @@
 % Please edit documentation in R/dataset.R
 \name{ridl_dataset_search}
 \alias{ridl_dataset_search}
+\alias{rd_search}
 \title{Search for datasets on RIDL}
 \usage{
 ridl_dataset_search(
+  query = "*:*",
+  visibility = c("all", "public", "restricted"),
+  filter_query = "",
+  rows = 10L,
+  start = 0L,
+  page_size = 1000L,
+  configuration = NULL,
+  progress = FALSE,
+  ...
+)
+
+rd_search(
   query = "*:*",
   visibility = c("all", "public", "restricted"),
   filter_query = "",

@@ -2,9 +2,12 @@
 % Please edit documentation in R/dataset.R
 \name{ridl_dataset_show}
 \alias{ridl_dataset_show}
+\alias{rd_show}
 \title{Pull and show a RIDL dataset}
 \usage{
 ridl_dataset_show(identifier, configuration = NULL)
+
+rd_show(identifier, configuration = NULL)
 }
 \arguments{
 \item{identifier}{character, name or id of the dataset}

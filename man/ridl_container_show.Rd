@@ -2,6 +2,7 @@
 % Please edit documentation in R/container.R
 \name{ridl_container_show}
 \alias{ridl_container_show}
+\alias{rc_show}
 \title{Pull a RIDL container}
 \usage{
 ridl_container_show(
@@ -10,6 +11,8 @@ ridl_container_show(
   configuration = NULL,
   ...
 )
+
+rc_show(identifier = NULL, include_datasets = TRUE, configuration = NULL, ...)
 }
 \arguments{
 \item{identifier}{character, the container name or id}
