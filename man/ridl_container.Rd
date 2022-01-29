@@ -49,7 +49,9 @@ Create a RIDL container from list with required fields
 }
 \examples{
 \dontrun{
- res <- ridl_container(dsdata)
+ res <- ridl_container(country = "MLI",
+                       visible_external = FALSE,
+                       geographic_area = "Mali")
  res
 }
 }

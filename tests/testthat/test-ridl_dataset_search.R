@@ -1,5 +1,3 @@
-context("ridl_dataset_search")
-
 test_that("search_datasets returns the correct output", {
   skip_on_cran()
   ridl_config_setup()

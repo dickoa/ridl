@@ -1,5 +1,3 @@
-context("ridl_dataset_list")
-
 test_that("ridl_dataset_list returns a vector of character", {
   skip_on_cran()
   skip_if_offline()

@@ -1,5 +1,3 @@
-context("ridl_resource")
-
 test_that("ridl_resource returns a RIDLResource", {
   output <- ridl_resource(type = "data",
                           date_range_start = Sys.Date() - 10,
@@ -14,7 +12,5 @@ test_that("ridl_resource returns a RIDLResource", {
                           format = "csv",
                           description = "A cool csv")
 
-  skip_on_cran()
-  skip_if_offline()
-  expect_is(output, "RIDLResource")
+  expect_is(output, c("RIDLResource", "RIDLObject", "R6"))
 })
