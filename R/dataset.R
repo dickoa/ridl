@@ -304,7 +304,7 @@ RIDLDataset <- R6::R6Class(
 )
 
 #' @export
-#' @aliases Dataset
+#' @aliases RIDLDataset
 as.list.RIDLDataset <- function(x, ...) {
   x$as_list()
 }
@@ -321,7 +321,7 @@ as_tibble.RIDLDataset <- function(x, ...) {
 }
 
 #' @export
-#' @aliases RIDLResource
+#' @aliases RIDLDataset
 as_tibble.ridl_dataset_list <- function(x) {
   l <- lapply(x, as_tibble)
   Reduce(rbind, l)
@@ -412,6 +412,11 @@ rd_resource_delete_all.RIDLDataset <- ridl_dataset_resource_delete_all.RIDLDatas
 #'
 #' Search for datasets on RIDL
 #'
+#' @rdname ridl_dataset_search
+#'
+#' @importFrom jsonlite fromJSON
+#' @importFrom crul Paginator
+#'
 #' @param query character Query terms, use solr format
 #' and default to "*:*" (match everything)
 #' @param visibility character, either all, public or restricted
@@ -432,13 +437,8 @@ rd_resource_delete_all.RIDLDataset <- ridl_dataset_resource_delete_all.RIDLDatas
 #' @examples
 #' \dontrun{
 #'  # Setting the config to use RIDL default server
-#'  search_datasets("displaced nigeria", rows = 3L)
+#'  rd_search("sens chad", rows = 3L)
 #' }
-#'
-#' @importFrom jsonlite fromJSON
-#' @importFrom crul Paginator
-#'
-#' @rdname ridl_dataset_search
 #'
 #' @export
 ridl_dataset_search <- function(query = "*:*",
@@ -612,8 +612,8 @@ rd_container_get.RIDLDataset <- ridl_dataset_container_get.RIDLDataset
 #'
 #' @examples
 #' \dontrun{
-#'  ds <- ridl_dataset(list(name = "cool-dataset"))
-#'  ridl_container_set(ds, "zimbabwe-shelter-nfi")
+#'  ds <- RIDLdataset$new(list(name = "cool-dataset"))
+#'  rd_container_set(ds, "zimbabwe-shelter-nfi")
 #' }
 ridl_dataset_container_set.RIDLDataset <- function(dataset, container_name, configuration = NULL) {
   if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
@@ -643,7 +643,7 @@ rd_container_set.RIDLDataset <- ridl_dataset_container_set.RIDLDataset
 #' \dontrun{
 #'  # Setting the config to use RIDL
 #'  res <- ridl_dataset_search(rows = 3L, visibility = "public")
-#'  ridl_dataset_resource_count(res[[2]])
+#'  rd_resource_count(res[[2]])
 #' }
 #' @export
 ridl_dataset_resource_count.RIDLDataset <- function(dataset) {

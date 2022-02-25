@@ -1,7 +1,3 @@
-#' @importFrom magrittr %>%
-#' @export
-magrittr::`%>%`
-
 #' @noRd
 is_null_recursive <- function(x)
   is.null(x) | all(vapply(x, is.null, logical(1)))
@@ -470,6 +466,13 @@ read_ridl_excel_ <- function(file = NULL, sheet = NULL, hxl = FALSE, ...) {
   if (isTRUE(hxl))
     df <- strip_hxl(df)
   df
+}
+
+#' @importFrom haven read_sav
+#' @noRd
+read_ridl_spss_ <- function(file, ...) {
+  check_packages("haven")
+  read_sav(file, ...)
 }
 
 #' @importFrom haven read_dta

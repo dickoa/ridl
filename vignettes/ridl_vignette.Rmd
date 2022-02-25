@@ -31,6 +31,12 @@ You can retrieve your `API key` in your [user page](https://ridl.unhcr.org/user/
 
 ### RIDL Dataset
 
+Most function are prefixed by `ridl_dataset` or `rd`
+
 ### RIDL Resource
 
+Most function are prefixed by `ridl_resource` or `rr`
+
 ### RIDL Container
+
+Most function are prefixed by `ridl_container` or `rc`

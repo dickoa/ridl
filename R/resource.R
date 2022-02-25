@@ -142,7 +142,10 @@ RIDLResource <- R6::R6Class(
                                       hxl = hxl, ...),
              stata = read_ridl_stata_(file_path, ...),
              dta = read_ridl_stata_(file_path, ...),
-             `.dta` = read_ridl_stata_(file_path, ...))
+             `.dta` = read_ridl_stata_(file_path, ...),
+             sav = read_ridl_spss_(file_path, ...),
+             `.sav` = read_ridl_spss_(file_path, ...),
+             spss = read_ridl_spss_(file_path, ...))
     },
 
     #' @description

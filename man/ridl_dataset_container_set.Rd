@@ -37,7 +37,7 @@ Add a dataset to a container
 }
 \examples{
 \dontrun{
- ds <- ridl_dataset(list(name = "cool-dataset"))
- ridl_container_set(ds, "zimbabwe-shelter-nfi")
+ ds <- RIDLdataset$new(list(name = "cool-dataset"))
+ rd_container_set(ds, "zimbabwe-shelter-nfi")
 }
 }

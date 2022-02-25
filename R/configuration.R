@@ -10,7 +10,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' ridl_config()
+#'  ridl_config()
 #' }
 RIDLConfig <- R6::R6Class(
   classname = "RIDLConfig",
@@ -224,6 +224,7 @@ RIDLConfig <- R6::R6Class(
 #'
 #' @return A RIDLConfig object
 #' @export
+#'
 ridl_config <- function(site = "prod",
                         key = NULL,
                         user_agent = NULL,

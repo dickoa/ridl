@@ -62,7 +62,7 @@ Search and find datasets on RIDL
 \examples{
 \dontrun{
  # Setting the config to use RIDL default server
- search_datasets("displaced nigeria", rows = 3L)
+ rd_search("sens chad", rows = 3L)
 }
 
 }

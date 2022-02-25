@@ -34,6 +34,6 @@ Get the number of resources in the dataset
 \dontrun{
  # Setting the config to use RIDL
  res <- ridl_dataset_search(rows = 3L, visibility = "public")
- ridl_dataset_resource_count(res[[2]])
+ rd_resource_count(res[[2]])
 }
 }

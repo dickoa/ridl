@@ -22,27 +22,26 @@ LazyData: TRUE
 URL: https://gitlab.com/dickoa/ridl
 BugReports: https://gitlab.com/dickoa/ridl/issues
 Depends:
-    R (>= 3.5)
+    R (>= 4.1)
 Imports:
     crul (>= 1.1),
-    magrittr,
-    jsonlite,
-    readr,
-    readxl,
-    haven,
-    memoise,
-    cachem,
-    hoardr,
-    tibble,
-    logger
+    jsonlite (>= 1.7.3),
+    readr (>= 2.1.2),
+    readxl (>= 1.3.1),
+    haven (>= 2.4.3),
+    memoise (>= 2.0.1),
+    cachem (>= 1.0.6),
+    hoardr (>= 0.5.2),
+    tibble (>= 3.1.6),
+    logger (>= 0.2.2)
 Suggests:
-    roxygen2,
-    knitr,
-    rmarkdown,
-    testthat,
-    covr,
-    webmockr,
-    vcr (>= 0.6.0)
+    roxygen2 (>= 7.1.2),
+    knitr (>= 1.37),
+    rmarkdown (>= 2.11),
+    testthat (>= 3.1.2),
+    covr (>= 3.5.1),
+    webmockr (>= 0.8.0),
+    vcr (>= 1.0.2)
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
 Encoding: UTF-8
