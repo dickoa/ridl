@@ -5,15 +5,12 @@ dataset_json <- "https://raw.githubusercontent.com/okfn/ckanext-unhcr/master/cka
 data_container_json <- "https://raw.githubusercontent.com/okfn/ckanext-unhcr/master/ckanext/unhcr/schemas/data_container.json"
 deposited_dataset_json <- "https://raw.githubusercontent.com/okfn/ckanext-unhcr/master/ckanext/unhcr/schemas/deposited_dataset.json"
 
-
 .ridl_dataset_schema <- fromJSON(dataset_json,
                                   simplifyVector = FALSE)
 .ridl_deposited_dataset_schema <- fromJSON(deposited_dataset_json,
                                            simplifyVector = FALSE)
 .ridl_container_schema <<- fromJSON(data_container_json,
                                     simplifyVector = FALSE)
-
-
 
 bool <- vapply(.ridl_dataset_schema$dataset_fields,
                function(x) "choices" %in% names(x),

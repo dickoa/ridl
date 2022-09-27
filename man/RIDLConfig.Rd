@@ -27,25 +27,25 @@ and setup project where you can interact with the RIDL platform
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{RIDLConfig$new()}}
-\item \href{#method-get_credentials}{\code{RIDLConfig$get_credentials()}}
-\item \href{#method-set_key}{\code{RIDLConfig$set_key()}}
-\item \href{#method-get_key}{\code{RIDLConfig$get_key()}}
-\item \href{#method-get_site_url}{\code{RIDLConfig$get_site_url()}}
-\item \href{#method-get_log_file}{\code{RIDLConfig$get_log_file()}}
-\item \href{#method-remoteclient}{\code{RIDLConfig$remoteclient()}}
-\item \href{#method-call_action}{\code{RIDLConfig$call_action()}}
-\item \href{#method-read}{\code{RIDLConfig$read()}}
-\item \href{#method-setup}{\code{RIDLConfig$setup()}}
-\item \href{#method-delete}{\code{RIDLConfig$delete()}}
-\item \href{#method-as_list}{\code{RIDLConfig$as_list()}}
-\item \href{#method-print}{\code{RIDLConfig$print()}}
-\item \href{#method-clone}{\code{RIDLConfig$clone()}}
+\item \href{#method-RIDLConfig-new}{\code{RIDLConfig$new()}}
+\item \href{#method-RIDLConfig-get_credentials}{\code{RIDLConfig$get_credentials()}}
+\item \href{#method-RIDLConfig-set_key}{\code{RIDLConfig$set_key()}}
+\item \href{#method-RIDLConfig-get_key}{\code{RIDLConfig$get_key()}}
+\item \href{#method-RIDLConfig-get_site_url}{\code{RIDLConfig$get_site_url()}}
+\item \href{#method-RIDLConfig-get_log_file}{\code{RIDLConfig$get_log_file()}}
+\item \href{#method-RIDLConfig-remoteclient}{\code{RIDLConfig$remoteclient()}}
+\item \href{#method-RIDLConfig-call_action}{\code{RIDLConfig$call_action()}}
+\item \href{#method-RIDLConfig-read}{\code{RIDLConfig$read()}}
+\item \href{#method-RIDLConfig-setup}{\code{RIDLConfig$setup()}}
+\item \href{#method-RIDLConfig-delete}{\code{RIDLConfig$delete()}}
+\item \href{#method-RIDLConfig-as_list}{\code{RIDLConfig$as_list()}}
+\item \href{#method-RIDLConfig-print}{\code{RIDLConfig$print()}}
+\item \href{#method-RIDLConfig-clone}{\code{RIDLConfig$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-RIDLConfig-new"></a>}}
+\if{latex}{\out{\hypertarget{method-RIDLConfig-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new Configuration object.
 \subsection{Usage}{
@@ -78,8 +78,8 @@ A new Configuration object.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_credentials"></a>}}
-\if{latex}{\out{\hypertarget{method-get_credentials}{}}}
+\if{html}{\out{<a id="method-RIDLConfig-get_credentials"></a>}}
+\if{latex}{\out{\hypertarget{method-RIDLConfig-get_credentials}{}}}
 \subsection{Method \code{get_credentials()}}{
 Configuration credentials when using a RIDL API key
 \subsection{Usage}{
@@ -88,8 +88,8 @@ Configuration credentials when using a RIDL API key
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_key"></a>}}
-\if{latex}{\out{\hypertarget{method-set_key}{}}}
+\if{html}{\out{<a id="method-RIDLConfig-set_key"></a>}}
+\if{latex}{\out{\hypertarget{method-RIDLConfig-set_key}{}}}
 \subsection{Method \code{set_key()}}{
 Specify a RIDL API key
 \subsection{Usage}{
@@ -105,8 +105,8 @@ Specify a RIDL API key
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_key"></a>}}
-\if{latex}{\out{\hypertarget{method-get_key}{}}}
+\if{html}{\out{<a id="method-RIDLConfig-get_key"></a>}}
+\if{latex}{\out{\hypertarget{method-RIDLConfig-get_key}{}}}
 \subsection{Method \code{get_key()}}{
 Specify a RIDL API key
 \subsection{Usage}{
@@ -118,8 +118,8 @@ a character, the RIDL API key
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_site_url"></a>}}
-\if{latex}{\out{\hypertarget{method-get_site_url}{}}}
+\if{html}{\out{<a id="method-RIDLConfig-get_site_url"></a>}}
+\if{latex}{\out{\hypertarget{method-RIDLConfig-get_site_url}{}}}
 \subsection{Method \code{get_site_url()}}{
 Get the RIDL server URL in use
 \subsection{Usage}{
@@ -131,8 +131,8 @@ the server URL
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_log_file"></a>}}
-\if{latex}{\out{\hypertarget{method-get_log_file}{}}}
+\if{html}{\out{<a id="method-RIDLConfig-get_log_file"></a>}}
+\if{latex}{\out{\hypertarget{method-RIDLConfig-get_log_file}{}}}
 \subsection{Method \code{get_log_file()}}{
 Get the log file used by RIDL
 \subsection{Usage}{
@@ -144,8 +144,8 @@ the log file
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-remoteclient"></a>}}
-\if{latex}{\out{\hypertarget{method-remoteclient}{}}}
+\if{html}{\out{<a id="method-RIDLConfig-remoteclient"></a>}}
+\if{latex}{\out{\hypertarget{method-RIDLConfig-remoteclient}{}}}
 \subsection{Method \code{remoteclient()}}{
 Get the remoteclient currently used
 \subsection{Usage}{
@@ -164,8 +164,8 @@ a crul::HttpClient
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-call_action"></a>}}
-\if{latex}{\out{\hypertarget{method-call_action}{}}}
+\if{html}{\out{<a id="method-RIDLConfig-call_action"></a>}}
+\if{latex}{\out{\hypertarget{method-RIDLConfig-call_action}{}}}
 \subsection{Method \code{call_action()}}{
 Call the client to the RIDL API
 \subsection{Usage}{
@@ -188,8 +188,8 @@ list a with status code and results
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-read"></a>}}
-\if{latex}{\out{\hypertarget{method-read}{}}}
+\if{html}{\out{<a id="method-RIDLConfig-read"></a>}}
+\if{latex}{\out{\hypertarget{method-RIDLConfig-read}{}}}
 \subsection{Method \code{read()}}{
 read and show Configuration object
 \subsection{Usage}{
@@ -201,8 +201,8 @@ Configuration object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-setup"></a>}}
-\if{latex}{\out{\hypertarget{method-setup}{}}}
+\if{html}{\out{<a id="method-RIDLConfig-setup"></a>}}
+\if{latex}{\out{\hypertarget{method-RIDLConfig-setup}{}}}
 \subsection{Method \code{setup()}}{
 Setup Configuration object
 \subsection{Usage}{
@@ -224,8 +224,8 @@ Setup Configuration object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-delete"></a>}}
-\if{latex}{\out{\hypertarget{method-delete}{}}}
+\if{html}{\out{<a id="method-RIDLConfig-delete"></a>}}
+\if{latex}{\out{\hypertarget{method-RIDLConfig-delete}{}}}
 \subsection{Method \code{delete()}}{
 Delete a Configuration object
 \subsection{Usage}{
@@ -234,8 +234,8 @@ Delete a Configuration object
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-as_list"></a>}}
-\if{latex}{\out{\hypertarget{method-as_list}{}}}
+\if{html}{\out{<a id="method-RIDLConfig-as_list"></a>}}
+\if{latex}{\out{\hypertarget{method-RIDLConfig-as_list}{}}}
 \subsection{Method \code{as_list()}}{
 Convert configuration to list
 \subsection{Usage}{
@@ -247,8 +247,8 @@ configuration in list format
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-print"></a>}}
-\if{latex}{\out{\hypertarget{method-print}{}}}
+\if{html}{\out{<a id="method-RIDLConfig-print"></a>}}
+\if{latex}{\out{\hypertarget{method-RIDLConfig-print}{}}}
 \subsection{Method \code{print()}}{
 Print Configuration object
 \subsection{Usage}{
@@ -257,8 +257,8 @@ Print Configuration object
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-RIDLConfig-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-RIDLConfig-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

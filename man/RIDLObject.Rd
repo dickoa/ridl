@@ -22,20 +22,20 @@ creating, and updating RIDL objects.
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{RIDLObject$new()}}
-\item \href{#method-as_list}{\code{RIDLObject$as_list()}}
-\item \href{#method-browse_on_ridl}{\code{RIDLObject$browse_on_ridl()}}
-\item \href{#method-get_config}{\code{RIDLObject$get_config()}}
-\item \href{#method-get_fields}{\code{RIDLObject$get_fields()}}
-\item \href{#method-get_required_fields}{\code{RIDLObject$get_required_fields()}}
-\item \href{#method-check_required_fields}{\code{RIDLObject$check_required_fields()}}
-\item \href{#method-print}{\code{RIDLObject$print()}}
-\item \href{#method-clone}{\code{RIDLObject$clone()}}
+\item \href{#method-RIDLObject-new}{\code{RIDLObject$new()}}
+\item \href{#method-RIDLObject-as_list}{\code{RIDLObject$as_list()}}
+\item \href{#method-RIDLObject-browse_on_ridl}{\code{RIDLObject$browse_on_ridl()}}
+\item \href{#method-RIDLObject-get_config}{\code{RIDLObject$get_config()}}
+\item \href{#method-RIDLObject-get_fields}{\code{RIDLObject$get_fields()}}
+\item \href{#method-RIDLObject-get_required_fields}{\code{RIDLObject$get_required_fields()}}
+\item \href{#method-RIDLObject-check_required_fields}{\code{RIDLObject$check_required_fields()}}
+\item \href{#method-RIDLObject-print}{\code{RIDLObject$print()}}
+\item \href{#method-RIDLObject-clone}{\code{RIDLObject$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-RIDLObject-new"></a>}}
+\if{latex}{\out{\hypertarget{method-RIDLObject-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new RIDLObject object
 \subsection{Usage}{
@@ -56,8 +56,8 @@ A RIDLObject object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-as_list"></a>}}
-\if{latex}{\out{\hypertarget{method-as_list}{}}}
+\if{html}{\out{<a id="method-RIDLObject-as_list"></a>}}
+\if{latex}{\out{\hypertarget{method-RIDLObject-as_list}{}}}
 \subsection{Method \code{as_list()}}{
 Get RIDLObject field into list
 \subsection{Usage}{
@@ -69,8 +69,8 @@ a list with RIDLObject field
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-browse_on_ridl"></a>}}
-\if{latex}{\out{\hypertarget{method-browse_on_ridl}{}}}
+\if{html}{\out{<a id="method-RIDLObject-browse_on_ridl"></a>}}
+\if{latex}{\out{\hypertarget{method-RIDLObject-browse_on_ridl}{}}}
 \subsection{Method \code{browse_on_ridl()}}{
 Browse RIDL
 \subsection{Usage}{
@@ -79,8 +79,8 @@ Browse RIDL
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_config"></a>}}
-\if{latex}{\out{\hypertarget{method-get_config}{}}}
+\if{html}{\out{<a id="method-RIDLObject-get_config"></a>}}
+\if{latex}{\out{\hypertarget{method-RIDLObject-get_config}{}}}
 \subsection{Method \code{get_config()}}{
 Get the current configuration in use
 \subsection{Usage}{
@@ -92,8 +92,8 @@ A configuration object, the configuration in use
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_fields"></a>}}
-\if{latex}{\out{\hypertarget{method-get_fields}{}}}
+\if{html}{\out{<a id="method-RIDLObject-get_fields"></a>}}
+\if{latex}{\out{\hypertarget{method-RIDLObject-get_fields}{}}}
 \subsection{Method \code{get_fields()}}{
 Get dataset fields
 \subsection{Usage}{
@@ -105,8 +105,8 @@ list of fields for a dataset
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_required_fields"></a>}}
-\if{latex}{\out{\hypertarget{method-get_required_fields}{}}}
+\if{html}{\out{<a id="method-RIDLObject-get_required_fields"></a>}}
+\if{latex}{\out{\hypertarget{method-RIDLObject-get_required_fields}{}}}
 \subsection{Method \code{get_required_fields()}}{
 Get dataset required fields
 \subsection{Usage}{
@@ -118,8 +118,8 @@ list of required fields for a dataset
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-check_required_fields"></a>}}
-\if{latex}{\out{\hypertarget{method-check_required_fields}{}}}
+\if{html}{\out{<a id="method-RIDLObject-check_required_fields"></a>}}
+\if{latex}{\out{\hypertarget{method-RIDLObject-check_required_fields}{}}}
 \subsection{Method \code{check_required_fields()}}{
 Check dataset required field
 \subsection{Usage}{
@@ -132,8 +132,8 @@ is not missing a required field and throws an error otherwise
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-print"></a>}}
-\if{latex}{\out{\hypertarget{method-print}{}}}
+\if{html}{\out{<a id="method-RIDLObject-print"></a>}}
+\if{latex}{\out{\hypertarget{method-RIDLObject-print}{}}}
 \subsection{Method \code{print()}}{
 Print a Dataset object
 \subsection{Usage}{
@@ -142,8 +142,8 @@ Print a Dataset object
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-RIDLObject-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-RIDLObject-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

@@ -25,28 +25,28 @@ and updating resources
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{RIDLContainer$new()}}
-\item \href{#method-list_datasets}{\code{RIDLContainer$list_datasets()}}
-\item \href{#method-ridl_browse}{\code{RIDLContainer$ridl_browse()}}
-\item \href{#method-get_fields}{\code{RIDLContainer$get_fields()}}
-\item \href{#method-get_required_fields}{\code{RIDLContainer$get_required_fields()}}
-\item \href{#method-check_required_fields}{\code{RIDLContainer$check_required_fields()}}
-\item \href{#method-as_list}{\code{RIDLContainer$as_list()}}
-\item \href{#method-print}{\code{RIDLContainer$print()}}
-\item \href{#method-clone}{\code{RIDLContainer$clone()}}
+\item \href{#method-RIDLContainer-new}{\code{RIDLContainer$new()}}
+\item \href{#method-RIDLContainer-list_datasets}{\code{RIDLContainer$list_datasets()}}
+\item \href{#method-RIDLContainer-ridl_browse}{\code{RIDLContainer$ridl_browse()}}
+\item \href{#method-RIDLContainer-get_fields}{\code{RIDLContainer$get_fields()}}
+\item \href{#method-RIDLContainer-get_required_fields}{\code{RIDLContainer$get_required_fields()}}
+\item \href{#method-RIDLContainer-check_required_fields}{\code{RIDLContainer$check_required_fields()}}
+\item \href{#method-RIDLContainer-as_list}{\code{RIDLContainer$as_list()}}
+\item \href{#method-RIDLContainer-print}{\code{RIDLContainer$print()}}
+\item \href{#method-RIDLContainer-clone}{\code{RIDLContainer$clone()}}
 }
 }
-\if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
-\itemize{
-\item \out{<span class="pkg-link" data-pkg="ridl" data-topic="RIDLObject" data-id="browse_on_ridl">}\href{../../ridl/html/RIDLObject.html#method-browse_on_ridl}{\code{ridl::RIDLObject$browse_on_ridl()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="ridl" data-topic="RIDLObject" data-id="get_config">}\href{../../ridl/html/RIDLObject.html#method-get_config}{\code{ridl::RIDLObject$get_config()}}\out{</span>}
-}
-\out{</details>}
-}
+\if{html}{\out{
+<details open><summary>Inherited methods</summary>
+<ul>
+<li><span class="pkg-link" data-pkg="ridl" data-topic="RIDLObject" data-id="browse_on_ridl"><a href='../../ridl/html/RIDLObject.html#method-RIDLObject-browse_on_ridl'><code>ridl::RIDLObject$browse_on_ridl()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="ridl" data-topic="RIDLObject" data-id="get_config"><a href='../../ridl/html/RIDLObject.html#method-RIDLObject-get_config'><code>ridl::RIDLObject$get_config()</code></a></span></li>
+</ul>
+</details>
+}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-RIDLContainer-new"></a>}}
+\if{latex}{\out{\hypertarget{method-RIDLContainer-new}{}}}
 \subsection{Method \code{new()}}{
 Create a Container object
 \subsection{Usage}{
@@ -67,8 +67,8 @@ A Container object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-list_datasets"></a>}}
-\if{latex}{\out{\hypertarget{method-list_datasets}{}}}
+\if{html}{\out{<a id="method-RIDLContainer-list_datasets"></a>}}
+\if{latex}{\out{\hypertarget{method-RIDLContainer-list_datasets}{}}}
 \subsection{Method \code{list_datasets()}}{
 Get the list of datasets within the container
 \subsection{Usage}{
@@ -80,8 +80,8 @@ list of RIDLDataset objects
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-ridl_browse"></a>}}
-\if{latex}{\out{\hypertarget{method-ridl_browse}{}}}
+\if{html}{\out{<a id="method-RIDLContainer-ridl_browse"></a>}}
+\if{latex}{\out{\hypertarget{method-RIDLContainer-ridl_browse}{}}}
 \subsection{Method \code{ridl_browse()}}{
 Browse the Container page on RIDL
 \subsection{Usage}{
@@ -90,8 +90,8 @@ Browse the Container page on RIDL
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_fields"></a>}}
-\if{latex}{\out{\hypertarget{method-get_fields}{}}}
+\if{html}{\out{<a id="method-RIDLContainer-get_fields"></a>}}
+\if{latex}{\out{\hypertarget{method-RIDLContainer-get_fields}{}}}
 \subsection{Method \code{get_fields()}}{
 Get container fields
 \subsection{Usage}{
@@ -103,8 +103,8 @@ list of fields for a dataset
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_required_fields"></a>}}
-\if{latex}{\out{\hypertarget{method-get_required_fields}{}}}
+\if{html}{\out{<a id="method-RIDLContainer-get_required_fields"></a>}}
+\if{latex}{\out{\hypertarget{method-RIDLContainer-get_required_fields}{}}}
 \subsection{Method \code{get_required_fields()}}{
 Get container required fields
 \subsection{Usage}{
@@ -116,8 +116,8 @@ list of required fields for a container
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-check_required_fields"></a>}}
-\if{latex}{\out{\hypertarget{method-check_required_fields}{}}}
+\if{html}{\out{<a id="method-RIDLContainer-check_required_fields"></a>}}
+\if{latex}{\out{\hypertarget{method-RIDLContainer-check_required_fields}{}}}
 \subsection{Method \code{check_required_fields()}}{
 Check container required field
 \subsection{Usage}{
@@ -130,8 +130,8 @@ is not missing a required field and throws an error otherwise
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-as_list"></a>}}
-\if{latex}{\out{\hypertarget{method-as_list}{}}}
+\if{html}{\out{<a id="method-RIDLContainer-as_list"></a>}}
+\if{latex}{\out{\hypertarget{method-RIDLContainer-as_list}{}}}
 \subsection{Method \code{as_list()}}{
 Get dataset field into list
 \subsection{Usage}{
@@ -143,8 +143,8 @@ a list with container field element
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-print"></a>}}
-\if{latex}{\out{\hypertarget{method-print}{}}}
+\if{html}{\out{<a id="method-RIDLContainer-print"></a>}}
+\if{latex}{\out{\hypertarget{method-RIDLContainer-print}{}}}
 \subsection{Method \code{print()}}{
 Print a Dataset object
 \subsection{Usage}{
@@ -153,8 +153,8 @@ Print a Dataset object
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-RIDLContainer-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-RIDLContainer-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

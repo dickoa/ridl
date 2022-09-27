@@ -25,37 +25,37 @@ and updating resources
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{RIDLResource$new()}}
-\item \href{#method-download}{\code{RIDLResource$download()}}
-\item \href{#method-download_folder}{\code{RIDLResource$download_folder()}}
-\item \href{#method-read}{\code{RIDLResource$read()}}
-\item \href{#method-excel_sheets}{\code{RIDLResource$excel_sheets()}}
-\item \href{#method-ridl_dataset}{\code{RIDLResource$ridl_dataset()}}
-\item \href{#method-file_format}{\code{RIDLResource$file_format()}}
-\item \href{#method-check_required_field}{\code{RIDLResource$check_required_field()}}
-\item \href{#method-get_file_to_upload}{\code{RIDLResource$get_file_to_upload()}}
-\item \href{#method-set_file_to_upload}{\code{RIDLResource$set_file_to_upload()}}
-\item \href{#method-check_url_filetoupload}{\code{RIDLResource$check_url_filetoupload()}}
-\item \href{#method-get_fields}{\code{RIDLResource$get_fields()}}
-\item \href{#method-get_required_fields}{\code{RIDLResource$get_required_fields()}}
-\item \href{#method-check_required_fields}{\code{RIDLResource$check_required_fields()}}
-\item \href{#method-as_list}{\code{RIDLResource$as_list()}}
-\item \href{#method-ridl_browse}{\code{RIDLResource$ridl_browse()}}
-\item \href{#method-print}{\code{RIDLResource$print()}}
-\item \href{#method-clone}{\code{RIDLResource$clone()}}
+\item \href{#method-RIDLResource-new}{\code{RIDLResource$new()}}
+\item \href{#method-RIDLResource-download}{\code{RIDLResource$download()}}
+\item \href{#method-RIDLResource-download_folder}{\code{RIDLResource$download_folder()}}
+\item \href{#method-RIDLResource-read}{\code{RIDLResource$read()}}
+\item \href{#method-RIDLResource-excel_sheets}{\code{RIDLResource$excel_sheets()}}
+\item \href{#method-RIDLResource-ridl_dataset}{\code{RIDLResource$ridl_dataset()}}
+\item \href{#method-RIDLResource-file_format}{\code{RIDLResource$file_format()}}
+\item \href{#method-RIDLResource-check_required_field}{\code{RIDLResource$check_required_field()}}
+\item \href{#method-RIDLResource-get_file_to_upload}{\code{RIDLResource$get_file_to_upload()}}
+\item \href{#method-RIDLResource-set_file_to_upload}{\code{RIDLResource$set_file_to_upload()}}
+\item \href{#method-RIDLResource-check_url_filetoupload}{\code{RIDLResource$check_url_filetoupload()}}
+\item \href{#method-RIDLResource-get_fields}{\code{RIDLResource$get_fields()}}
+\item \href{#method-RIDLResource-get_required_fields}{\code{RIDLResource$get_required_fields()}}
+\item \href{#method-RIDLResource-check_required_fields}{\code{RIDLResource$check_required_fields()}}
+\item \href{#method-RIDLResource-as_list}{\code{RIDLResource$as_list()}}
+\item \href{#method-RIDLResource-ridl_browse}{\code{RIDLResource$ridl_browse()}}
+\item \href{#method-RIDLResource-print}{\code{RIDLResource$print()}}
+\item \href{#method-RIDLResource-clone}{\code{RIDLResource$clone()}}
 }
 }
-\if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
-\itemize{
-\item \out{<span class="pkg-link" data-pkg="ridl" data-topic="RIDLObject" data-id="browse_on_ridl">}\href{../../ridl/html/RIDLObject.html#method-browse_on_ridl}{\code{ridl::RIDLObject$browse_on_ridl()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="ridl" data-topic="RIDLObject" data-id="get_config">}\href{../../ridl/html/RIDLObject.html#method-get_config}{\code{ridl::RIDLObject$get_config()}}\out{</span>}
-}
-\out{</details>}
-}
+\if{html}{\out{
+<details open><summary>Inherited methods</summary>
+<ul>
+<li><span class="pkg-link" data-pkg="ridl" data-topic="RIDLObject" data-id="browse_on_ridl"><a href='../../ridl/html/RIDLObject.html#method-RIDLObject-browse_on_ridl'><code>ridl::RIDLObject$browse_on_ridl()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="ridl" data-topic="RIDLObject" data-id="get_config"><a href='../../ridl/html/RIDLObject.html#method-RIDLObject-get_config'><code>ridl::RIDLObject$get_config()</code></a></span></li>
+</ul>
+</details>
+}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-RIDLResource-new"></a>}}
+\if{latex}{\out{\hypertarget{method-RIDLResource-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new RIDLResource object
 \subsection{Usage}{
@@ -76,8 +76,8 @@ A RIDLResource object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-download"></a>}}
-\if{latex}{\out{\hypertarget{method-download}{}}}
+\if{html}{\out{<a id="method-RIDLResource-download"></a>}}
+\if{latex}{\out{\hypertarget{method-RIDLResource-download}{}}}
 \subsection{Method \code{download()}}{
 Download a RIDL resource
 \subsection{Usage}{
@@ -107,8 +107,8 @@ a character, the file path
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-download_folder"></a>}}
-\if{latex}{\out{\hypertarget{method-download_folder}{}}}
+\if{html}{\out{<a id="method-RIDLResource-download_folder"></a>}}
+\if{latex}{\out{\hypertarget{method-RIDLResource-download_folder}{}}}
 \subsection{Method \code{download_folder()}}{
 Get the download folder for the latest downloaded resource
 \subsection{Usage}{
@@ -120,8 +120,8 @@ a character, folder with the latest downloaded resource
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-read"></a>}}
-\if{latex}{\out{\hypertarget{method-read}{}}}
+\if{html}{\out{<a id="method-RIDLResource-read"></a>}}
+\if{latex}{\out{\hypertarget{method-RIDLResource-read}{}}}
 \subsection{Method \code{read()}}{
 Read a resource object directly into memory
 \subsection{Usage}{
@@ -157,8 +157,8 @@ A \code{tibble}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-excel_sheets"></a>}}
-\if{latex}{\out{\hypertarget{method-excel_sheets}{}}}
+\if{html}{\out{<a id="method-RIDLResource-excel_sheets"></a>}}
+\if{latex}{\out{\hypertarget{method-RIDLResource-excel_sheets}{}}}
 \subsection{Method \code{excel_sheets()}}{
 Get the list of sheets name of resource
 \subsection{Usage}{
@@ -188,8 +188,8 @@ the names of the sheets of XLS(X) resources
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-ridl_dataset"></a>}}
-\if{latex}{\out{\hypertarget{method-ridl_dataset}{}}}
+\if{html}{\out{<a id="method-RIDLResource-ridl_dataset"></a>}}
+\if{latex}{\out{\hypertarget{method-RIDLResource-ridl_dataset}{}}}
 \subsection{Method \code{ridl_dataset()}}{
 Get the resource dataset.
 \subsection{Usage}{
@@ -201,8 +201,8 @@ a RIDLDataset, the dataset containing the resource
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-file_format"></a>}}
-\if{latex}{\out{\hypertarget{method-file_format}{}}}
+\if{html}{\out{<a id="method-RIDLResource-file_format"></a>}}
+\if{latex}{\out{\hypertarget{method-RIDLResource-file_format}{}}}
 \subsection{Method \code{file_format()}}{
 Get the file format
 \subsection{Usage}{
@@ -214,8 +214,8 @@ a character, the file format of the resource
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-check_required_field"></a>}}
-\if{latex}{\out{\hypertarget{method-check_required_field}{}}}
+\if{html}{\out{<a id="method-RIDLResource-check_required_field"></a>}}
+\if{latex}{\out{\hypertarget{method-RIDLResource-check_required_field}{}}}
 \subsection{Method \code{check_required_field()}}{
 Check dataset required field
 \subsection{Usage}{
@@ -235,8 +235,8 @@ a required field and throws an error otherwise
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_file_to_upload"></a>}}
-\if{latex}{\out{\hypertarget{method-get_file_to_upload}{}}}
+\if{html}{\out{<a id="method-RIDLResource-get_file_to_upload"></a>}}
+\if{latex}{\out{\hypertarget{method-RIDLResource-get_file_to_upload}{}}}
 \subsection{Method \code{get_file_to_upload()}}{
 Get the file that will be or has been uploaded if any
 \subsection{Usage}{
@@ -248,8 +248,8 @@ the file to upload
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_file_to_upload"></a>}}
-\if{latex}{\out{\hypertarget{method-set_file_to_upload}{}}}
+\if{html}{\out{<a id="method-RIDLResource-set_file_to_upload"></a>}}
+\if{latex}{\out{\hypertarget{method-RIDLResource-set_file_to_upload}{}}}
 \subsection{Method \code{set_file_to_upload()}}{
 Set the file that will be uploaded
 \subsection{Usage}{
@@ -265,8 +265,8 @@ Set the file that will be uploaded
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-check_url_filetoupload"></a>}}
-\if{latex}{\out{\hypertarget{method-check_url_filetoupload}{}}}
+\if{html}{\out{<a id="method-RIDLResource-check_url_filetoupload"></a>}}
+\if{latex}{\out{\hypertarget{method-RIDLResource-check_url_filetoupload}{}}}
 \subsection{Method \code{check_url_filetoupload()}}{
 Check if the resource has an url or a file to upload but not both
 \subsection{Usage}{
@@ -279,8 +279,8 @@ and 'file_to_upload'
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_fields"></a>}}
-\if{latex}{\out{\hypertarget{method-get_fields}{}}}
+\if{html}{\out{<a id="method-RIDLResource-get_fields"></a>}}
+\if{latex}{\out{\hypertarget{method-RIDLResource-get_fields}{}}}
 \subsection{Method \code{get_fields()}}{
 Get resource fields
 \subsection{Usage}{
@@ -292,8 +292,8 @@ list of fields for a resource
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_required_fields"></a>}}
-\if{latex}{\out{\hypertarget{method-get_required_fields}{}}}
+\if{html}{\out{<a id="method-RIDLResource-get_required_fields"></a>}}
+\if{latex}{\out{\hypertarget{method-RIDLResource-get_required_fields}{}}}
 \subsection{Method \code{get_required_fields()}}{
 Get resource required fields
 \subsection{Usage}{
@@ -305,8 +305,8 @@ list of required fields for a resource
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-check_required_fields"></a>}}
-\if{latex}{\out{\hypertarget{method-check_required_fields}{}}}
+\if{html}{\out{<a id="method-RIDLResource-check_required_fields"></a>}}
+\if{latex}{\out{\hypertarget{method-RIDLResource-check_required_fields}{}}}
 \subsection{Method \code{check_required_fields()}}{
 Check resource required field
 \subsection{Usage}{
@@ -319,8 +319,8 @@ is not missing a required field and throws an error otherwise
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-as_list"></a>}}
-\if{latex}{\out{\hypertarget{method-as_list}{}}}
+\if{html}{\out{<a id="method-RIDLResource-as_list"></a>}}
+\if{latex}{\out{\hypertarget{method-RIDLResource-as_list}{}}}
 \subsection{Method \code{as_list()}}{
 Get resource field into list
 \subsection{Usage}{
@@ -332,8 +332,8 @@ a list with resource field
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-ridl_browse"></a>}}
-\if{latex}{\out{\hypertarget{method-ridl_browse}{}}}
+\if{html}{\out{<a id="method-RIDLResource-ridl_browse"></a>}}
+\if{latex}{\out{\hypertarget{method-RIDLResource-ridl_browse}{}}}
 \subsection{Method \code{ridl_browse()}}{
 Browse the resource page on RIDL
 \subsection{Usage}{
@@ -342,8 +342,8 @@ Browse the resource page on RIDL
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-print"></a>}}
-\if{latex}{\out{\hypertarget{method-print}{}}}
+\if{html}{\out{<a id="method-RIDLResource-print"></a>}}
+\if{latex}{\out{\hypertarget{method-RIDLResource-print}{}}}
 \subsection{Method \code{print()}}{
 Print a Resource object
 \subsection{Usage}{
@@ -352,8 +352,8 @@ Print a Resource object
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-RIDLResource-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-RIDLResource-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

@@ -39,11 +39,27 @@ In order to easily use the `ridl` package, it's important to understand some key
 A `container` is a placeholder where we can share data on `RIDL`.
 A `container` is represented in the `ridl` package as a `RIDLContainer` object and can hold zero or multiple `datasets`.
 
+Most functions are prefixed by `ridl_container` or `rc`
+
++ Get metadata of a resource: `ridl_container_show` or `rc_show`
++ Get the list of the names of all containers in the server: `ridl_container_list` or `rc_list`
+
 ##### `Dataset`
 A `dataset` is a placeholder where we can share data files (`resources`). In a dataset page there's some metadata that give you enough context and information to properly store the data files and use them. A data file e.g an Excel file is called a `resource` and many of them can be shared in `dataset` page. In the `ridl` package, a `RIDLDataset` object is used to represent a `dataset`.
 
+Most functions are prefixed by `ridl_dataset` or `rd`:
+
++ Get metadata of a dataset and its resources: `ridl_dataset_show` or `rd_show`
++ Get the list of the names of all datasets in the server: `ridl_dataset_list` or `rd_list`
++ Check whether a dataset exists or not: `ridl_dataset_exist` or `rd_exist`
++ Searches for datasets satisfying a given search criteria: `ridl_datasets_search` or `rd_search`
+
 ##### `Resource`
 A `resource` is a file shared in `dataset` page, it includes `microdata` and supporting documents like reports or survey forms. A `RIDLResource` class is used to implement all the logic needed to manipulate RIDL `resource`.
+
+Most functions are prefixed by `ridl_resource` or `rr`
+
++ Get metadata of a resource: `ridl_resource_show` or `rr_show`
 
 ### Installation
 
@@ -130,8 +146,8 @@ We can select a particular `dataset` from the list (a `ridl_dataset_list` is a l
 
 ```{r, eval = FALSE}
 library(tidyverse)
-ridl_dataset_search("mali", visibility = "public", rows = 2) %>%
-  nth(1) %>%
+ridl_dataset_search("mali", visibility = "public", rows = 2) |>
+  nth(1) |>
   ridl_resource_list(format = "stata")
 ## <RIDL Resource> 026f9547-d7b2-4ec3-bbaa-5096837b1f01
 ##   Name: UNHCR_BFA_2016_SEA_household_v1_1
@@ -156,11 +172,11 @@ A `ridl_resource_list` is a simple `R` `list` and can be manipulated using `purr
 
 ```{r, eval = FALSE}
 library(tidyverse)
-ridl_dataset_search("mali", visibility = "public", rows = 2) %>%
-  nth(1) %>%
-  ridl_resource_list(format = "stata") %>%
-  nth(1) %>%
-  read()
+ridl_dataset_search("mali", visibility = "public", rows = 2) |>
+  nth(1) |>
+  ridl_dataset_resource_get_all(format = "stata") |>
+  nth(1) |>
+  ridl_resource_read()
 ## + # A tibble: 1,690 x 459
 ##     hhid   q002a    q006    q008  q102  q113    q200    q201
 ##    <dbl> <dbl+l> <dbl+l> <dbl+l> <dbl> <dbl> <dbl+l> <dbl+l>
@@ -221,10 +237,10 @@ We can also use `ridl_dataset_show` to directly read and access a dataset object
 
 ```{r, eval = FALSE}
 dataset_name <- "official-cross-border-figures-of-venezuelan-individuals"
-ridl_dataset_show(dataset_name) %>%
-  ridl_resource_list() %>%
-  nth(1) %>%
-  read()
+rd_show(dataset_name) |>
+  rd_resource_get_all() |>
+  nth(1) |>
+  rr_read()
 ## + Reading sheet:  VEN_Official Borders Figures
 ## # A tibble: 1,314 x 5
 ##    Country `Mov Type`  `Border Point` Month_Year Total_individua…
@@ -245,8 +261,8 @@ ridl_dataset_show(dataset_name) %>%
 If you know the id of a `RIDL Resource` object you can also use directly `ridl_resource_show` to access directly the desired resource.
 
 ```{r, eval = FALSE}
-ridl_dataset_show(dataset_name) %>%
-  ridl_resource_list() %>%
+rd_show(dataset_name) |>
+  rd_resource_get_all() |>
   nth(1)
 ## + <RIDL Resource> 68e39d44-88ae-49f9-b492-3635341c92be
 ##   Name: VEN_OfficialFiguresBorders
@@ -255,8 +271,8 @@ ridl_dataset_show(dataset_name) %>%
 ##   Size: 39998
 ##   Format: XLSX
 
-ridl_resource_show("68e39d44-88ae-49f9-b492-3635341c92be") %>%
-  read()
+ridl_resource_show("68e39d44-88ae-49f9-b492-3635341c92be") |>
+  ridl_resource_read()
 ## + Reading sheet:  VEN_Official Borders Figures
 ## # A tibble: 1,314 x 5
 ##    Country `Mov Type`  `Border Point` Month_Year Total_individua…
@@ -292,7 +308,7 @@ ridl_container_show("niger-protection")
 ##   No. Datasets: 5
 ##   No. Members: 3
 
-ridl_container_show("niger-protection") %>%
+ridl_container_show("niger-protection") |>
   ridl_dataset_list()
 ## [1] "enrolement-pdi-tillaberi-tillaberi-niger-2020"
 ## [2] "identify-asylum-seekers-in-migration-flow-agadez-niger-2018-2019-2020"
@@ -306,19 +322,18 @@ ridl_container_show("niger-protection") %>%
 It's possible to create a `RIDLDataset` object we can manipulate and upload to the RIDL platform.
 
 ```{r, eval = FALSE}
-data <- list(name = "test-dataset-pen",
+ridl_dataset(name = "test-dataset-pen",
              title = "Test Dataset PEN",
              notes = "Some description",
              owner_org = "africa",
              data_collector = "unhcr",
-             keywords = c("solution", "basic needs"), ## check ridl_dataset_keywords()
+             keywords = list(3, 4),
              unit_of_measurement = "kg",
              data_collection_technique = "f2f",
              archived = FALSE,
              visibility = "restricted",
              external_access_level = "data_enclave")
 
-ridl_dataset(data)
 ## <RIDL Dataset>
 ##   Title: Test Dataset PEN
 ##   Name: test-dataset-pen
@@ -328,21 +343,19 @@ ridl_dataset(data)
 ```
 
 ```{r, eval = FALSE}
-ds_data <- list(name = "test-dataset",
-                title = "Test Dataset",
-                notes = "An example dataset",
-                owner_org = "west-africa",
-                data_collector = "ACF, UNHCR",
-                keywords = list(3, 4), ## check ridl_dataset_keywords()
-                unit_of_measurement = "individual",
-                data_collection_technique = "f2f",
-                sampling_procedure = "nonprobability",
-                operational_purpose_of_data = "cartography",
-                archived = "False",
-                visibility = "restricted",
-                external_access_level = "open_access")
-
-ds <- ridl_dataset(ds_data)
+ds <- ridl_dataset(name = "test-dataset",
+                   title = "Test Dataset",
+                   notes = "An example dataset",
+                   owner_org = "west-africa",
+                   data_collector = "ACF, UNHCR",
+                   keywords = list(3, 4),
+                   unit_of_measurement = "individual",
+                   data_collection_technique = "f2f",
+                   sampling_procedure = "nonprobability",
+                   operational_purpose_of_data = "cartography",
+                   archived = "False",
+                   visibility = "restricted",
+                   external_access_level = "open_access")
 ds
 ## <RIDL Dataset>
 ##   Title: Test Dataset
@@ -354,18 +367,16 @@ ds
 `ridl_resource` can also be used to create a `RIDLResource`.
 
 ```{r, eval = FALSE}
-rs_data <- list(name = "Test resource",
-                type = "data",
-                format = "CSV",
-                file_type = "microdata",
-                identifiability = "anonymized_public",
-                date_range_start = "2018-01-01",
-                date_range_end = "2019-01-01",
-                process_status = "anonymized",
-                visibility = "public",
-                version = 1L)
-
-rs <- ridl_resource(rs_data)
+rs <- ridl_resource(name = "Test resource",
+                    type = "data",
+                    format = "CSV",
+                    file_type = "microdata",
+                    identifiability = "anonymized_public",
+                    date_range_start = "2018-01-01",
+                    date_range_end = "2019-01-01",
+                    process_status = "anonymized",
+                    visibility = "public",
+                    version = 1L)
 rs
 ## <RIDL Resource>
 ##   Name: Test resource
@@ -378,8 +389,8 @@ rs
 We can add the resource to the dataset and upload it to the RIDL platform.
 
 ```{r, eval = FALSE}
-ds <- ds %>%
-  ridl_resource_add(rs)
+ds |>
+  ridl_dataset_resource_add(rs)
 ds
 ## <RIDL Dataset>
 ##   Title: Test Dataset
@@ -390,6 +401,6 @@ ds
 
 ## Meta
 
-* Please [report any issues or bugs](https://gitlab.com/dickoa/ridl/issues).
+* Please [report any issues or bugs](https://gitlab.com/dickoa/ridl/-/issues).
 * License: MIT
 * Please note that this project is released with a [Contributor Code of Conduct](CONDUCT.md). By participating in this project you agree to abide by its terms.
