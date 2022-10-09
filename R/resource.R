@@ -336,20 +336,20 @@ RIDLResource <- R6::R6Class(
 #' @aliases RIDLResource
 #' @importFrom tibble as_tibble
 as_tibble.RIDLResource <- function(x, ...) {
-  df <- tibble::tibble(
-    resource_id = x$data$id,
-    resource_name = x$data$name,
-    resource_format = tolower(x$data$format),
-    resource_url = x$data$url)
-  df$resource <- list(x)
-  df
+  data <- x$data
+  fields <- x$get_fields()
+  data <- drop_nulls(data[fields])
+  data <- as_tibble(data)
+  data$resource_url <- data$url
+  data$resource <- list(x)
+  data
 }
 
 #' @export
 #' @aliases RIDLResource
 as_tibble.ridl_resource_list <- function(x) {
   l <- lapply(x, as_tibble)
-  Reduce(rbind, l)
+  rbind_tibble(l)
 }
 
 #' @export

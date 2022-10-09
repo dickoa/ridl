@@ -53,6 +53,16 @@ format_size <- function(x) {
 }
 
 #' @noRd
+rbind_tibble <- function(x) {
+  nm <- unique(unlist(lapply(x, names)))
+  x <- lapply(x, function(df) {
+    df[setdiff(nm, names(df))] <- NA
+    df
+  })
+  Reduce(rbind.data.frame, x)
+}
+
+#' @noRd
 check_config_params <- function(site = c("prod", "test"),
                                 key = NULL,
                                 user_agent = NULL) {

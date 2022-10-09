@@ -232,8 +232,8 @@ RIDLDataset <- R6::R6Class(
         ridl_config_set(configuration = configuration)
       configuration <- ridl_config_get()
       res <- configuration$call_action("package_collaborator_list_for_user",
-                                   list(id = user,
-                                        capacity = capacity))
+                                       list(id = user,
+                                            capacity = capacity))
       res$raw$raise_for_status()
       res$result
     },
@@ -244,7 +244,7 @@ RIDLDataset <- R6::R6Class(
     #' @return list of fields for a dataset
     get_fields = function() {
       vapply(.ridl_dataset_schema$dataset_fields,
-                   function(x) x$field_name, character(1))
+             function(x) x$field_name, character(1))
     },
 
     #' @description
@@ -292,12 +292,12 @@ RIDLDataset <- R6::R6Class(
     #' @description
     #' Print a Dataset object
     print = function() {
-        cat(paste0("<RIDL Dataset> ", self$data$id), "\n")
-        cat("  Title: ", self$data$title, "\n", sep = "")
-        cat("  Name: ", self$data$name, "\n", sep = "")
-        cat("  Visibility: ", self$data$visibility, "\n", sep = "")
-        cat("  Resources (up to 5): ",
-            sift_res(self$data$resources), "\n", sep = "")
+      cat(paste0("<RIDL Dataset> ", self$data$id), "\n")
+      cat("  Title: ", self$data$title, "\n", sep = "")
+      cat("  Name: ", self$data$name, "\n", sep = "")
+      cat("  Visibility: ", self$data$visibility, "\n", sep = "")
+      cat("  Resources (up to 5): ",
+          sift_res(self$data$resources), "\n", sep = "")
       invisible(self)
     }
   )
@@ -313,18 +313,30 @@ as.list.RIDLDataset <- function(x, ...) {
 #' @aliases RIDLDataset
 #' @importFrom tibble as_tibble
 as_tibble.RIDLDataset <- function(x, ...) {
-  tibble::tibble(dataset_title = tolower(x$data$title),
-                 dataset_name = x$data$name,
-                 container_name = x$data$owner_org,
-                 n_resources = rd_resource_count(x),
-                 dataset = list(x))
+  data <- x$data
+  num_resources <- data$num_resources
+  fields <- x$get_fields()
+  config <- x$get_config()
+  url <- config$get_site_url()
+  url <- paste0(url, "/dataset/", x$data$name)
+  data <- drop_nulls(data[fields])
+  data <- lapply(data, \(x)
+                 if (is.list(x))
+                   paste(unique(unlist(x)), collapse = ", ")
+                 else
+                   as.character(x))
+  data$dataset_url <- url
+  data$num_resources <- num_resources
+  data <- as_tibble(data)
+  data$dataset <- list(x)
+  data
 }
 
 #' @export
 #' @aliases RIDLDataset
 as_tibble.ridl_dataset_list <- function(x) {
   l <- lapply(x, as_tibble)
-  Reduce(rbind, l)
+  rbind_tibble(l)
 }
 
 #' Access the nth resource of a dataset
@@ -1172,11 +1184,11 @@ ridl_dataset_exist <- function(dataset_name, configuration = NULL) {
   if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
     ridl_config_set(configuration = configuration)
 
-    res <- tryCatch({ridl_dataset_show(dataset_name);TRUE},
-                    error = function(e) {
-                      FALSE
+  res <- tryCatch({ridl_dataset_show(dataset_name);TRUE},
+                  error = function(e) {
+                    FALSE
                   })
-    res
+  res
 }
 
 #' @rdname ridl_dataset_exist

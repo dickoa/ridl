@@ -46,7 +46,7 @@ RIDLContainer <- R6::R6Class(
     #' Browse the Container page on RIDL
     ridl_browse = function() {
       url <- private$configuration$get_site_url()
-      browseURL(url = paste0(url, "/organization/", self$data$name))
+      browseURL(url = paste0(url, "/data-container/", self$data$name))
     },
 
     #' @description
@@ -55,7 +55,7 @@ RIDLContainer <- R6::R6Class(
     #' @return list of fields for a dataset
     get_fields = function() {
       vapply(.ridl_container_schema$fields,
-                   function(x) x$field_name, character(1))
+             function(x) x$field_name, character(1))
     },
 
     #' @description
@@ -117,10 +117,24 @@ RIDLContainer <- R6::R6Class(
 #' @aliases RIDLContainer
 #' @importFrom tibble as_tibble
 as_tibble.RIDLContainer <- function(x, ...) {
-  df <- tibble::tibble(container_id = x$data$id,
-                       container_name = x$data$name)
-  df$container <- list(x)
-  df
+  data <- x$data
+  num_datasets <- data$package_count
+  config <- x$get_config()
+  url <- config$get_site_url()
+  url <- paste0(url, "/data-container/", x$data$name)
+  fields <- vapply(.ridl_container_schema$fields,
+                   \(x) x$field_name, character(1))
+  data <- drop_nulls(data[fields])
+  data <- lapply(data, \(x)
+                 if (is.list(x))
+                   paste(unique(unlist(x)), collapse = ", ")
+                 else
+                   as.character(x))
+  data$num_datasets <- num_datasets
+  data$container_url <- url
+  data <- as_tibble(data)
+  data$container <- list(x)
+  data
 }
 
 #' @export
@@ -143,8 +157,8 @@ as.list.RIDLContainer <- function(x, ...) {
 #' @return A RIDLContainer
 #' @export
 ridl_container_show <- function(identifier = NULL,
-                                  include_datasets = TRUE,
-                                  configuration = NULL,
+                                include_datasets = TRUE,
+                                configuration = NULL,
                                 ...) {
   if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
     ridl_config_set(configuration = configuration)
@@ -499,11 +513,11 @@ ridl_container_exist <- function(container_name, configuration = NULL) {
   if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
     ridl_config_set(configuration = configuration)
 
-    res <- tryCatch({ridl_container_show(container_name);TRUE},
-                    error = function(e) {
-                      FALSE
+  res <- tryCatch({ridl_container_show(container_name);TRUE},
+                  error = function(e) {
+                    FALSE
                   })
-    res
+  res
 }
 
 #' @rdname ridl_container_exist
