@@ -533,15 +533,32 @@ rc_exist <- ridl_container_exist
 #' @param container RIDLContainer, the container
 #'
 #' @export
-ridl_container_hierarchy_list.default <- function(container_name) {
-  container <- rc_show(container_name)
-  idx <- which(container$data$name %in% container_name)
-  if (idx == 0 || length(container$data$groups[[idx]]) == 0)
+ridl_container_hierarchy_list.default <- function(container) {
+  ct <- rc_show(container)
+  idx <- which(ct$data$name %in% container)
+  if (idx == 0 || length(ct$data$groups[[idx]]) == 0)
     return (NULL)
-  c(container$data$groups[[idx]]$name,
-    ridl_container_hierarchy_list(container$data$groups[[idx]]$name))
+  c(ct$data$groups[[idx]]$name,
+    ridl_container_hierarchy_list(ct$data$groups[[idx]]$name))
 }
 
 #' @rdname ridl_container_hierarchy_list
 #' @export
 rc_hierarchy_list.default <- ridl_container_hierarchy_list.default
+
+#' List container containers hierarchy
+#'
+#' List container containers hierarchy
+#'
+#' @rdname ridl_container_hierarchy_list
+#'
+#' @param container RIDLContainer, the container
+#'
+#' @export
+ridl_container_hierarchy_list.RIDLContainer <- function(container) {
+  lapply(ridl_container_hierarchy_list(container$data$name), rc_show)
+}
+
+#' @rdname ridl_container_hierarchy_list
+#' @export
+rc_hierarchy_list.RIDLContainer <- ridl_container_hierarchy_list.RIDLContainer

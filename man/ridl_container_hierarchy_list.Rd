@@ -3,21 +3,29 @@
 \name{ridl_container_hierarchy_list.default}
 \alias{ridl_container_hierarchy_list.default}
 \alias{rc_hierarchy_list.default}
+\alias{ridl_container_hierarchy_list.RIDLContainer}
+\alias{rc_hierarchy_list.RIDLContainer}
 \alias{ridl_container_hierarchy_list}
 \alias{rc_hierarchy_list}
 \title{List container containers hierarchy}
 \usage{
-\method{ridl_container_hierarchy_list}{default}(container_name)
+\method{ridl_container_hierarchy_list}{default}(container)
 
-\method{rc_hierarchy_list}{default}(container_name)
+\method{rc_hierarchy_list}{default}(container)
 
-ridl_container_hierarchy_list(container_name)
+\method{ridl_container_hierarchy_list}{RIDLContainer}(container)
 
-rc_hierarchy_list(container_name)
+\method{rc_hierarchy_list}{RIDLContainer}(container)
+
+ridl_container_hierarchy_list(container)
+
+rc_hierarchy_list(container)
 }
 \arguments{
 \item{container}{RIDLContainer, the container}
 }
 \description{
+List container containers hierarchy
+
 List container containers hierarchy
 }

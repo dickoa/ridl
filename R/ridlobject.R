@@ -111,12 +111,12 @@ rc_list <- function(sort, user_container, configuration)
 
 #' @rdname ridl_container_hierarchy_list
 #' @export
-ridl_container_hierarchy_list <- function(container_name)
+ridl_container_hierarchy_list <- function(container)
   UseMethod("ridl_container_hierarchy_list")
 
 #' @rdname ridl_container_hierarchy_list
 #' @export
-rc_hierarchy_list <- function(container_name)
+rc_hierarchy_list <- function(container)
   UseMethod("rc_hierarchy_list")
 
 #' @rdname ridl_resource_file_format
