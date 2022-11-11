@@ -26,7 +26,6 @@ and updating resources
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-RIDLContainer-new}{\code{RIDLContainer$new()}}
-\item \href{#method-RIDLContainer-list_datasets}{\code{RIDLContainer$list_datasets()}}
 \item \href{#method-RIDLContainer-ridl_browse}{\code{RIDLContainer$ridl_browse()}}
 \item \href{#method-RIDLContainer-get_fields}{\code{RIDLContainer$get_fields()}}
 \item \href{#method-RIDLContainer-get_required_fields}{\code{RIDLContainer$get_required_fields()}}
@@ -64,19 +63,6 @@ Create a Container object
 }
 \subsection{Returns}{
 A Container object
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-RIDLContainer-list_datasets"></a>}}
-\if{latex}{\out{\hypertarget{method-RIDLContainer-list_datasets}{}}}
-\subsection{Method \code{list_datasets()}}{
-Get the list of datasets within the container
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RIDLContainer$list_datasets()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-list of RIDLDataset objects
 }
 }
 \if{html}{\out{<hr>}}

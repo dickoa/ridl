@@ -33,16 +33,6 @@ RIDLContainer <- R6::R6Class(
     },
 
     #' @description
-    #' Get the list of datasets within the container
-    #' @return list of RIDLDataset objects
-    list_datasets = function() {
-      if (!"packages" %in% names(self$data))
-        stop("No datasets available in this RIDLContainer!",
-             call. = FALSE)
-      vapply(self$data$packages, function(x) x$name, character(1))
-    },
-
-    #' @description
     #' Browse the Container page on RIDL
     ridl_browse = function() {
       url <- private$configuration$get_site_url()
@@ -230,37 +220,6 @@ ridl_container_list.default <- function(sort = c("title asc", "name",
 #' @rdname ridl_container_list
 #' @export
 rc_list.default <- ridl_container_list.default
-
-#' List RIDL datasets
-#'
-#' List RIDL datasets
-#'
-#' @param container RIDLContainer, the container containing the datasets
-#' @param user character, List datasets from which the user is a member
-#' @param configuration a RIDLConfig, the configuration object
-#'
-#' @rdname ridl_dataset_list
-#'
-#' @return A vector of datasets names
-#'
-#' @examples
-#' \dontrun{
-#' # Setting the config to use RIDL default server
-#'  ridl_config_set()
-#'  ct <- ridl_container_show("africa")
-#'  ridl_dataset_list(ct)
-#' }
-#'
-#' @export
-ridl_dataset_list.RIDLContainer <- function(container = NULL,
-                                            user = NULL,
-                                            configuration = NULL) {
-  container$list_datasets()
-}
-
-#' @rdname ridl_dataset_list
-#' @export
-rd_list.RIDLContainer <- ridl_dataset_list.RIDLContainer
 
 #' Create a RIDL container from list
 #'

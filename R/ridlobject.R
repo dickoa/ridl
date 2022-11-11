@@ -81,12 +81,12 @@ RIDLObject <- R6::R6Class(
 
 #' @rdname ridl_dataset_list
 #' @export
-ridl_dataset_list <- function(container, user, configuration)
+ridl_dataset_list <- function(user, configuration)
   UseMethod("ridl_dataset_list")
 
 #' @rdname ridl_dataset_list
 #' @export
-rd_list <- function(container, user, configuration)
+rd_list <- function(user, configuration)
   UseMethod("rd_list")
 
 #' @rdname ridl_dataset_delete

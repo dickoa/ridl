@@ -531,10 +531,28 @@ ridl_dataset_show <-  function(identifier, configuration = NULL) {
 #' @export
 rd_show <- ridl_dataset_show
 
+
+#' List RIDL datasets
+#'
+#' List RIDL datasets
+#'
+#' @param user character, List datasets from which the user is a member
+#' @param configuration a RIDLConfig, the configuration object
+#'
 #' @rdname ridl_dataset_list
+#'
+#' @return A vector of datasets names
+#'
+#' @examples
+#' \dontrun{
+#' # Setting the config to use RIDL default server
+#'  ridl_config_set()
+#'  ct <- ridl_container_show("africa")
+#'  ridl_dataset_list(ct)
+#' }
+#'
 #' @export
-ridl_dataset_list.default <- function(container = NULL,
-                                      user = NULL,
+ridl_dataset_list.default <- function(user = NULL,
                                       configuration = NULL) {
   if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
     ridl_config_set(configuration = configuration)
