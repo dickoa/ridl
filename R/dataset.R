@@ -1212,3 +1212,9 @@ ridl_dataset_exist <- function(dataset_name, configuration = NULL) {
 #' @rdname ridl_dataset_exist
 #' @export
 rd_exist <- ridl_dataset_exist
+
+
+#' @export
+`[.ridl_dataset_list` <- function(x, i) {
+   structure(NextMethod(), class = "ridl_dataset_list")
+}

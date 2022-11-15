@@ -938,3 +938,8 @@ ridl_resource_exist <- function(resource_id, configuration = NULL) {
 #' @rdname ridl_resource_exist
 #' @export
 rr_exist <- ridl_resource_exist
+
+#' @export
+`[.ridl_resource_list` <- function(x, i) {
+   structure(NextMethod(), class = "ridl_resource_list")
+}
