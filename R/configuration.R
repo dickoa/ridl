@@ -24,49 +24,27 @@ RIDLConfig <- R6::R6Class(
     #'
     #' @importFrom crul HttpClient
     #' @importFrom logger appender_file log_appender log_formatter formatter_sprintf
+    #' @importFrom lifecycle deprecated is_present deprecate_warn
     #'
     #' @param site character, the RIDL instance, prod (production server), test (testing server)
-    #' @param key character, the RIDL API key
+    #' @param token character, the RIDL API token
+    #' @param key character, `r lifecycle::badge("deprecated")` the RIDL API key, is no longer recommended use the API `token` instead
     #' @param user_agent character value, User agent
     #' @param log_file character, the log file
     #' @param ... curl options to pass to crul::HttpClient
     #'
     #' @return A new Configuration object.
     initialize = function(site = "prod",
+                          token = NULL,
                           key = NULL,
                           user_agent = NULL,
                           log_file = NULL,
                           ...) {
 
-      check_config_params(site = site,
-                          key = key,
-                          user_agent = user_agent)
-
-      if (site == "prod") {
-        site_url <- "https://ridl.unhcr.org"
-        key_env_var <- "RIDL_API_KEY"
-
-        if (is.null(key)) {
-          key_env <- Sys.getenv("RIDL_API_KEY")
-          if (!nzchar(key_env))
-            warning("You need to properly set the `RIDL_API_KEY` variable or use the `key parameter` in the `ridl_config_setup` function!",
-                    call. = FALSE)
-          key <- key_env
-          Sys.setenv("RIDL_API_KEY" = key)
-        }
-      } else {
-        site_url <- "https://ridl-uat.unhcr.org"
-        key_env_var <- "RIDL_UAT_API_KEY"
-
-        if (is.null(key)) {
-          key_env <- Sys.getenv("RIDL_UAT_API_KEY")
-          if (!nzchar(key_env))
-            warning("You are using the test server, you need to properly set the `RIDL_UAT_API_KEY` variable or use the `key parameter` in the `ridl_config_setup` function!",
-                    call. = FALSE)
-          key <- key_env
-          Sys.setenv("RIDL_UAT_API_KEY" = key)
-        }
-      }
+      config <- check_config_params(site = site,
+                                    key = key,
+                                    token = token,
+                                    user_agent = user_agent)
 
       hooks <- NULL
       if (!is.null(log_file)) {
@@ -80,14 +58,14 @@ RIDLConfig <- R6::R6Class(
                       response = log_response)
       }
 
-      self$data$key <- key
-      self$data$site_url <- site_url
-      headers <- list(`X-CKAN-API-Key` = key)
+      self$data$token <- config$token
+      self$data$site_url <- config$site_url
+      headers <- list(`X-CKAN-API-Key` = config$token)
 
       if (is.null(user_agent))
         user_agent <- get_user_agent()
 
-      self$data$remoteclient <- HttpClient$new(url = site_url,
+      self$data$remoteclient <- HttpClient$new(url = config$site_url,
                                                headers = headers,
                                                opts = list(http_version = 2L,
                                                            useragent = user_agent, ...),
@@ -100,21 +78,19 @@ RIDLConfig <- R6::R6Class(
     },
 
     #' @description
-    #' Specify a RIDL API key
+    #' Specify a RIDL API token
     #'
-    #' @param key a character with key
-    set_key = function(key) {
-      if (!is_valid_uuid(key))
-        stop("key not valid!", call. = FALSE)
-      self$data$key <- key
+    #' @param token a character with token
+    set_token = function(token) {
+      self$data$token <- token
     },
 
     #' @description
-    #' Specify a RIDL API key
+    #' Specify a RIDL API token
     #'
-    #' @return a character, the RIDL API key
-    get_key = function() {
-      self$data$key
+    #' @return a character, the RIDL API token
+    get_token = function() {
+      self$data$token
     },
 
     #' @description
@@ -169,10 +145,11 @@ RIDLConfig <- R6::R6Class(
     #' @description
     #' Setup Configuration object
     #' @param site character, the RIDL instance, prod (production server), test (testing server)
+    #' @param token a character value, the API token
     #' @param key a character value, the API key
     #' @param configuration a character
     #' @param ... curl options to pass to crul::HttpClient
-    setup = function(site = "prod", key = NULL, configuration = NULL, ...) {
+    setup = function(site = "prod", token = NULL, key = NULL, configuration = NULL, ...) {
       if (!is.null(configuration)) {
         if (!inherits(configuration, "RIDLConfig,"))
           stop("Not a 'RIDLConfig' object!", call. = FALSE)
@@ -180,6 +157,7 @@ RIDLConfig <- R6::R6Class(
       } else {
         private$shared$configuration <- RIDLConfig$new(site = site,
                                                        key = key,
+                                                       token = token,
                                                        configuration = configuration,
                                                        ...)
       }
@@ -204,7 +182,7 @@ RIDLConfig <- R6::R6Class(
     print = function() {
       cat("<RIDL Configuration> ", sep = "\n")
       cat(paste0("  RIDL site url: ", self$get_site_url()), sep = "\n")
-      cat(paste0("  RIDL API key: ", self$get_key()), sep = "\n")
+      cat(paste0("  RIDL API token: ", self$get_token()), sep = "\n")
       invisible(self)
     }
   )
@@ -215,7 +193,8 @@ RIDLConfig <- R6::R6Class(
 #' Create and RIDL configuration object
 #'
 #' @param site character, the RIDL instance, prod (production server), test (testing server)
-#' @param key character for the CKAN API key, it is required to push data into RIDL
+#' @param token character for the CKAN API token
+#' @param key character for the CKAN API key
 #' @param user_agent character value, a user agent string
 #' @param log_file character, the log file
 #' @param ... curl options to pass to crul::HttpClient
@@ -226,12 +205,14 @@ RIDLConfig <- R6::R6Class(
 #' @export
 #'
 ridl_config <- function(site = "prod",
+                        token = NULL,
                         key = NULL,
                         user_agent = NULL,
                         log_file = NULL,
                         ...) {
   RIDLConfig$new(site = site,
                  key = key,
+                 token = token,
                  log_file = log_file,
                  user_agent = user_agent,
                  ...)
@@ -242,7 +223,8 @@ ridl_config <- function(site = "prod",
 #' Sets the configuration settings for using RIDL.
 #'
 #' @param site character, the RIDL instance, prod (production server), test (testing server)
-#' @param key character, the CKAN API key, it is required to push data into RIDL
+#' @param token character, the CKAN API token
+#' @param key character, the CKAN API key
 #' @param user_agent a character, A user agent string
 #' @param log_file character, the log file
 #' @param configuration RIDLConfig, the configuration
@@ -265,6 +247,7 @@ ridl_config <- function(site = "prod",
 #' config
 #' }
 ridl_config_set <- function(site = "prod",
+                            token = NULL,
                             key = NULL,
                             user_agent = NULL,
                             log_file = NULL,
@@ -275,6 +258,7 @@ ridl_config_set <- function(site = "prod",
   } else {
     .ridl_env$configuration <- RIDLConfig$new(site = site,
                                               key = key,
+                                              token = token,
                                               log_file = log_file,
                                               user_agent = user_agent,
                                               ...)

@@ -7,10 +7,18 @@
 \alias{ridl_config_get}
 \title{Create a RIDL configuration object}
 \usage{
-ridl_config(site = "prod", key = NULL, user_agent = NULL, log_file = NULL, ...)
+ridl_config(
+  site = "prod",
+  token = NULL,
+  key = NULL,
+  user_agent = NULL,
+  log_file = NULL,
+  ...
+)
 
 ridl_config_set(
   site = "prod",
+  token = NULL,
   key = NULL,
   user_agent = NULL,
   log_file = NULL,
@@ -20,6 +28,7 @@ ridl_config_set(
 
 ridl_config_setup(
   site = "prod",
+  token = NULL,
   key = NULL,
   user_agent = NULL,
   log_file = NULL,
@@ -32,7 +41,9 @@ ridl_config_get()
 \arguments{
 \item{site}{character, the RIDL instance, prod (production server), test (testing server)}
 
-\item{key}{character, the CKAN API key, it is required to push data into RIDL}
+\item{token}{character, the CKAN API token}
+
+\item{key}{character, the CKAN API key}
 
 \item{user_agent}{a character, A user agent string}
 

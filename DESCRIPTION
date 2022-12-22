@@ -2,7 +2,7 @@ Package: ridl
 Title: A Client for the UNHCR RIDL Platform API
 Description: Client for the UNHCR RIDL Platform API
     <https://ridl.unhcr.org>. Allows to search and download ridl datasets into R.
-Version: 0.4.0.9001
+Version: 0.6.0.9001
 Authors@R: c(person(given = "Ahmadou",
                     family = "Dicko",
 		    email = "mail@ahmadoudicko.com",
@@ -33,7 +33,8 @@ Imports:
     cachem (>= 1.0.6),
     hoardr (>= 0.5.2),
     tibble (>= 3.1.6),
-    logger (>= 0.2.2)
+    logger (>= 0.2.2),
+    lifecycle (>= 1.0.3)
 Suggests:
     roxygen2 (>= 7.1.2),
     knitr (>= 1.37),
@@ -43,7 +44,7 @@ Suggests:
     webmockr (>= 0.8.0),
     vcr (>= 1.0.2)
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.2
+RoxygenNote: 7.2.3
 Encoding: UTF-8
 Language: en-US
 VignetteBuilder: knitr

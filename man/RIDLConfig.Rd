@@ -29,8 +29,8 @@ and setup project where you can interact with the RIDL platform
 \itemize{
 \item \href{#method-RIDLConfig-new}{\code{RIDLConfig$new()}}
 \item \href{#method-RIDLConfig-get_credentials}{\code{RIDLConfig$get_credentials()}}
-\item \href{#method-RIDLConfig-set_key}{\code{RIDLConfig$set_key()}}
-\item \href{#method-RIDLConfig-get_key}{\code{RIDLConfig$get_key()}}
+\item \href{#method-RIDLConfig-set_token}{\code{RIDLConfig$set_token()}}
+\item \href{#method-RIDLConfig-get_token}{\code{RIDLConfig$get_token()}}
 \item \href{#method-RIDLConfig-get_site_url}{\code{RIDLConfig$get_site_url()}}
 \item \href{#method-RIDLConfig-get_log_file}{\code{RIDLConfig$get_log_file()}}
 \item \href{#method-RIDLConfig-remoteclient}{\code{RIDLConfig$remoteclient()}}
@@ -51,6 +51,7 @@ Create a new Configuration object.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{RIDLConfig$new(
   site = "prod",
+  token = NULL,
   key = NULL,
   user_agent = NULL,
   log_file = NULL,
@@ -63,7 +64,9 @@ Create a new Configuration object.
 \describe{
 \item{\code{site}}{character, the RIDL instance, prod (production server), test (testing server)}
 
-\item{\code{key}}{character, the RIDL API key}
+\item{\code{token}}{character, the RIDL API token}
+
+\item{\code{key}}{character, \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} the RIDL API key, is no longer recommended use the API \code{token} instead}
 
 \item{\code{user_agent}}{character value, User agent}
 
@@ -88,33 +91,33 @@ Configuration credentials when using a RIDL API key
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-RIDLConfig-set_key"></a>}}
-\if{latex}{\out{\hypertarget{method-RIDLConfig-set_key}{}}}
-\subsection{Method \code{set_key()}}{
-Specify a RIDL API key
+\if{html}{\out{<a id="method-RIDLConfig-set_token"></a>}}
+\if{latex}{\out{\hypertarget{method-RIDLConfig-set_token}{}}}
+\subsection{Method \code{set_token()}}{
+Specify a RIDL API token
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RIDLConfig$set_key(key)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RIDLConfig$set_token(token)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{key}}{a character with key}
+\item{\code{token}}{a character with token}
 }
 \if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-RIDLConfig-get_key"></a>}}
-\if{latex}{\out{\hypertarget{method-RIDLConfig-get_key}{}}}
-\subsection{Method \code{get_key()}}{
-Specify a RIDL API key
+\if{html}{\out{<a id="method-RIDLConfig-get_token"></a>}}
+\if{latex}{\out{\hypertarget{method-RIDLConfig-get_token}{}}}
+\subsection{Method \code{get_token()}}{
+Specify a RIDL API token
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RIDLConfig$get_key()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RIDLConfig$get_token()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
-a character, the RIDL API key
+a character, the RIDL API token
 }
 }
 \if{html}{\out{<hr>}}
@@ -206,13 +209,21 @@ Configuration object
 \subsection{Method \code{setup()}}{
 Setup Configuration object
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RIDLConfig$setup(site = "prod", key = NULL, configuration = NULL, ...)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RIDLConfig$setup(
+  site = "prod",
+  token = NULL,
+  key = NULL,
+  configuration = NULL,
+  ...
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{site}}{character, the RIDL instance, prod (production server), test (testing server)}
+
+\item{\code{token}}{a character value, the API token}
 
 \item{\code{key}}{a character value, the API key}
 

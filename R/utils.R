@@ -62,8 +62,10 @@ rbind_tibble <- function(x) {
   Reduce(rbind.data.frame, x)
 }
 
+
 #' @noRd
 check_config_params <- function(site = c("prod", "test"),
+                                token = NULL,
                                 key = NULL,
                                 user_agent = NULL) {
 
@@ -71,9 +73,31 @@ check_config_params <- function(site = c("prod", "test"),
     stop("user_agent should be a character",
          call. = FALSE)
 
-  if (!is.null(key) && !is_valid_uuid(key))
-    stop("RIDL API key not valid!",
-         call. = FALSE)
+  if (site == "prod") {
+    site_url <- "https://ridl.unhcr.org"
+    token_env <- Sys.getenv("RIDL_API_TOKEN")
+
+    if (is.null(token)) {
+          if (!nzchar(token_env))
+            warning("You need to properly set the `RIDL_API_TOKEN` variable or use the `token parameter` in the `ridl_config_setup` function!",
+                    call. = FALSE)
+          token <- token_env
+          Sys.setenv("RIDL_API_TOKEN" = token)
+    }
+  } else {
+    site_url <- "https://ridl-uat.unhcr.org"
+    token_env <- Sys.getenv("RIDL_UAT_API_TOKEN")
+
+    if (is.null(token)) {
+      if (!nzchar(token_env))
+        warning("You are using the test server, you need to properly set the `RIDL_UAT_API_TOKEN` variable or use the `token parameter` in the `ridl_config_setup` function!",
+                call. = FALSE)
+      token <- token_env
+      Sys.setenv("RIDL_UAT_API_TOKEN" = token)
+    }
+  }
+
+  list(token = token, key = key, site_url = site_url)
 }
 
 #' @noRd
