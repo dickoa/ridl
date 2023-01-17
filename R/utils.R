@@ -53,6 +53,13 @@ format_size <- function(x) {
 }
 
 #' @noRd
+hide_token <- function(x) {
+  a <- paste(rep("x", 10), collapse = "")
+  b <- substr(x, nchar(x) - 10, nchar(x))
+  paste(c(a, b), collapse = "")
+}
+
+#' @noRd
 rbind_tibble <- function(x) {
   nm <- unique(unlist(lapply(x, names)))
   x <- lapply(x, function(df) {
@@ -589,4 +596,9 @@ dataset_name_ <- function(ids) {
   vapply(ids, function(id) {
     rd_show(id)$data$name
   }, character(1), USE.NAMES = FALSE)
+}
+
+#' @noRd
+keyword_lookup_ <- function(x) {
+  unname(.ridl_dataset_lookup_list$keywords[x])
 }

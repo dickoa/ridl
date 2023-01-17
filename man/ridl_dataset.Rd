@@ -11,6 +11,7 @@ ridl_dataset(
   notes,
   keywords,
   visibility,
+  geographies,
   archived,
   external_access_level,
   unit_of_measurement,
@@ -29,7 +30,6 @@ ridl_dataset(
   hxlated = NULL,
   process_status = NULL,
   identifiability = NULL,
-  geog_coverage = NULL,
   linked_datasets = NULL,
   admin_notes = NULL,
   sampling_procedure_notes = NULL,
@@ -40,6 +40,7 @@ ridl_dataset(
   data_accs_notes = NULL,
   ddi = NULL,
   kobo_asset_id = NULL,
+  geog_coverage = NULL,
   configuration = NULL
 )
 }
@@ -55,6 +56,8 @@ ridl_dataset(
 \item{keywords}{character,  Topic classifications(*) - Tags useful for searching for the datasets. Multiple values are allowed.}
 
 \item{visibility}{character, Internal Access Level(*). Allowed values: \code{restricted} (Private), \code{public} (Internally Visible).}
+
+\item{geographies}{character, the name of the geographic area. 'UNSPECIFIED' when you don't know}
 
 \item{archived}{logical, Archived(*) - Allows users to indicate if the dataset is archived or active. Allowed values: \code{False} (No), \code{True} (Yes).}
 
@@ -92,8 +95,6 @@ ridl_dataset(
 
 \item{identifiability}{character, Identifiability. Allowd values: \code{personally_identifiable} (Personally identifiable), \code{anonymized_enclave} (Anonymized 1st level: Data Enclave - only removed direct identifiers), \code{anonymized_scientific} (Anonymized 2st level: Scientific Use File (SUF)), \code{anonymized_public} (Anonymized 3rd level: Public Use File (PUF)).}
 
-\item{geog_coverage}{character, Geographic Coverage - eg. National coverage, or name of the area, etc.}
-
 \item{linked_datasets}{character, Linked Datasets - Links to other RIDL datasets. It supports multiple selections.}
 
 \item{admin_notes}{character, Admin Notes - General. You can use Markdown formatting here.}
@@ -113,6 +114,8 @@ ridl_dataset(
 \item{ddi}{DDI.}
 
 \item{kobo_asset_id}{character, the KoBoToolbox asset id.}
+
+\item{geog_coverage}{character, Additional notes for geographic coveraage. Complement the Geographic coverage field, e.g National coverage, or name of the area, etc.}
 
 \item{configuration}{RIDLConfig, RIDL configuration used}
 }

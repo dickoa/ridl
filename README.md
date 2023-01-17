@@ -37,7 +37,7 @@ object and can hold zero or multiple `datasets`.
 
 Most functions are prefixed by `ridl_container` or `rc`
 
-- Get metadata of a resource: `ridl_container_show` or `rc_show`
+- Get metadata of a container: `ridl_container_show` or `rc_show`
 - Get the list of the names of all containers in the server:
   `ridl_container_list` or `rc_list`
 
@@ -60,6 +60,8 @@ Most functions are prefixed by `ridl_dataset` or `rd`:
   `rd_exist`
 - Searches for datasets satisfying a given search criteria:
   `ridl_datasets_search` or `rd_search`
+- Get the `Container` object in which you have the dataset:
+  `ridl_datasets_container_get` or `rd_container_get`
 
 ##### `Resource`
 
@@ -89,21 +91,23 @@ remotes::install_gitlab("dickoa/ridl")
 library("ridl")
 ```
 
-The `ridl` package requires you to add your API key and store it for
-further use. The easiest way to do that is to store your API key in your
-`.Renviron` file which is automatically read by R on startup.
+The `ridl` package requires you to add your API token and store it for
+further use. It is preferred option, you no longer need to use the API
+key. In order to have an API token, you need to generate one, by going
+to the following this URL:
+“<ridl-server-url/user/@your-user-name>/api-tokens”.
 
-You can retrieve your `API key` in your [user
-page](https://ridl.unhcr.org/user/).
+![api_key_img](man/figures/ridl_api_token.png)
 
-![api_key_img](man/figures/ridl_api_key.png)
+You give it a name, and generate a token. Once generated, you can store
+it in your `.Renviron` file which is automatically read by R on startup.
 
 You can either edit directly the `.Renviron` file or access it by
 calling `usethis::edit_r_environ()` (assuming you have the `usethis`
 package installed) and entering:
 
 ``` bash
-RIDL_API_KEY=xxxxxxxxxxxxxxxxxx
+RIDL_API_TOKEN=xxxxxxxxxxxxxxxxxx
 ```
 
 Once the environment variable is set you will need to restart your
@@ -114,15 +118,15 @@ library("ridl")
 ridl_config_get()
 ## <RIDL Configuration>
 ##   RIDL site url: https://ridl.unhcr.org
-##   RIDL API key: xxxxxxxxxxxxxxxxxx
+##   RIDL API token: xxxxxxxxxxxxxxxxxx
 ```
 
 If you plan to use RIDL testing environment
 (<https://ridl-uat.unhcr.org>), you’ll need to also setup the
-`RIDL_UAT_API_KEY` variable.
+`RIDL_UAT_API_TOKEN` variable.
 
 ``` bash
-RIDL_UAT_API_KEY=xxxxxxxxxxxxxxxxxx
+RIDL_UAT_API_TOKEN=xxxxxxxxxxxxxxxxxx
 ```
 
 You can also configure directly the `ridl` package using the
@@ -131,11 +135,11 @@ You can also configure directly the `ridl` package using the
 
 ``` r
 ridl_config_setup(site = "test",
-                  key = "xxxxxxxxxxxxxxxxxx")
+                  token = "xxxxxxxxxxxxxxxxxx")
 ridl_config_get()
 ## <RIDL Configuration>
 ##   RIDL site: https://ridl-uat.unhcr.org/
-##   RIDL API key: xxxxxxxxxxxxxxxxxx
+##   RIDL API token: xxxxxxxxxxxxxxxxxx
 ```
 
 Now that we are connected to RIDL, we can search for dataset using

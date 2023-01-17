@@ -21,7 +21,7 @@ value <- lapply(param_with_choices,
                 function(x)
                   setNames(lapply(x$choices, "[[", "value"),
                            vapply(x$choices,
-                                  function(cc) tolower(cc$label),
+                                  function(cc) gsub(" / ", "/", tolower(cc$label)),
                                     character(1))))
 param <- vapply(param_with_choices,
                 function(x) x$field_name, character(1))

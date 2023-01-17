@@ -724,6 +724,7 @@ rd_resource_add.RIDLDataset <- ridl_dataset_resource_add.RIDLDataset
 #' @param owner_org character, Data container(*)  - Use the canonical name for the container.
 #' @param private character, Visibility (Private/Public).
 #' @param visibility character, Internal Access Level(*). Allowed values: `restricted` (Private), `public` (Internally Visible).
+#' @param geographies character, the name of the geographic area. 'UNSPECIFIED' when you don't know
 #' @param external_access_level character, External access level(*). Allowed values: `not_available` (Not available), `direct_access` (Direct access), `public_use` (Public use), `licensed_use` (Licensed use), `data_enclave` (Data enclave), `open_access` (Open access).
 #' @param data_sensitivity character,  Data sensitivity - Apply to both Anonymized and Personally identifiable data. Allowed values: `yes` (Yes), `no` (No).
 #' @param original_id character, Original ID - If the dataset already has an ID from the source org, DDI, etc...
@@ -736,7 +737,6 @@ rd_resource_add.RIDLDataset <- ridl_dataset_resource_add.RIDLDataset
 #' @param operational_purpose_of_data character,  Operational purpose of data - Classification of the type of data contained in the file. Multiple values are allowed. Allowed values: `participatory_assessments` (Participatory assessments), `baseline_household_survey` (Baseline Household Survey), `rapid_needs_assessment` (Rapid Needs Assessment), `protection_monitoring` (Protection Monitoring), `programme_monitoring` (Programme monitoring), `population_data` (Population Data), `cartography` (Cartography, Infrastructure & GIS).
 #' @param process_status character, Dataset Process Status. Allowed values: `raw` (Raw-Uncleaned), `cleaned` (Cleaned Only), `anonymized` (Cleaned & Anonymized).
 #' @param identifiability character, Identifiability. Allowd values: `personally_identifiable` (Personally identifiable), `anonymized_enclave` (Anonymized 1st level: Data Enclave - only removed direct identifiers), `anonymized_scientific` (Anonymized 2st level: Scientific Use File (SUF)), `anonymized_public` (Anonymized 3rd level: Public Use File (PUF)).
-#' @param geog_coverage character, Geographic Coverage - eg. National coverage, or name of the area, etc.
 #' @param data_collection_technique character, Data collection technique(*). Allowed values: `nf` (Not specified), `f2f` (Face-to-face interview), `capi` (Face-to-face interview: Computerised), `cami` (Face-to-face interview: Mobile), `papi` (Face-to-face interview: Paper-and-pencil), `tri` (Telephone interview), `eri` (E-mail interview), `wri` (Web-based interview: audio-visual technology enabling the interviewer(s) and interviewee(s) to communicate in real time), `easi` (Self-administered questionnaire: E-mail), `pasi` (Self-administered questionnaire: Paper), `sasi` (Self-administered questionnaire: SMS/MMS), `casi` (Self-administered questionnaire: Computer-assisted), `cawi` (Self-administered questionnaire: Web-based), `foc` (Face-to-face focus group), `tfoc` (Telephone focus group), `obs` (Observation), `oth` (Other).
 #' @param linked_datasets character, Linked Datasets - Links to other RIDL datasets. It supports multiple selections.
 #' @param hxlated logical, Dataset with resources having HXL tags
@@ -749,6 +749,7 @@ rd_resource_add.RIDLDataset <- ridl_dataset_resource_add.RIDLDataset
 #' @param clean_ops_notes character, Admin Notes - Cleaning. You can use Markdown formatting here.
 #' @param data_accs_notes character, Admin Notes - Access authority. You can use Markdown formatting here.
 #' @param ddi DDI.
+#' @param geog_coverage character, Additional notes for geographic coveraage. Complement the Geographic coverage field, e.g National coverage, or name of the area, etc.
 #' @param kobo_asset_id character, the KoBoToolbox asset id.
 #' @param configuration RIDLConfig, RIDL configuration used
 #'
@@ -769,6 +770,7 @@ ridl_dataset <- function(title,
                          notes,
                          keywords,
                          visibility,
+                         geographies,
                          archived,
                          external_access_level,
                          unit_of_measurement,
@@ -787,7 +789,6 @@ ridl_dataset <- function(title,
                          hxlated = NULL,
                          process_status = NULL,
                          identifiability = NULL,
-                         geog_coverage = NULL,
                          linked_datasets = NULL,
                          admin_notes = NULL,
                          sampling_procedure_notes = NULL,
@@ -798,6 +799,7 @@ ridl_dataset <- function(title,
                          data_accs_notes = NULL,
                          ddi = NULL,
                          kobo_asset_id = NULL,
+                         geog_coverage = NULL,
                          configuration = NULL) {
 
   if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
@@ -813,13 +815,14 @@ ridl_dataset <- function(title,
                 owner_org = owner_org,
                 private = private,
                 visibility = visibility,
+                geographies = geographies,
                 external_access_level = external_access_level,
                 data_sensitivity = data_sensitivity,
                 original_id = original_id,
                 data_collector = data_collector,
                 date_range_start = date_range_start,
                 date_range_end = date_range_end,
-                keywords = keywords,
+                keywords = keyword_lookup_(keywords),
                 unit_of_measurement = unit_of_measurement,
                 sampling_procedure = sampling_procedure,
                 operational_purpose_of_data = operational_purpose_of_data,
