@@ -279,15 +279,13 @@ Get the title of the dataset for pretty printing
 
 \subsection{Returns}{
 a character, the title
-Get all collaborators for a given dataset
-
-Get all collaborators for a given dataset
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-RIDLDataset-collaborator_list"></a>}}
 \if{latex}{\out{\hypertarget{method-RIDLDataset-collaborator_list}{}}}
 \subsection{Method \code{collaborator_list()}}{
+Get all collaborators for a given dataset
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{RIDLDataset$collaborator_list(
   user = NULL,

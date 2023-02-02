@@ -181,8 +181,10 @@ RIDLConfig <- R6::R6Class(
     #' Print Configuration object
     print = function() {
       cat("<RIDL Configuration> ", sep = "\n")
-      cat(paste0("  RIDL site url: ", self$get_site_url()), sep = "\n")
-      cat(paste0("  RIDL API token: ", hide_token(self$get_token())), sep = "\n")
+      cat(paste0("  RIDL site url: ",
+                 self$get_site_url()), sep = "\n")
+      cat(paste0("  RIDL API token: ",
+                 hide_token(self$get_token())), sep = "\n")
       invisible(self)
     }
   )

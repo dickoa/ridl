@@ -7,6 +7,8 @@ test_that("ridl_resource returns a RIDLResource", {
                           process_status = "raw",
                           identifiability = "personally_identifiable",
                           visibility = "public",
+                          measurement_unit = "persons",
+                          methodology = "collected using face to face",
                           name = "my.csv",
                           version = as.character(Sys.Date()),
                           format = "csv",

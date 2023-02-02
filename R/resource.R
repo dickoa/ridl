@@ -248,7 +248,7 @@ RIDLResource <- R6::R6Class(
     #'
     #' @return a logical value, TRUE if the the resource don't mix 'url' and
     #' and 'file_to_upload'
-    check_url_filetoupload = function() {
+    check_resource_type = function() {
       nm <- names(self$data)
       bool1 <- "url" %in% nm & "file_to_upload" %in% nm
       bool2 <- !"url" %in% nm & !"file_to_upload" %in% nm
@@ -632,6 +632,8 @@ rr_show <- ridl_resource_show
 #' @param format character, File format - eg. CSV, XML, or JSON.
 #' @param file_type character, File type(*) - Indicates what is contained in the file. Allowed values: `microdata` (Microdata), `questionnaire` (Questionnaire), `report` (Report), `sampling_methodology` (Sampling strategy & methodology Description), `infographics` (Infographics & Dashboard), `script` (Script), `concept note` (Concept Note), `other` (Other).
 #' @param visibility character, Internal Access Level(*). Allowed values: `restricted` (Private), `public` (Internally Visible).
+#' @param measurement_unit character, the unit of measurement
+#' @param methodology character, This element documents methodological details on the production of the series or indicator.
 #' @param file_to_upload character, path of the file to upload
 #' @param date_range_start Date, Data collection first date(*) - Use yyyy-mm-dd format.
 #' @param date_range_end Date, Data collection last date(*) - Use yyyy-mm-dd format.
@@ -663,6 +665,8 @@ ridl_resource <- function(type,
                           process_status,
                           identifiability,
                           visibility,
+                          measurement_unit,
+                          methodology,
                           file_to_upload = NULL,
                           url = NULL,
                           name = NULL,
@@ -683,6 +687,8 @@ ridl_resource <- function(type,
                description = description,
                format = format,
                file_type = file_type,
+               measurement_unit = measurement_unit,
+               methodology = methodology,
                date_range_start = date_range_start,
                date_range_end = date_range_end,
                version = version,
@@ -758,6 +764,8 @@ rr_create <- ridl_resource_create
 #' @param description character, Description - Some usefule notes about the data.
 #' @param format character, File format - eg. CSV, XML, or JSON.
 #' @param file_type character, File type(*) - Indicates what is contained in the file. Allowed values: `microdata` (Microdata), `questionnaire` (Questionnaire), `report` (Report), `sampling_methodology` (Sampling strategy & methodology Description), `infographics` (Infographics & Dashboard), `script` (Script), `concept note` (Concept Note), `other` (Other).
+#' @param measurement_unit character, the unit of measurement
+#' @param methodology character, This element documents methodological details on the production of the series or indicator.
 #' @param file_to_upload character, path of the file to upload
 #' @param date_range_start Date, Data collection first date(*) - Use yyyy-mm-dd format.
 #' @param date_range_end Date, Data collection last date(*) - Use yyyy-mm-dd format.
@@ -765,6 +773,9 @@ rr_create <- ridl_resource_create
 #' @param hxlated logical, HXL-ated. Allowed values: `False` (No), `True` (Yes).
 #' @param process_status character, File process status(*) - Indicates the processing stage of the data. 'Raw' means that the data has not been cleaned since collection. 'In process' means that it is being cleaned. 'Final' means that the dataset is final and ready for use in analytical products. Allowed valued: `raw` (Raw-Uncleaned), `cleaned` (Cleaned Only), `anonymized` (Cleaned & Anonymized).
 #' @param identifiability character, Identifiability(*) - Indicates if personally identifiable data is contained in the dataset. Allowed values: `personally_identifiable` (Personally identifiable), `anonymized_enclave` (Anonymized 1st level: Data Enclave - only removed direct identifiers), `anonymized_scientific` (Anonymized 2st level: Scientific Use File (SUF)), `anonymized_public` (Anonymized 3st level: Public Use File (PUF)).
+#' @param visibility character, Internal Access Level(*). Allowed values: `restricted` (Private), `public` (Internally Visible).
+#' @param kobo_type character, type
+#' @param kobo_details character, details
 #' @param name character, the name of the resource
 #' @param title character, title of the resource
 #' @param configuration RIDLConfig, the configuration
@@ -774,11 +785,14 @@ rr_create <- ridl_resource_create
 ridl_resource_update <- function(resource,
                                  type,
                                  file_type,
+                                 measurement_unit,
+                                 methodology,
                                  date_range_start,
                                  date_range_end,
                                  version,
                                  process_status,
                                  identifiability,
+                                 visibility,
                                  file_to_upload = NULL,
                                  url = NULL,
                                  name = NULL,
@@ -786,6 +800,8 @@ ridl_resource_update <- function(resource,
                                  description = NULL,
                                  format = NULL,
                                  hxlated = NULL,
+                                 kobo_type = NULL,
+                                 kobo_details = NULL,
                                  configuration = NULL) {
 
   if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
@@ -800,12 +816,17 @@ ridl_resource_update <- function(resource,
                description = description,
                format = format,
                file_type = file_type,
+               measurement_unit = measurement_unit,
+               methodology = methodology,
                date_range_start = date_range_start,
                date_range_end = date_range_end,
                version = version,
                `hxl-ated` = hxlated,
                process_status = process_status,
                identifiability = identifiability,
+               visibility = visibility,
+               kobo_type = kobo_type,
+               kobo_details = kobo_details,
                id = resource$data$id)
   data <- drop_nulls(data)
   data <- validate_resource_data(data)
@@ -832,6 +853,8 @@ rr_update <- ridl_resource_update
 #' @param description character, Description - Some usefule notes about the data.
 #' @param format character, File format - eg. CSV, XML, or JSON.
 #' @param file_type character, File type(*) - Indicates what is contained in the file. Allowed values: `microdata` (Microdata), `questionnaire` (Questionnaire), `report` (Report), `sampling_methodology` (Sampling strategy & methodology Description), `infographics` (Infographics & Dashboard), `script` (Script), `concept note` (Concept Note), `other` (Other).
+#' @param measurement_unit character, the unit of measurement
+#' @param methodology character, This element documents methodological details on the production of the series or indicator.
 #' @param file_to_upload character, path of the file to upload
 #' @param date_range_start Date, Data collection first date(*) - Use yyyy-mm-dd format.
 #' @param date_range_end Date, Data collection last date(*) - Use yyyy-mm-dd format.
@@ -839,6 +862,9 @@ rr_update <- ridl_resource_update
 #' @param hxlated logical, HXL-ated. Allowed values: `False` (No), `True` (Yes).
 #' @param process_status character, File process status(*) - Indicates the processing stage of the data. 'Raw' means that the data has not been cleaned since collection. 'In process' means that it is being cleaned. 'Final' means that the dataset is final and ready for use in analytical products. Allowed valued: `raw` (Raw-Uncleaned), `cleaned` (Cleaned Only), `anonymized` (Cleaned & Anonymized).
 #' @param identifiability character, Identifiability(*) - Indicates if personally identifiable data is contained in the dataset. Allowed values: `personally_identifiable` (Personally identifiable), `anonymized_enclave` (Anonymized 1st level: Data Enclave - only removed direct identifiers), `anonymized_scientific` (Anonymized 2st level: Scientific Use File (SUF)), `anonymized_public` (Anonymized 3st level: Public Use File (PUF)).
+#' @param visibility character, Internal Access Level(*). Allowed values: `restricted` (Private), `public` (Internally Visible).
+#' @param kobo_type character, type
+#' @param kobo_details character, details
 #' @param name character, the name of the resource
 #' @param title character, title of the resource
 #' @param configuration RIDLConfig, the configuration
@@ -848,6 +874,8 @@ rr_update <- ridl_resource_update
 ridl_resource_patch <- function(resource,
                                 type = NULL,
                                 file_type = NULL,
+                                measurement_unit = NULL,
+                                methodology = NULL,
                                 date_range_start = NULL,
                                 date_range_end = NULL,
                                 version = NULL,
@@ -860,6 +888,9 @@ ridl_resource_patch <- function(resource,
                                 description = NULL,
                                 format = NULL,
                                 hxlated = NULL,
+                                visibility = NULL,
+                                kobo_type = NULL,
+                                kobo_details = NULL,
                                 configuration = NULL) {
 
   if (!is.null(configuration) & inherits(configuration, "RIDLConfig"))
@@ -874,12 +905,17 @@ ridl_resource_patch <- function(resource,
                description = description,
                format = format,
                file_type = file_type,
+               measurement_unit = measurement_unit,
+               methodology = methodology,
                date_range_start = date_range_start,
                date_range_end = date_range_end,
                version = version,
                `hxl-ated` = hxlated,
                process_status = process_status,
                identifiability = identifiability,
+               visibility = visibility,
+               kobo_type = kobo_type,
+               kobo_details = kobo_details,
                id = resource$data$id)
   data <- drop_nulls(data)
 

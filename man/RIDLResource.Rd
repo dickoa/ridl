@@ -35,7 +35,7 @@ and updating resources
 \item \href{#method-RIDLResource-check_required_field}{\code{RIDLResource$check_required_field()}}
 \item \href{#method-RIDLResource-get_file_to_upload}{\code{RIDLResource$get_file_to_upload()}}
 \item \href{#method-RIDLResource-set_file_to_upload}{\code{RIDLResource$set_file_to_upload()}}
-\item \href{#method-RIDLResource-check_url_filetoupload}{\code{RIDLResource$check_url_filetoupload()}}
+\item \href{#method-RIDLResource-check_resource_type}{\code{RIDLResource$check_resource_type()}}
 \item \href{#method-RIDLResource-get_fields}{\code{RIDLResource$get_fields()}}
 \item \href{#method-RIDLResource-get_required_fields}{\code{RIDLResource$get_required_fields()}}
 \item \href{#method-RIDLResource-check_required_fields}{\code{RIDLResource$check_required_fields()}}
@@ -265,12 +265,12 @@ Set the file that will be uploaded
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-RIDLResource-check_url_filetoupload"></a>}}
-\if{latex}{\out{\hypertarget{method-RIDLResource-check_url_filetoupload}{}}}
-\subsection{Method \code{check_url_filetoupload()}}{
+\if{html}{\out{<a id="method-RIDLResource-check_resource_type"></a>}}
+\if{latex}{\out{\hypertarget{method-RIDLResource-check_resource_type}{}}}
+\subsection{Method \code{check_resource_type()}}{
 Check if the resource has an url or a file to upload but not both
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RIDLResource$check_url_filetoupload()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RIDLResource$check_resource_type()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{

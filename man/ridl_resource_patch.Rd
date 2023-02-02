@@ -9,6 +9,8 @@ ridl_resource_patch(
   resource,
   type = NULL,
   file_type = NULL,
+  measurement_unit = NULL,
+  methodology = NULL,
   date_range_start = NULL,
   date_range_end = NULL,
   version = NULL,
@@ -21,6 +23,9 @@ ridl_resource_patch(
   description = NULL,
   format = NULL,
   hxlated = NULL,
+  visibility = NULL,
+  kobo_type = NULL,
+  kobo_details = NULL,
   configuration = NULL
 )
 
@@ -28,6 +33,8 @@ rr_patch(
   resource,
   type = NULL,
   file_type = NULL,
+  measurement_unit = NULL,
+  methodology = NULL,
   date_range_start = NULL,
   date_range_end = NULL,
   version = NULL,
@@ -40,6 +47,9 @@ rr_patch(
   description = NULL,
   format = NULL,
   hxlated = NULL,
+  visibility = NULL,
+  kobo_type = NULL,
+  kobo_details = NULL,
   configuration = NULL
 )
 }
@@ -49,6 +59,10 @@ rr_patch(
 \item{type}{character, Resource type(*) - The kind of file you want to upload. Allowed values: \code{data} (Data file), \code{attachment} (Additional attachment).}
 
 \item{file_type}{character, File type(*) - Indicates what is contained in the file. Allowed values: \code{microdata} (Microdata), \code{questionnaire} (Questionnaire), \code{report} (Report), \code{sampling_methodology} (Sampling strategy & methodology Description), \code{infographics} (Infographics & Dashboard), \code{script} (Script), \verb{concept note} (Concept Note), \code{other} (Other).}
+
+\item{measurement_unit}{character, the unit of measurement}
+
+\item{methodology}{character, This element documents methodological details on the production of the series or indicator.}
 
 \item{date_range_start}{Date, Data collection first date(*) - Use yyyy-mm-dd format.}
 
@@ -73,6 +87,12 @@ rr_patch(
 \item{format}{character, File format - eg. CSV, XML, or JSON.}
 
 \item{hxlated}{logical, HXL-ated. Allowed values: \code{False} (No), \code{True} (Yes).}
+
+\item{visibility}{character, Internal Access Level(*). Allowed values: \code{restricted} (Private), \code{public} (Internally Visible).}
+
+\item{kobo_type}{character, type}
+
+\item{kobo_details}{character, details}
 
 \item{configuration}{RIDLConfig, the configuration}
 }

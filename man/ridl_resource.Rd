@@ -13,6 +13,8 @@ ridl_resource(
   process_status,
   identifiability,
   visibility,
+  measurement_unit,
+  methodology,
   file_to_upload = NULL,
   url = NULL,
   name = NULL,
@@ -41,6 +43,10 @@ ridl_resource(
 \item{identifiability}{character, Identifiability(*) - Indicates if personally identifiable data is contained in the dataset. Allowed values: \code{personally_identifiable} (Personally identifiable), \code{anonymized_enclave} (Anonymized 1st level: Data Enclave - only removed direct identifiers), \code{anonymized_scientific} (Anonymized 2st level: Scientific Use File (SUF)), \code{anonymized_public} (Anonymized 3st level: Public Use File (PUF)).}
 
 \item{visibility}{character, Internal Access Level(*). Allowed values: \code{restricted} (Private), \code{public} (Internally Visible).}
+
+\item{measurement_unit}{character, the unit of measurement}
+
+\item{methodology}{character, This element documents methodological details on the production of the series or indicator.}
 
 \item{file_to_upload}{character, path of the file to upload}
 

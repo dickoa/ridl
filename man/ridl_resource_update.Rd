@@ -9,11 +9,14 @@ ridl_resource_update(
   resource,
   type,
   file_type,
+  measurement_unit,
+  methodology,
   date_range_start,
   date_range_end,
   version,
   process_status,
   identifiability,
+  visibility,
   file_to_upload = NULL,
   url = NULL,
   name = NULL,
@@ -21,6 +24,8 @@ ridl_resource_update(
   description = NULL,
   format = NULL,
   hxlated = NULL,
+  kobo_type = NULL,
+  kobo_details = NULL,
   configuration = NULL
 )
 
@@ -28,11 +33,14 @@ rr_update(
   resource,
   type,
   file_type,
+  measurement_unit,
+  methodology,
   date_range_start,
   date_range_end,
   version,
   process_status,
   identifiability,
+  visibility,
   file_to_upload = NULL,
   url = NULL,
   name = NULL,
@@ -40,6 +48,8 @@ rr_update(
   description = NULL,
   format = NULL,
   hxlated = NULL,
+  kobo_type = NULL,
+  kobo_details = NULL,
   configuration = NULL
 )
 }
@@ -50,6 +60,10 @@ rr_update(
 
 \item{file_type}{character, File type(*) - Indicates what is contained in the file. Allowed values: \code{microdata} (Microdata), \code{questionnaire} (Questionnaire), \code{report} (Report), \code{sampling_methodology} (Sampling strategy & methodology Description), \code{infographics} (Infographics & Dashboard), \code{script} (Script), \verb{concept note} (Concept Note), \code{other} (Other).}
 
+\item{measurement_unit}{character, the unit of measurement}
+
+\item{methodology}{character, This element documents methodological details on the production of the series or indicator.}
+
 \item{date_range_start}{Date, Data collection first date(*) - Use yyyy-mm-dd format.}
 
 \item{date_range_end}{Date, Data collection last date(*) - Use yyyy-mm-dd format.}
@@ -59,6 +73,8 @@ rr_update(
 \item{process_status}{character, File process status(*) - Indicates the processing stage of the data. 'Raw' means that the data has not been cleaned since collection. 'In process' means that it is being cleaned. 'Final' means that the dataset is final and ready for use in analytical products. Allowed valued: \code{raw} (Raw-Uncleaned), \code{cleaned} (Cleaned Only), \code{anonymized} (Cleaned & Anonymized).}
 
 \item{identifiability}{character, Identifiability(*) - Indicates if personally identifiable data is contained in the dataset. Allowed values: \code{personally_identifiable} (Personally identifiable), \code{anonymized_enclave} (Anonymized 1st level: Data Enclave - only removed direct identifiers), \code{anonymized_scientific} (Anonymized 2st level: Scientific Use File (SUF)), \code{anonymized_public} (Anonymized 3st level: Public Use File (PUF)).}
+
+\item{visibility}{character, Internal Access Level(*). Allowed values: \code{restricted} (Private), \code{public} (Internally Visible).}
 
 \item{file_to_upload}{character, path of the file to upload}
 
@@ -73,6 +89,10 @@ rr_update(
 \item{format}{character, File format - eg. CSV, XML, or JSON.}
 
 \item{hxlated}{logical, HXL-ated. Allowed values: \code{False} (No), \code{True} (Yes).}
+
+\item{kobo_type}{character, type}
+
+\item{kobo_details}{character, details}
 
 \item{configuration}{RIDLConfig, the configuration}
 }

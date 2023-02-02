@@ -61,21 +61,18 @@ RIDLDataset <- R6::R6Class(
     #' @return a list of Resource objects, all resources available in the dataset
     ridl_resource_get_all = function(pattern = NULL, format = NULL) {
       l <- self$resources
-
       if (!is.null(pattern)) {
         b <- sapply(self$data$resources,
                     function(x)
                       grepl(pattern, x$name, ignore.case = TRUE))
         l <- l[b]
       }
-
       if (!is.null(format)) {
         b <- sapply(self$data$resources,
                     function(x)
                       tolower(x$format) %in% tolower(format))
         l <- l[b]
       }
-
       if (is.null(l) | length(l) < 1)
         l <- list()
 
@@ -116,14 +113,14 @@ RIDLDataset <- R6::R6Class(
     },
 
     #' @description
-    #'
     #' Add a resource to a dataset
     #'
     #' @param resource RIDLResource, the resource
     #' @param ignore_dataset_id logical, ignore the dataset id
     ridl_resource_add = function(resource, ignore_dataset_id = FALSE) {
       if (!inherits(resource, "RIDLResource"))
-        stop("Not of class `RIDLResource` please use `ridl_resource` to create a resource first!", call. = FALSE)
+        stop("Not of class `RIDLResource` please use `ridl_resource` to create a resource first!",
+             call. = FALSE)
       if ("package_id" %in% names(resource$data))
         stop("This resource already have a dataset id",
              call. = FALSE)
@@ -142,7 +139,6 @@ RIDLDataset <- R6::R6Class(
     },
 
     #' @description
-    #'
     #' Delete a dataset
     #'
     #' @param id character, the id or name of the dataset to delete
@@ -217,8 +213,7 @@ RIDLDataset <- R6::R6Class(
       res
     },
 
-    #' Get all collaborators for a given dataset
-    #'
+    #' @description
     #' Get all collaborators for a given dataset
     #'
     #' @param user character, id or name of the user
@@ -832,7 +827,7 @@ ridl_dataset <- function(title,
                 geog_coverage = geog_coverage,
                 data_collection_technique = data_collection_technique,
                 linked_datasets = linked_datasets,
-                archived = archived,
+                archived = as_pylog(archived),
                 admin_notes = admin_notes,
                 sampling_procedure_notes = sampling_procedure_notes,
                 response_rate_notes = response_rate_notes,

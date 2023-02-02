@@ -95,7 +95,7 @@ RIDLContainer <- R6::R6Class(
     print = function() {
       cat(paste0("<RIDL Container> ", self$data$id), "\n")
       cat("  Name: ", self$data$name, "\n", sep = "")
-      cat("  Display name: ", self$data$display_name, "\n", sep = "")
+      cat("  Display name: ", self$data$title, "\n", sep = "")
       cat("  No. Datasets: ", self$data$package_count, "\n", sep = "")
       cat("  No. Members: ", length(self$data$users), "\n", sep = "")
       invisible(self)
@@ -263,7 +263,7 @@ ridl_container <- function(country,
   configuration <- ridl_config_get()
 
   data <- list(country = country,
-               visible_external = visible_external,
+               visible_external = as_pylog(visible_external),
                geographic_area = geographic_area,
                title = title,
                name = name,
@@ -349,7 +349,7 @@ ridl_container_update <-  function(container,
   assert_container_on_ridl(container)
 
   data <- list(country = country,
-               visible_external = visible_external,
+               visible_external = as_pylog(visible_external),
                geographic_area = geographic_area,
                title = title,
                name = name,
@@ -415,7 +415,7 @@ ridl_container_patch <-  function(container,
   assert_container_on_ridl(container)
 
   data <- list(country = country,
-               visible_external = visible_external,
+               visible_external = as_pylog(visible_external),
                geographic_area = geographic_area,
                title = title,
                name = name,
