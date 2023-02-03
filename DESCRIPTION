@@ -2,7 +2,7 @@ Package: ridl
 Title: A Client for the UNHCR RIDL Platform API
 Description: Client for the UNHCR RIDL Platform API
     <https://ridl.unhcr.org>. Allows to search and download ridl datasets into R.
-Version: 3.2.1
+Version: 3.2.0.9000
 Authors@R: c(person(given = "Ahmadou",
                     family = "Dicko",
 		    email = "mail@ahmadoudicko.com",
