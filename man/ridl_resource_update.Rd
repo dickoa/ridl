@@ -9,21 +9,37 @@ ridl_resource_update(
   resource,
   type,
   file_type,
-  measurement_unit,
-  methodology,
   date_range_start,
   date_range_end,
   version,
   process_status,
   identifiability,
   visibility,
+  methodology = NULL,
+  measurement_unit = NULL,
   file_to_upload = NULL,
   url = NULL,
   name = NULL,
-  title = NULL,
   description = NULL,
   format = NULL,
   hxlated = NULL,
+  authors = NULL,
+  script_field_name = NULL,
+  script_methods = NULL,
+  script_instructions = NULL,
+  script_dependencies = NULL,
+  script_zip_package = NULL,
+  script_date = NULL,
+  license_name = NULL,
+  license_uri = NULL,
+  periodicity = NULL,
+  limitations = NULL,
+  dimensions = NULL,
+  statistical_concept = NULL,
+  time_periods = NULL,
+  confidentiality = NULL,
+  confidentiality_status = NULL,
+  confidentiality_note = NULL,
   kobo_type = NULL,
   kobo_details = NULL,
   configuration = NULL
@@ -33,21 +49,37 @@ rr_update(
   resource,
   type,
   file_type,
-  measurement_unit,
-  methodology,
   date_range_start,
   date_range_end,
   version,
   process_status,
   identifiability,
   visibility,
+  methodology = NULL,
+  measurement_unit = NULL,
   file_to_upload = NULL,
   url = NULL,
   name = NULL,
-  title = NULL,
   description = NULL,
   format = NULL,
   hxlated = NULL,
+  authors = NULL,
+  script_field_name = NULL,
+  script_methods = NULL,
+  script_instructions = NULL,
+  script_dependencies = NULL,
+  script_zip_package = NULL,
+  script_date = NULL,
+  license_name = NULL,
+  license_uri = NULL,
+  periodicity = NULL,
+  limitations = NULL,
+  dimensions = NULL,
+  statistical_concept = NULL,
+  time_periods = NULL,
+  confidentiality = NULL,
+  confidentiality_status = NULL,
+  confidentiality_note = NULL,
   kobo_type = NULL,
   kobo_details = NULL,
   configuration = NULL
@@ -59,10 +91,6 @@ rr_update(
 \item{type}{character, Resource type(*) - The kind of file you want to upload. Allowed values: \code{data} (Data file), \code{attachment} (Additional attachment).}
 
 \item{file_type}{character, File type(*) - Indicates what is contained in the file. Allowed values: \code{microdata} (Microdata), \code{questionnaire} (Questionnaire), \code{report} (Report), \code{sampling_methodology} (Sampling strategy & methodology Description), \code{infographics} (Infographics & Dashboard), \code{script} (Script), \verb{concept note} (Concept Note), \code{other} (Other).}
-
-\item{measurement_unit}{character, the unit of measurement}
-
-\item{methodology}{character, This element documents methodological details on the production of the series or indicator.}
 
 \item{date_range_start}{Date, Data collection first date(*) - Use yyyy-mm-dd format.}
 
@@ -76,13 +104,15 @@ rr_update(
 
 \item{visibility}{character, Internal Access Level(*). Allowed values: \code{restricted} (Private), \code{public} (Internally Visible).}
 
+\item{methodology}{character, This element documents methodological details on the production of the series or indicator.}
+
+\item{measurement_unit}{character, the unit of measurement}
+
 \item{file_to_upload}{character, path of the file to upload}
 
 \item{url}{character, Upload - The file name as it will be recorded in the system.}
 
 \item{name}{character, the name of the resource}
-
-\item{title}{character, title of the resource}
 
 \item{description}{character, Description - Some usefule notes about the data.}
 
@@ -90,11 +120,49 @@ rr_update(
 
 \item{hxlated}{logical, HXL-ated. Allowed values: \code{False} (No), \code{True} (Yes).}
 
+\item{authors}{character, authors}
+
+\item{script_field_name}{character, name of the script field}
+
+\item{script_methods}{character, statistical/analytic methods included in the script}
+
+\item{script_instructions}{character, instructions for running the script. Information on the sequence in which the scripts must be run is critical.}
+
+\item{script_dependencies}{character, dependencies (packages/libraries) that the script relies on.}
+
+\item{script_zip_package}{character, Script ZIP package}
+
+\item{script_date, }{character, date of the script}
+
+\item{license_name}{character, script license name}
+
+\item{license_uri}{character, script license uri}
+
+\item{periodicity}{character, periodicity}
+
+\item{limitations}{character, limitations}
+
+\item{dimensions}{character, dimensions}
+
+\item{statistical_concept}{character, statistical concept used}
+
+\item{time_periods}{character, time periods}
+
+\item{confidentiality}{character, confidentiality}
+
+\item{confidentiality_status}{character, confidentiality status}
+
+\item{confidentiality_note}{character, confidentiality note}
+
 \item{kobo_type}{character, type}
 
 \item{kobo_details}{character, details}
 
 \item{configuration}{RIDLConfig, the configuration}
+
+\item{script_software}{character, software used to run the script}
+
+\item{source_code_repo}{character, repository (e.g. GitHub repo) where the script has been published.}
 }
 \value{
 RIDLResource, the resource

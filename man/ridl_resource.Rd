@@ -22,6 +22,22 @@ ridl_resource(
   description = NULL,
   format = NULL,
   hxlated = NULL,
+  authors = NULL,
+  script_field_name = NULL,
+  script_methods = NULL,
+  script_instructions = NULL,
+  script_dependencies = NULL,
+  script_zip_package = NULL,
+  script_date = NULL,
+  license_name = NULL,
+  license_uri = NULL,
+  limitations = NULL,
+  dimensions = NULL,
+  statistical_concept = NULL,
+  time_periods = NULL,
+  confidentiality = NULL,
+  confidentiality_status = NULL,
+  confidentiality_note = NULL,
   kobo_type = NULL,
   kobo_details = NULL,
   configuration = NULL
@@ -54,19 +70,55 @@ ridl_resource(
 
 \item{name}{character, the name of the resource}
 
-\item{title}{character, title of the resource}
-
 \item{description}{character, Description - Some usefule notes about the data.}
 
 \item{format}{character, File format - eg. CSV, XML, or JSON.}
 
 \item{hxlated}{logical, HXL-ated. Allowed values: \code{False} (No), \code{True} (Yes).}
 
+\item{authors}{character, authors}
+
+\item{script_field_name}{character, name of the script field}
+
+\item{script_methods}{character, statistical/analytic methods included in the script}
+
+\item{script_instructions}{character, instructions for running the script. Information on the sequence in which the scripts must be run is critical.}
+
+\item{script_dependencies}{character, dependencies (packages/libraries) that the script relies on.}
+
+\item{script_zip_package}{character, Script ZIP package}
+
+\item{script_date, }{character, date of the script}
+
+\item{license_name}{character, script license name}
+
+\item{license_uri}{character, script license uri}
+
+\item{limitations}{character, limitations}
+
+\item{dimensions}{character, dimensions}
+
+\item{statistical_concept}{character, statistical concept used}
+
+\item{time_periods}{character, time periods}
+
+\item{confidentiality}{character, confidentiality}
+
+\item{confidentiality_status}{character, confidentiality status}
+
+\item{confidentiality_note}{character, confidentiality note}
+
 \item{kobo_type}{character, type}
 
 \item{kobo_details}{character, details}
 
 \item{configuration}{RIDLConfig, the configuration}
+
+\item{script_software}{character, software used to run the script}
+
+\item{source_code_repo}{character, repository (e.g. GitHub repo) where the script has been published.}
+
+\item{periodicity}{character, periodicity}
 }
 \value{
 Resource the resources

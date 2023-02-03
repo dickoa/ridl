@@ -4,32 +4,56 @@
 \name{rc_metadata_country}
 \alias{rc_metadata_country}
 \alias{rc_metadata_sectoral_area}
-\title{Visibility metadata}
+\alias{rc_metadata_uat_country}
+\alias{rc_metadata_uat_sectoral_area}
+\title{Container country metadata schema on the production server}
 \format{
-A tibble with 2 rows and 2 variables:
+A tibble with 219 rows and 2 variables:
 \describe{
-\item{visibility_code}{Code for visibility}
-\item{visibility_label}{Label for visibility}
+\item{country_code}{Code for country}
+\item{country_label}{Label for country}
 }
 
-A tibble with 2 rows and 2 variables:
+A tibble with 57 rows and 2 variables:
 \describe{
-\item{visibility_code}{Code for visibility}
-\item{visibility_label}{Label for visibility}
+\item{sectoral_area_code}{Code for sectoral_area}
+\item{sectoral_area_label}{Label for sectoral_area}
+}
+
+A tibble with 219 rows and 2 variables:
+\describe{
+\item{country_code}{Code for country}
+\item{country_label}{Label for country}
+}
+
+A tibble with 57 rows and 2 variables:
+\describe{
+\item{sectoral_area_code}{Code for sectoral_area}
+\item{sectoral_area_label}{Label for sectoral_area}
 }
 }
 \usage{
 rc_metadata_country
 
 rc_metadata_sectoral_area
+
+rc_metadata_uat_country
+
+rc_metadata_uat_sectoral_area
 }
 \description{
-Internal access level
+Container country metadata schema on the production server
 
-Internal access level
+Container sectoral_area metadata scheme on production server
+
+Container country metadata schema on the UAT server
+
+Container sectoral_area metadata scheme on UAT server
 }
 \examples{
 rc_metadata_country
 rc_metadata_sectoral_area
+rc_metadata_uat_country
+rc_metadata_uat_sectoral_area
 }
 \keyword{datasets}

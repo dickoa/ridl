@@ -238,7 +238,11 @@ RIDLDataset <- R6::R6Class(
     #'
     #' @return list of fields for a dataset
     get_fields = function() {
-      vapply(.ridl_dataset_schema$dataset_fields,
+      url <- private$configuration$get_site_url()
+      fields <- .ridl_dataset_schema$dataset_fields
+      if (grepl("uat", url))
+        fields <- .ridl_dataset_uat_schema$dataset_fields
+      vapply(fields,
              function(x) x$field_name, character(1))
     },
 
@@ -247,8 +251,12 @@ RIDLDataset <- R6::R6Class(
     #'
     #' @return list of required fields for a dataset
     get_required_fields = function() {
+      url <- private$configuration$get_site_url()
+      fields <- .ridl_dataset_schema$dataset_fields
+      if (grepl("uat", url))
+        fields <- .ridl_dataset_uat_schema$dataset_fields
       nm <- self$get_fields()
-      bool <- lapply(.ridl_dataset_schema$dataset_fields,
+      bool <- lapply(fields,
                      function(x) x$required)
       bool <- vapply(bool, isTRUE, logical(1))
       union("owner_org", nm[bool])

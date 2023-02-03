@@ -38,7 +38,12 @@ merge_list_patch <- function(x, y) {
 as_pylog <- function(x) {
   if (is.numeric(x))
     x <- as.logical(x)
-  tools::toTitleCase(tolower(as.character(x)))
+  if (!is.null(x)) {
+    r <- tools::toTitleCase(tolower(as.character(x)))
+  } else {
+    r <- NULL
+  }
+  r
 }
 
 #' @noRd

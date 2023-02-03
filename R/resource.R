@@ -266,7 +266,11 @@ RIDLResource <- R6::R6Class(
     #'
     #' @return list of fields for a resource
     get_fields = function() {
-      nm <- vapply(.ridl_dataset_schema$resource_fields,
+      url <- private$configuration$get_site_url()
+      fields <- .ridl_dataset_schema$resource_fields
+      if (grepl("uat", url))
+        fields <- .ridl_dataset_uat_schema$resource_fields
+      nm <- vapply(fields,
                    function(x) x$field_name, character(1))
       nm
     },
@@ -276,8 +280,12 @@ RIDLResource <- R6::R6Class(
     #'
     #' @return list of required fields for a resource
     get_required_fields = function() {
+      url <- private$configuration$get_site_url()
+      fields <- .ridl_dataset_schema$resource_fields
+      if (grepl("uat", url))
+        fields <- .ridl_dataset_uat_schema$resource_fields
       nm <- self$get_fields()
-      bool <- lapply(.ridl_dataset_schema$resource_fields,
+      bool <- lapply(fields,
                   function(x) x$required)
       bool <- vapply(bool, isTRUE, logical(1))
       nm[bool]
@@ -641,10 +649,28 @@ rr_show <- ridl_resource_show
 #' @param hxlated logical, HXL-ated. Allowed values: `False` (No), `True` (Yes).
 #' @param process_status character, File process status(*) - Indicates the processing stage of the data. 'Raw' means that the data has not been cleaned since collection. 'In process' means that it is being cleaned. 'Final' means that the dataset is final and ready for use in analytical products. Allowed valued: `raw` (Raw-Uncleaned), `cleaned` (Cleaned Only), `anonymized` (Cleaned & Anonymized).
 #' @param identifiability character, Identifiability(*) - Indicates if personally identifiable data is contained in the dataset. Allowed values: `personally_identifiable` (Personally identifiable), `anonymized_enclave` (Anonymized 1st level: Data Enclave - only removed direct identifiers), `anonymized_scientific` (Anonymized 2st level: Scientific Use File (SUF)), `anonymized_public` (Anonymized 3st level: Public Use File (PUF)).
+#' @param script_field_name character, name of the script field
+#' @param script_software character, software used to run the script
+#' @param script_methods character, statistical/analytic methods included in the script
+#' @param script_instructions character, instructions for running the script. Information on the sequence in which the scripts must be run is critical.
+#' @param script_dependencies character, dependencies (packages/libraries) that the script relies on.
+#' @param script_zip_package character, Script ZIP package
+#' @param license_name character, script license name
+#' @param license_uri character, script license uri
+#' @param source_code_repo character, repository (e.g. GitHub repo) where the script has been published.
+#' @param script_date, character, date of the script
+#' @param authors character, authors
+#' @param dimensions character, dimensions
+#' @param statistical_concept character, statistical concept used
+#' @param time_periods character, time periods
+#' @param confidentiality character, confidentiality
+#' @param confidentiality_status character, confidentiality status
+#' @param confidentiality_note character, confidentiality note
+#' @param limitations character, limitations
+#' @param periodicity character, periodicity
 #' @param kobo_type character, type
 #' @param kobo_details character, details
 #' @param name character, the name of the resource
-#' @param title character, title of the resource
 #' @param configuration RIDLConfig, the configuration
 #'
 #' @return Resource the resources
@@ -674,6 +700,22 @@ ridl_resource <- function(type,
                           description = NULL,
                           format = NULL,
                           hxlated = NULL,
+                          authors = NULL,
+                          script_field_name = NULL,
+                          script_methods = NULL,
+                          script_instructions = NULL,
+                          script_dependencies = NULL,
+                          script_zip_package = NULL,
+                          script_date = NULL,
+                          license_name = NULL,
+                          license_uri = NULL,
+                          limitations = NULL,
+                          dimensions = NULL,
+                          statistical_concept = NULL,
+                          time_periods = NULL,
+                          confidentiality = NULL,
+                          confidentiality_status = NULL,
+                          confidentiality_note = NULL,
                           kobo_type = NULL,
                           kobo_details = NULL,
                           configuration = NULL) {
@@ -695,6 +737,22 @@ ridl_resource <- function(type,
                `hxl-ated` = hxlated,
                process_status = process_status,
                identifiability = identifiability,
+               authors = authors,
+               script_field_name = script_field_name,
+               script_methods = script_methods,
+               script_instructions = script_instructions,
+               script_dependencies = script_dependencies,
+               script_zip_package = script_zip_package,
+               script_date = script_date,
+               license_name = license_name,
+               license_uri = license_uri,
+               limitations = limitations,
+               dimensions = dimensions,
+               statistical_concept = statistical_concept,
+               time_periods = time_periods,
+               confidentiality = confidentiality,
+               confidentiality_status = confidentiality_status,
+               confidentiality_note = confidentiality_note,
                visibility = visibility,
                kobo_type = kobo_type,
                kobo_details = kobo_details)
@@ -774,10 +832,28 @@ rr_create <- ridl_resource_create
 #' @param process_status character, File process status(*) - Indicates the processing stage of the data. 'Raw' means that the data has not been cleaned since collection. 'In process' means that it is being cleaned. 'Final' means that the dataset is final and ready for use in analytical products. Allowed valued: `raw` (Raw-Uncleaned), `cleaned` (Cleaned Only), `anonymized` (Cleaned & Anonymized).
 #' @param identifiability character, Identifiability(*) - Indicates if personally identifiable data is contained in the dataset. Allowed values: `personally_identifiable` (Personally identifiable), `anonymized_enclave` (Anonymized 1st level: Data Enclave - only removed direct identifiers), `anonymized_scientific` (Anonymized 2st level: Scientific Use File (SUF)), `anonymized_public` (Anonymized 3st level: Public Use File (PUF)).
 #' @param visibility character, Internal Access Level(*). Allowed values: `restricted` (Private), `public` (Internally Visible).
+#' @param script_field_name character, name of the script field
+#' @param script_software character, software used to run the script
+#' @param script_methods character, statistical/analytic methods included in the script
+#' @param script_instructions character, instructions for running the script. Information on the sequence in which the scripts must be run is critical.
+#' @param script_dependencies character, dependencies (packages/libraries) that the script relies on.
+#' @param script_zip_package character, Script ZIP package
+#' @param license_name character, script license name
+#' @param license_uri character, script license uri
+#' @param source_code_repo character, repository (e.g. GitHub repo) where the script has been published.
+#' @param script_date, character, date of the script
+#' @param authors character, authors
 #' @param kobo_type character, type
 #' @param kobo_details character, details
+#' @param dimensions character, dimensions
+#' @param statistical_concept character, statistical concept used
+#' @param time_periods character, time periods
+#' @param confidentiality character, confidentiality
+#' @param confidentiality_status character, confidentiality status
+#' @param confidentiality_note character, confidentiality note
+#' @param limitations character, limitations
+#' @param periodicity character, periodicity
 #' @param name character, the name of the resource
-#' @param title character, title of the resource
 #' @param configuration RIDLConfig, the configuration
 #'
 #' @return RIDLResource, the resource
@@ -785,21 +861,37 @@ rr_create <- ridl_resource_create
 ridl_resource_update <- function(resource,
                                  type,
                                  file_type,
-                                 measurement_unit,
-                                 methodology,
                                  date_range_start,
                                  date_range_end,
                                  version,
                                  process_status,
                                  identifiability,
                                  visibility,
+                                 methodology = NULL,
+                                 measurement_unit = NULL,
                                  file_to_upload = NULL,
                                  url = NULL,
                                  name = NULL,
-                                 title = NULL,
                                  description = NULL,
                                  format = NULL,
                                  hxlated = NULL,
+                                 authors = NULL,
+                                 script_field_name = NULL,
+                                 script_methods = NULL,
+                                 script_instructions = NULL,
+                                 script_dependencies = NULL,
+                                 script_zip_package = NULL,
+                                 script_date = NULL,
+                                 license_name = NULL,
+                                 license_uri = NULL,
+                                 periodicity = NULL,
+                                 limitations = NULL,
+                                 dimensions = NULL,
+                                 statistical_concept = NULL,
+                                 time_periods = NULL,
+                                 confidentiality = NULL,
+                                 confidentiality_status = NULL,
+                                 confidentiality_note = NULL,
                                  kobo_type = NULL,
                                  kobo_details = NULL,
                                  configuration = NULL) {
@@ -825,6 +917,22 @@ ridl_resource_update <- function(resource,
                process_status = process_status,
                identifiability = identifiability,
                visibility = visibility,
+               authors = authors,
+               script_field_name = script_field_name,
+               script_methods = script_methods,
+               script_instructions = script_instructions,
+               script_dependencies = script_dependencies,
+               script_zip_package = script_zip_package,
+               script_date = script_date,
+               license_name = license_name,
+               license_uri = license_uri,
+               limitations = limitations,
+               dimensions = dimensions,
+               statistical_concept = statistical_concept,
+               time_periods = time_periods,
+               confidentiality = confidentiality,
+               confidentiality_status = confidentiality_status,
+               confidentiality_note = confidentiality_note,
                kobo_type = kobo_type,
                kobo_details = kobo_details,
                id = resource$data$id)
@@ -863,10 +971,28 @@ rr_update <- ridl_resource_update
 #' @param process_status character, File process status(*) - Indicates the processing stage of the data. 'Raw' means that the data has not been cleaned since collection. 'In process' means that it is being cleaned. 'Final' means that the dataset is final and ready for use in analytical products. Allowed valued: `raw` (Raw-Uncleaned), `cleaned` (Cleaned Only), `anonymized` (Cleaned & Anonymized).
 #' @param identifiability character, Identifiability(*) - Indicates if personally identifiable data is contained in the dataset. Allowed values: `personally_identifiable` (Personally identifiable), `anonymized_enclave` (Anonymized 1st level: Data Enclave - only removed direct identifiers), `anonymized_scientific` (Anonymized 2st level: Scientific Use File (SUF)), `anonymized_public` (Anonymized 3st level: Public Use File (PUF)).
 #' @param visibility character, Internal Access Level(*). Allowed values: `restricted` (Private), `public` (Internally Visible).
+#' @param script_field_name character, name of the script field
+#' @param script_software character, software used to run the script
+#' @param script_methods character, statistical/analytic methods included in the script
+#' @param script_instructions character, instructions for running the script. Information on the sequence in which the scripts must be run is critical.
+#' @param script_dependencies character, dependencies (packages/libraries) that the script relies on.
+#' @param script_zip_package character, Script ZIP package
+#' @param license_name character, script license name
+#' @param license_uri character, script license uri
+#' @param source_code_repo character, repository (e.g. GitHub repo) where the script has been published.
+#' @param script_date, character, date of the script
+#' @param authors character, authors
+#' @param dimensions character, dimensions
+#' @param statistical_concept character, statistical concept used
+#' @param time_periods character, time periods
+#' @param confidentiality character, confidentiality
+#' @param confidentiality_status character, confidentiality status
+#' @param confidentiality_note character, confidentiality note
+#' @param limitations character, limitations
+#' @param periodicity character, periodicity
 #' @param kobo_type character, type
 #' @param kobo_details character, details
 #' @param name character, the name of the resource
-#' @param title character, title of the resource
 #' @param configuration RIDLConfig, the configuration
 #'
 #' @return RIDLResource, the resource
@@ -884,11 +1010,26 @@ ridl_resource_patch <- function(resource,
                                 file_to_upload = NULL,
                                 url = NULL,
                                 name = NULL,
-                                title = NULL,
                                 description = NULL,
                                 format = NULL,
                                 hxlated = NULL,
+                                authors = NULL,
+                                script_field_name = NULL,
+                                script_methods = NULL,
+                                script_instructions = NULL,
+                                script_dependencies = NULL,
+                                script_zip_package = NULL,
+                                script_date = NULL,
+                                license_name = NULL,
+                                license_uri = NULL,
                                 visibility = NULL,
+                                limitations = NULL,
+                                dimensions = NULL,
+                                statistical_concept = NULL,
+                                time_periods = NULL,
+                                confidentiality = NULL,
+                                confidentiality_status = NULL,
+                                confidentiality_note = NULL,
                                 kobo_type = NULL,
                                 kobo_details = NULL,
                                 configuration = NULL) {
@@ -914,6 +1055,22 @@ ridl_resource_patch <- function(resource,
                process_status = process_status,
                identifiability = identifiability,
                visibility = visibility,
+               authors = authors,
+               script_field_name = script_field_name,
+               script_methods = script_methods,
+               script_instructions = script_instructions,
+               script_dependencies = script_dependencies,
+               script_zip_package = script_zip_package,
+               script_date = script_date,
+               license_name = license_name,
+               license_uri = license_uri,
+               limitations = limitations,
+               dimensions = dimensions,
+               statistical_concept = statistical_concept,
+               time_periods = time_periods,
+               confidentiality = confidentiality,
+               confidentiality_status = confidentiality_status,
+               confidentiality_note = confidentiality_note,
                kobo_type = kobo_type,
                kobo_details = kobo_details,
                id = resource$data$id)
