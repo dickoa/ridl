@@ -28,7 +28,6 @@ and setup project where you can interact with the RIDL platform
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-RIDLConfig-new}{\code{RIDLConfig$new()}}
-\item \href{#method-RIDLConfig-get_credentials}{\code{RIDLConfig$get_credentials()}}
 \item \href{#method-RIDLConfig-set_token}{\code{RIDLConfig$set_token()}}
 \item \href{#method-RIDLConfig-get_token}{\code{RIDLConfig$get_token()}}
 \item \href{#method-RIDLConfig-get_site_url}{\code{RIDLConfig$get_site_url()}}
@@ -79,16 +78,6 @@ Create a new Configuration object.
 \subsection{Returns}{
 A new Configuration object.
 }
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-RIDLConfig-get_credentials"></a>}}
-\if{latex}{\out{\hypertarget{method-RIDLConfig-get_credentials}{}}}
-\subsection{Method \code{get_credentials()}}{
-Configuration credentials when using a RIDL API key
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RIDLConfig$get_credentials()}\if{html}{\out{</div>}}
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-RIDLConfig-set_token"></a>}}

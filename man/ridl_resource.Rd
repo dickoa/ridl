@@ -18,7 +18,6 @@ ridl_resource(
   file_to_upload = NULL,
   url = NULL,
   name = NULL,
-  title = NULL,
   description = NULL,
   format = NULL,
   hxlated = NULL,
@@ -38,6 +37,9 @@ ridl_resource(
   confidentiality = NULL,
   confidentiality_status = NULL,
   confidentiality_note = NULL,
+  script_software = NULL,
+  source_code_repo = NULL,
+  periodicity = NULL,
   kobo_type = NULL,
   kobo_details = NULL,
   configuration = NULL
@@ -108,17 +110,17 @@ ridl_resource(
 
 \item{confidentiality_note}{character, confidentiality note}
 
-\item{kobo_type}{character, type}
-
-\item{kobo_details}{character, details}
-
-\item{configuration}{RIDLConfig, the configuration}
-
 \item{script_software}{character, software used to run the script}
 
 \item{source_code_repo}{character, repository (e.g. GitHub repo) where the script has been published.}
 
 \item{periodicity}{character, periodicity}
+
+\item{kobo_type}{character, type}
+
+\item{kobo_details}{character, details}
+
+\item{configuration}{RIDLConfig, the configuration}
 }
 \value{
 Resource the resources

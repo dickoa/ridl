@@ -696,7 +696,6 @@ ridl_resource <- function(type,
                           file_to_upload = NULL,
                           url = NULL,
                           name = NULL,
-                          title = NULL,
                           description = NULL,
                           format = NULL,
                           hxlated = NULL,
@@ -716,6 +715,9 @@ ridl_resource <- function(type,
                           confidentiality = NULL,
                           confidentiality_status = NULL,
                           confidentiality_note = NULL,
+                          script_software = NULL,
+                          source_code_repo = NULL,
+                          periodicity = NULL,
                           kobo_type = NULL,
                           kobo_details = NULL,
                           configuration = NULL) {
@@ -753,6 +755,9 @@ ridl_resource <- function(type,
                confidentiality = confidentiality,
                confidentiality_status = confidentiality_status,
                confidentiality_note = confidentiality_note,
+               script_software = script_software,
+               source_code_repo = source_code_repo,
+               periodicity = periodicity,
                visibility = visibility,
                kobo_type = kobo_type,
                kobo_details = kobo_details)
@@ -794,15 +799,17 @@ ridl_resource_create <- function(resource,
   configuration <- ridl_config_get()
   assert_resource(resource)
   assert_dataset_on_ridl(dataset)
-  resource$check_url_filetoupload()
+  resource$check_resource_type()
 
   data <- resource$data
   data$package_id <- dataset$data$id
 
+  encode <- if (is.null(data$upload)) "json" else "multipart"
+
   res <- configuration$call_action("resource_create",
                                    body = data,
                                    verb = "post",
-                                   encode = "multipart")
+                                   encode = encode)
 
   res$raw$raise_for_status()
   invisible(res)
@@ -892,6 +899,8 @@ ridl_resource_update <- function(resource,
                                  confidentiality = NULL,
                                  confidentiality_status = NULL,
                                  confidentiality_note = NULL,
+                                 script_software = NULL,
+                                 source_code_repo = NULL,
                                  kobo_type = NULL,
                                  kobo_details = NULL,
                                  configuration = NULL) {
@@ -933,15 +942,20 @@ ridl_resource_update <- function(resource,
                confidentiality = confidentiality,
                confidentiality_status = confidentiality_status,
                confidentiality_note = confidentiality_note,
+               script_software = script_software,
+               source_code_repo = source_code_repo,
+               periodicity = periodicity,
                kobo_type = kobo_type,
                kobo_details = kobo_details,
                id = resource$data$id)
   data <- drop_nulls(data)
   data <- validate_resource_data(data)
 
+  encode <- if (is.null(data$upload)) "json" else "multipart"
+
   res <- configuration$call_action("resource_update",
                                    body = data,
-                                   verb = "multipart")
+                                   verb = encode)
 
   res$raw$raise_for_status()
   invisible(res)
@@ -1030,6 +1044,9 @@ ridl_resource_patch <- function(resource,
                                 confidentiality = NULL,
                                 confidentiality_status = NULL,
                                 confidentiality_note = NULL,
+                                script_software = NULL,
+                                source_code_repo = NULL,
+                                periodicity = NULL,
                                 kobo_type = NULL,
                                 kobo_details = NULL,
                                 configuration = NULL) {
@@ -1071,15 +1088,20 @@ ridl_resource_patch <- function(resource,
                confidentiality = confidentiality,
                confidentiality_status = confidentiality_status,
                confidentiality_note = confidentiality_note,
+               script_software = script_software,
+               source_code_repo = source_code_repo,
+               periodicity = periodicity,
                kobo_type = kobo_type,
                kobo_details = kobo_details,
                id = resource$data$id)
   data <- drop_nulls(data)
 
+  encode <- if (is.null(data$upload)) "json" else "multipart"
+
   res <- configuration$call_action("resource_patch",
                                    body = data,
                                    verb = "post",
-                                   encode = "multipart")
+                                   encode = encode)
 
   res$raw$raise_for_status()
   invisible(res)

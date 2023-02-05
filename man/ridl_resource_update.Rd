@@ -40,6 +40,8 @@ ridl_resource_update(
   confidentiality = NULL,
   confidentiality_status = NULL,
   confidentiality_note = NULL,
+  script_software = NULL,
+  source_code_repo = NULL,
   kobo_type = NULL,
   kobo_details = NULL,
   configuration = NULL
@@ -80,6 +82,8 @@ rr_update(
   confidentiality = NULL,
   confidentiality_status = NULL,
   confidentiality_note = NULL,
+  script_software = NULL,
+  source_code_repo = NULL,
   kobo_type = NULL,
   kobo_details = NULL,
   configuration = NULL
@@ -154,15 +158,15 @@ rr_update(
 
 \item{confidentiality_note}{character, confidentiality note}
 
+\item{script_software}{character, software used to run the script}
+
+\item{source_code_repo}{character, repository (e.g. GitHub repo) where the script has been published.}
+
 \item{kobo_type}{character, type}
 
 \item{kobo_details}{character, details}
 
 \item{configuration}{RIDLConfig, the configuration}
-
-\item{script_software}{character, software used to run the script}
-
-\item{source_code_repo}{character, repository (e.g. GitHub repo) where the script has been published.}
 }
 \value{
 RIDLResource, the resource
