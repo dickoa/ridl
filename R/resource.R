@@ -460,17 +460,6 @@ rr_file_format.RIDLResource <- ridl_resource_file_format.RIDLResource
 #'
 #' @return A RIDLResource with a file
 #' @export
-ridl_resource_file_to_upload_set.RIDLResource <- function(resource, file_to_upload) {
-  resource$set_file_to_upload(file_to_upload)
-  invisible(resource)
-}
-
-#' @rdname ridl_resource_file_to_upload
-#' @export
-rr_file_to_upload_set.RIDLResource <- ridl_resource_file_to_upload_set.RIDLResource
-
-#' @rdname ridl_resource_file_to_upload
-#' @export
 `ridl_resource_file_to_upload<-.RIDLResource` <- function(resource, value) {
   resource$set_file_to_upload(value)
   invisible(resource)
@@ -490,13 +479,13 @@ rr_file_to_upload_set.RIDLResource <- ridl_resource_file_to_upload_set.RIDLResou
 #'
 #' @return A character, the path to file to upload or NULL if not available
 #' @export
-ridl_resource_file_to_upload_get.RIDLResource <- function(resource) {
+ridl_resource_file_to_upload.RIDLResource <- function(resource) {
   resource$get_file_to_upload()
 }
 
 #' @rdname ridl_resource_file_to_upload
 #' @export
-rr_file_to_upload_get.RIDLResource <- ridl_resource_file_to_upload_get.RIDLResource
+rr_file_to_upload.RIDLResource <- ridl_resource_file_to_upload.RIDLResource
 
 #' Get the dataset containing the resource
 #'
@@ -736,7 +725,7 @@ ridl_resource <- function(type,
                date_range_start = date_range_start,
                date_range_end = date_range_end,
                version = version,
-               `hxl-ated` = hxlated,
+               `hxl-ated` = as_pylog(hxlated),
                process_status = process_status,
                identifiability = identifiability,
                authors = authors,
@@ -922,7 +911,7 @@ ridl_resource_update <- function(resource,
                date_range_start = date_range_start,
                date_range_end = date_range_end,
                version = version,
-               `hxl-ated` = hxlated,
+               `hxl-ated` = as_pylog(hxlated),
                process_status = process_status,
                identifiability = identifiability,
                visibility = visibility,
@@ -1068,7 +1057,7 @@ ridl_resource_patch <- function(resource,
                date_range_start = date_range_start,
                date_range_end = date_range_end,
                version = version,
-               `hxl-ated` = hxlated,
+               `hxl-ated` = as_pylog(hxlated),
                process_status = process_status,
                identifiability = identifiability,
                visibility = visibility,

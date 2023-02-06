@@ -169,60 +169,24 @@ rr_excel_sheets.default <- function(resource, format, download_folder, quiet) {
 
 #' @rdname ridl_resource_file_to_upload
 #' @export
-ridl_resource_file_to_upload_set <- function(resource, file_to_upload)
-  UseMethod("ridl_resource_file_to_upload_set")
-
-#' @rdname ridl_resource_file_to_upload
-#' @export
-ridl_resource_file_to_upload_set.default <- function(resource, file_to_upload) {
-  stop("Only available for a RIDLResource object",
-       call. = TRUE)
-}
-
-#' @rdname ridl_resource_file_to_upload
-#' @export
-rr_file_to_upload_set <- function(resource, file_to_upload)
-  UseMethod("rr_file_to_upload_set")
-
-#' @rdname ridl_resource_file_to_upload
-#' @export
-rr_file_to_upload_set.default <- function(resource, file_to_upload) {
-  stop("Only available for a RIDLResource object",
-       call. = TRUE)
-}
-
-#' @rdname ridl_resource_file_to_upload
-#' @export
-ridl_resource_file_to_upload_get <- function(resource)
-  UseMethod("ridl_resource_file_to_upload_get")
-
-#' @rdname ridl_resource_file_to_upload
-#' @export
-ridl_resource_file_to_upload_get.default <- function(resource) {
-  stop("Only available for a RIDLResource object",
-       call. = TRUE)
-}
-
-#' @rdname ridl_resource_file_to_upload
-#' @export
-rr_file_to_upload_get <- function(resource)
-  UseMethod("rr_file_to_upload_get")
-
-#' @rdname ridl_resource_file_to_upload
-#' @export
-rr_file_to_upload_get.default <- function(resource) {
-  stop("Only available for a RIDLResource object",
-       call. = TRUE)
-}
-
-#' @rdname ridl_resource_file_to_upload
-#' @export
 ridl_resource_file_to_upload <- function(resource)
   UseMethod("ridl_resource_file_to_upload")
 
 #' @rdname ridl_resource_file_to_upload
 #' @export
 ridl_resource_file_to_upload.default <- function(resource) {
+  stop("Only available for a RIDLResource object",
+       call. = TRUE)
+}
+
+#' @rdname ridl_resource_file_to_upload
+#' @export
+rr_file_to_upload <- function(resource)
+  UseMethod("rr_file_to_upload")
+
+#' @rdname ridl_resource_file_to_upload
+#' @export
+rr_file_to_upload.default <- function(resource) {
   stop("Only available for a RIDLResource object",
        call. = TRUE)
 }
@@ -239,7 +203,6 @@ ridl_resource_file_to_upload.default <- function(resource) {
        call. = TRUE)
 }
 
-
 #' @rdname ridl_resource_file_to_upload
 #' @export
 `rr_file_to_upload<-` <- function(resource, value)
@@ -248,18 +211,6 @@ ridl_resource_file_to_upload.default <- function(resource) {
 #' @rdname ridl_resource_file_to_upload
 #' @export
 `rr_file_to_upload<-.default` <- function(resource, value) {
-  stop("Only available for a RIDLResource object",
-       call. = TRUE)
-}
-
-#' @rdname ridl_resource_file_to_upload
-#' @export
-rr_file_to_upload <- function(resource)
-  UseMethod("rr_file_to_upload")
-
-#' @rdname ridl_resource_file_to_upload
-#' @export
-rr_file_to_upload.default <- function(resource) {
   stop("Only available for a RIDLResource object",
        call. = TRUE)
 }
