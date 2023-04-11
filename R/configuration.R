@@ -60,7 +60,7 @@ RIDLConfig <- R6::R6Class(
 
       self$data$token <- config$token
       self$data$site_url <- config$site_url
-      headers <- list(Authorization = config$token)
+      headers <- list(`X-CKAN-API-KEY` = config$token)
 
       if (is.null(user_agent))
         user_agent <- get_user_agent()

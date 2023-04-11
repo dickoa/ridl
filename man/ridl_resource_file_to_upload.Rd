@@ -43,8 +43,6 @@ rr_file_to_upload(resource) <- value
 \item{resource}{RIDLResource, a RIDL resource}
 
 \item{value}{character, the path of the file to upload}
-
-\item{file_to_upload}{character the path to the file to upload}
 }
 \value{
 A RIDLResource with a file

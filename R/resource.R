@@ -452,9 +452,8 @@ rr_file_format.RIDLResource <- ridl_resource_file_format.RIDLResource
 #'
 #' Get and set the file to upload
 #'
-#' @param file_to_upload character the path to the file to upload
-#' @param value character, the path of the file to upload
 #' @param resource RIDLResource, a RIDL resource
+#' @param value character, the path of the file to upload
 #'
 #' @rdname ridl_resource_file_to_upload
 #'
